@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <style>
+            .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+            .switch input { opacity: 0; width: 0; height: 0; }
+            label.switch { outline: none; }
+            .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; -webkit-transition: .4s; transition: .4s; outline: none; }
+            .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; }
+            input:checked + .slider { background-color: #2196F3; }
+            input:focus + .slider { box-shadow: 0 0 1px #2196F3; }
+            input:checked + .slider:before { -webkit-transform: translateX(26px); -ms-transform: translateX(26px); transform: translateX(26px); }
+            .slider.round { border-radius: 34px; }
+            .slider.round:before { border-radius: 50%; }
+        </style>
+    </head>
+    <body>
+        <h2 id="value">Toggle Switch is off</h2>
+        <label class="switch">
+            <input type="checkbox" name="myCheckbox">
+            <span class="slider round"></span>
+        </label>
+
+        <button onclick="payWithPaystack()">Trigger Paystack</button>
+        
+      
+
+        <script type="text/javascript">
+            var _selector = document.querySelector('input[name=myCheckbox]');
+            _selector.addEventListener('change', function(event) {
+                var message = (_selector.checked) ? "Toggle Switch is on" : "Toggle Switch is off";
+        
+                if (messageHandler) {
+                    messageHandler.postMessage(message);
+                }
+                });
+        </script>
+
+
+   
+   
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    
+    <script>
+       
+        function payWithPaystack() {
+ 
+ var handler = PaystackPop.setup({ 
+     key: 'pk_test_c42befa37f9f57569aa892bd7e9c2f9625bc1882', //put your public key here
+     email: 'ebubeemaka@email.com', //put your customer's email here
+     amount: 370000, //amount the customer is supposed to pay
+     metadata: {
+         custom_fields: [
+             {
+                 display_name: "Mobile Number",
+                 variable_name: "mobile_number",
+                 value: "+2348012345678" //customer's mobile number
+             }
+         ]
+     },
+     callback: function (response) {
+         //after the transaction have been completed
+         //make post call  to the server with to verify payment 
+         //using transaction reference as post data
+         $.post("verify.php", {reference:response.reference}, function(status){
+             if(status == "success")
+                 //successful transaction
+                 alert('Transaction was successful');
+             else
+                 //transaction failed
+                 alert(response);
+         });
+     },
+     onClose: function () {
+         //when the user close the payment modal
+         alert('Transaction cancelled');
+     }
+ });
+ handler.openIframe(); //open the paystack's payment modal
+ }
+ 
+         </script>
+        
+        
+    </body>
+
+
+</html>
