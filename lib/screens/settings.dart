@@ -27,10 +27,9 @@ class _SettingsState extends State<Settings> {
     //  callBiometric();
     _controller.addListener(() {
       setState(() {
-        if (_controller.value && _checked == true) {
+        if (_controller.value) {
           callBiometric();
 
-          _checked = true;
           cachedbiometric = true;
 
           print("controller value = ${_controller.value}");

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart' as eos;
 
 class Savings {
   static String userId = Hive.box('name').get('userID');
-  static String baseUrl = "http://statup.ng/statup/index.php/";
+  static String baseUrl = "https://statup.ng/statup/index.php/";
 
   Future<dynamic> setDefaultSavings({
     @required String? defaltSavingsName,

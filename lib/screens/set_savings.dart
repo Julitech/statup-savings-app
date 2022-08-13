@@ -316,7 +316,7 @@ class _SetSavingsState extends State<SetSavings> {
                                         starterAmt.text.isNotEmpty &&
                                         freqAmt.text.isNotEmpty &&
                                         int.parse(targetAmt.text) >= 100000 &&
-                                        int.parse(starterAmt.text) >= 5000)
+                                        int.parse(starterAmt.text) >= 3000)
                                       {
                                         loading("Loading", context),
                                         Savings()

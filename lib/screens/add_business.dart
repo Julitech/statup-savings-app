@@ -54,7 +54,7 @@ class _AddBusinessState extends State<AddBusiness> {
     business = Hive.box('statup').get('businesses');
 
     business_id = Hive.box('statup').get('business_id');
-    if (business != null) {
+    if (business != null && business.isNotEmpty) {
       setState(() {
         business_name.text = business["business_name"];
         category = business["category"];

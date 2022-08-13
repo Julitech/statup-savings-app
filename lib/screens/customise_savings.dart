@@ -316,22 +316,14 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                       // Spacer(),
                       SizedBox(
                           width: double.maxFinite,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: StadiumBorder(),
-                                  primary: color.green(),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 3),
-                                  textStyle: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                              onPressed: () => {
+                          child: GestureDetector(
+                              onTap: () => {
                                     if (targetAmt.text.isNotEmpty &&
                                         starterAmt.text.isNotEmpty &&
                                         freqAmt.text.isNotEmpty &&
                                         goal_name.text.isNotEmpty &&
                                         int.parse(targetAmt.text) >= 100000 &&
-                                        int.parse(starterAmt.text) >= 5000)
+                                        int.parse(starterAmt.text) >= 3000)
                                       {
                                         loading("Loading", context),
                                         Savings()
@@ -394,16 +386,29 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                           }
                                       }
                                   },
-                              child: Container(
-                                child: const Text("Continue",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5)),
-                              ))),
+                              child: Material(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  elevation: 10,
+                                  shadowColor:
+                                      Color.fromARGB(255, 209, 209, 209),
+                                  child: Container(
+                                      height: 40,
+                                      width: double.maxFinite,
+                                      decoration: BoxDecoration(
+                                        color: color.green(),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: const Text("Save",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                      )
+                                      //rest of the existing code
+                                      )))),
 
                       const SizedBox(height: 10),
                     ])))));

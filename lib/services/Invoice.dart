@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:dio/dio.dart' as eos;
 
 class Invoice {
-  static String baseUrl = "http://statup.ng/statup/index.php/";
+  static String baseUrl = "https://statup.ng/statup/index.php/";
 
   Future<dynamic> NewInvoice(
       {@required String? invoice_date,
@@ -44,7 +44,7 @@ class Invoice {
         'business_id': business_id
       });
 
-      var response = await dio.post(baseUrl + 'invoice/saveInvoice',
+      var response = await dio.post(baseUrl + 'invoice/saveinvoice',
           data: formData,
           options: eos.Options(
             headers: {

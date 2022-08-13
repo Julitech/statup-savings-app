@@ -273,22 +273,14 @@ class _DepositState extends State<Deposit> {
                       // Spacer(),
                       SizedBox(
                           width: double.maxFinite,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  shape: StadiumBorder(),
-                                  primary: color.green(),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 3),
-                                  textStyle: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold)),
-                              onPressed: () => {
+                          child: GestureDetector(
+                              onTap: () => {
                                     if (targetAmt.text.isNotEmpty &&
                                         freqAmt.text.isNotEmpty &&
                                         (int.parse(widget.totalSaved) +
                                                 (int.parse(targetAmt.text)) <=
                                             int.parse(widget.target)) &&
-                                        int.parse(targetAmt.text) >= 5000)
+                                        int.parse(targetAmt.text) >= 3000)
                                       {
                                         loading("Loading", context),
 
@@ -327,7 +319,7 @@ class _DepositState extends State<Deposit> {
                                         if (targetAmt.text.isNotEmpty)
                                           {
                                             if (int.parse(targetAmt.text) <
-                                                    5000 ||
+                                                    3000 ||
                                                 targetAmt.text.isEmpty)
                                               {
                                                 showErrorToast(
@@ -350,16 +342,29 @@ class _DepositState extends State<Deposit> {
                                           }
                                       }
                                   },
-                              child: Container(
-                                child: const Text("Continue",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5)),
-                              ))),
+                              child: Material(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  elevation: 10,
+                                  shadowColor:
+                                      Color.fromARGB(255, 209, 209, 209),
+                                  child: Container(
+                                      height: 40,
+                                      width: double.maxFinite,
+                                      decoration: BoxDecoration(
+                                        color: color.green(),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: const Text("Save",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                      )
+                                      //rest of the existing code
+                                      )))),
 
                       const SizedBox(height: 10),
                     ])))));

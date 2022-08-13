@@ -150,7 +150,8 @@ class AuthService {
         if (data["code"] == 0) {
           //network or server error
 
-          return "An error occured!";
+          print("An error occured!");
+          return [];
         } else if (data["code"] == 1) {
           Hive.box("statup").put("pin", data['pin']);
           Hive.box("statup").put("loggedIn", true);
@@ -483,6 +484,22 @@ class AuthService {
 
           return "An error occured!";
         } else if (data["code"] == 1) {
+          print(data["data"].toString());
+          Hive.box("statup").put("access_token", data["data"]["access_token"]);
+          Hive.box("statup").put("first_name", data["data"]["first_name"]);
+          Hive.box("statup").put("last_name", data["data"]["last_name"]);
+          Hive.box("statup").put("email", data["data"]["email"]);
+          Hive.box("statup").put("phone", data["data"]["phone"]);
+          Hive.box("statup").put("acc_name", data["data"]["account_name"]);
+          Hive.box("statup").put("id", data["data"]["id"]);
+          Hive.box("statup").put("acc_num", data["data"]["account_num"]);
+          Hive.box("statup")
+              .put("profile_image", data["data"]["profile_picture"]);
+          Hive.box("statup").put("bank", data["data"]["bank"]);
+          Hive.box("statup").put("loggedIn", true);
+
+          print("logged In successfully!");
+          Hive.box("statup").put("businesses", data["data"]["businesses"]);
           return 1;
         } else {
           return "error!";
