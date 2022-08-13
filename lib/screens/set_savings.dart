@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:statup/screens/landing.dart';
+import 'package:statup/screens/payment.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -31,6 +33,7 @@ class _SetSavingsState extends State<SetSavings> {
 
   var preselected = {"1": "100,000"};
   bool obs = true;
+  var savings_plans = [];
 
   List<String> preselectedSavings = [
     "100,000",
@@ -326,13 +329,26 @@ class _SetSavingsState extends State<SetSavings> {
                                             .then((value) => {
                                                   if (value == 1)
                                                     {
+                                                      savings_plans =
+                                                          Hive.box("statup")
+                                                              .get("savings"),
                                                       showToast(
                                                           "New Savings Goal Created!"),
                                                       Navigator.of(context,
                                                               rootNavigator:
                                                                   true)
                                                           .pop(),
-                                                      Get.to(const Landing())
+                                                      //Get.to(const Landing())
+
+                                                      Get.to(Payment(
+                                                          amount:
+                                                              starterAmt.text,
+                                                          savings_id:
+                                                              savings_plans[0]
+                                                                  ["id"],
+                                                          freq: freqAmt.text,
+                                                          savingsName: widget
+                                                              .defaultSavingsName)),
                                                       // _handlePaymentInitialization
                                                     }
                                                 })

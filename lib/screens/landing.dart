@@ -98,11 +98,12 @@ class _LandingState extends State<Landing> {
                     child: NavDrawer(),
                   ),
                   appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(31.0),
+                      preferredSize: Size.fromHeight(29.0),
                       child: AppBar(
                           leading: Builder(
                               builder: (context) => IconButton(
                                     icon: const Icon(Icons.menu,
+                                        size: 30,
                                         color: Color.fromARGB(255, 0, 0, 0)),
                                     onPressed: () => Scaffold.of(context)
                                         .openDrawer(), // open side menu},
@@ -116,13 +117,12 @@ class _LandingState extends State<Landing> {
                                   Get.to(Notifications());
                                 }),
                                 child: Container(
-                                    padding: EdgeInsets.only(bottom: 10),
                                     child: SvgPicture.asset(
-                                      "assets/images/svg/notification-svgrepo-com.svg",
-                                      height: 18,
-                                      width: 18,
-                                      fit: BoxFit.scaleDown,
-                                    ))),
+                                  "assets/images/svg/notification-svgrepo-com.svg",
+                                  height: 23,
+                                  width: 23,
+                                  fit: BoxFit.scaleDown,
+                                ))),
                             const SizedBox(width: 20),
                             GestureDetector(
                               onTap: () {
@@ -131,11 +131,14 @@ class _LandingState extends State<Landing> {
 
                               child: cachedProfileImg.toString() != "" &&
                                       cachedProfileImg.toString() != "null"
-                                  ? Image.network(
-                                      "https://statup.ng/statup/" +
-                                          cachedProfileImg.toString(),
-                                      height: 14,
-                                      width: 14)
+                                  ? Container(
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      child: Image.network(
+                                          "https://statup.ng/statup/" +
+                                              cachedProfileImg.toString(),
+                                          height: 14,
+                                          width: 14))
                                   : const Icon(Icons.account_circle,
                                       color: Colors.black, size: 22),
 
@@ -159,7 +162,7 @@ class _LandingState extends State<Landing> {
                               const Text("Overall Target",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 6, color: Colors.black)),
+                                      fontSize: 9, color: Colors.black)),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -277,7 +280,7 @@ class _LandingState extends State<Landing> {
                                               )))))
                             ],
                           ),
-
+                          SizedBox(height: 5),
                           allSavingsPlans!.isNotEmpty
                               ? SizedBox(
                                   //height: extend == false ? 180 : 280,
@@ -294,7 +297,9 @@ class _LandingState extends State<Landing> {
                                       scrollDirection: Axis.vertical,
                                       physics: const BouncingScrollPhysics(),
                                       separatorBuilder: (c, i) {
-                                        return const SizedBox(width: 10);
+                                        return const SizedBox(
+                                          width: 10,
+                                        );
                                       },
                                       itemBuilder:
                                           (BuildContext context, int index) {
@@ -326,8 +331,12 @@ class _LandingState extends State<Landing> {
                                                                     ["name"] ==
                                                                 "business-default"
                                                             ? "Business"
-                                                            : allSavingsPlans![
-                                                                index]["name"],
+                                                            : ["name"] ==
+                                                                    "rent-default"
+                                                                ? "Rent"
+                                                                : allSavingsPlans![
+                                                                        index]
+                                                                    ["name"],
                                                         style: TextStyle(
                                                             fontSize: 10,
                                                             color:
@@ -468,7 +477,7 @@ class _LandingState extends State<Landing> {
 
                           extend == true
                               ? const SizedBox(height: 5)
-                              : SizedBox(height: 0),
+                              : SizedBox(height: 4),
 
                           allSavingsPlans!.isEmpty ||
                                   extend == true ||
@@ -534,7 +543,7 @@ class _LandingState extends State<Landing> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Row(children: [
-                                          SizedBox(width: 16),
+                                          SizedBox(width: 14),
                                           GestureDetector(
                                               onTap: (() =>
                                                   Get.to(const SetSavings(
@@ -637,7 +646,7 @@ class _LandingState extends State<Landing> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Row(children: [
-                                          SizedBox(width: 16),
+                                          SizedBox(width: 14),
                                           GestureDetector(
                                               onTap: (() =>
                                                   Get.to(const SetSavings(
@@ -696,7 +705,7 @@ class _LandingState extends State<Landing> {
                           const SizedBox(height: 3),
 
                           SizedBox(
-                              height: (Get.height * 0.6) - 40,
+                              height: (Get.height * 0.6) - 20,
                               width: double.maxFinite,
                               child: ListView.separated(
                                 shrinkWrap: true,
@@ -729,7 +738,7 @@ class _LandingState extends State<Landing> {
                                               },
                                             ),
                                           ),
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 4),
                                           Row(
                                             children: [
                                               Column(
@@ -867,7 +876,7 @@ class _LandingState extends State<Landing> {
                   child: Row(
                     children: [
                       const SizedBox(
-                        width: 20,
+                        width: 10,
                       ),
                       Column(
                         children: [
@@ -877,8 +886,8 @@ class _LandingState extends State<Landing> {
                             }),
                             child: SvgPicture.asset(
                               "assets/images/svg/customize.svg",
-                              height: 20,
-                              width: 20,
+                              height: 29,
+                              width: 29,
                               fit: BoxFit.scaleDown,
                             ),
                           ),
@@ -887,7 +896,7 @@ class _LandingState extends State<Landing> {
                           ),
                           const Text("Customise",
                               style: TextStyle(
-                                  fontSize: 8,
+                                  fontSize: 7,
                                   fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
@@ -903,8 +912,8 @@ class _LandingState extends State<Landing> {
                               }),
                               child: SvgPicture.asset(
                                 "assets/images/svg/invoice.svg",
-                                height: 20,
-                                width: 20,
+                                height: 29,
+                                width: 29,
                                 fit: BoxFit.scaleDown,
                               )),
                           const SizedBox(
@@ -912,7 +921,7 @@ class _LandingState extends State<Landing> {
                           ),
                           const Text("Invoice",
                               style: TextStyle(
-                                  fontSize: 8,
+                                  fontSize: 7,
                                   fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
@@ -928,8 +937,8 @@ class _LandingState extends State<Landing> {
                               }),
                               child: SvgPicture.asset(
                                 "assets/images/svg/transactions.svg",
-                                height: 20,
-                                width: 20,
+                                height: 29,
+                                width: 29,
                                 fit: BoxFit.scaleDown,
                               )),
                           const SizedBox(
@@ -937,7 +946,7 @@ class _LandingState extends State<Landing> {
                           ),
                           const Text("Transactions",
                               style: TextStyle(
-                                  fontSize: 8,
+                                  fontSize: 7,
                                   fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
@@ -949,8 +958,8 @@ class _LandingState extends State<Landing> {
                         children: [
                           SvgPicture.asset(
                             "assets/images/svg/explore.svg",
-                            height: 20,
-                            width: 20,
+                            height: 29,
+                            width: 29,
                             fit: BoxFit.scaleDown,
                           ),
                           const SizedBox(
@@ -958,14 +967,15 @@ class _LandingState extends State<Landing> {
                           ),
                           const Text("Explore",
                               style: TextStyle(
-                                  fontSize: 8,
+                                  fontSize: 7,
+                                  fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.normal)),
                         ],
                       ),
                       const SizedBox(
-                        width: 20,
+                        width: 10,
                       ),
                     ],
                   )),

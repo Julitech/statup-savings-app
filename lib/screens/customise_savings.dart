@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:statup/screens/payment.dart';
 import 'package:statup/services/savings.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
@@ -20,6 +22,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
   TextEditingController targetAmt = TextEditingController();
   TextEditingController starterAmt = TextEditingController();
   TextEditingController freqAmt = TextEditingController();
+  var savings_plans = [];
 
   FocusNode? amtNode;
   FocusNode? goal_nameNode;
@@ -341,13 +344,27 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                             .then((value) => {
                                                   if (value == 1)
                                                     {
+                                                      savings_plans =
+                                                          Hive.box("statup")
+                                                              .get("savings"),
                                                       showToast(
                                                           "New Savings Goal Created!"),
                                                       Navigator.of(context,
                                                               rootNavigator:
                                                                   true)
                                                           .pop(),
-                                                      Get.to(const Landing())
+
+                                                      Get.to(Payment(
+                                                          amount:
+                                                              starterAmt.text,
+                                                          savings_id:
+                                                              savings_plans[0]
+                                                                  ["id"],
+                                                          freq: freqAmt.text,
+                                                          savingsName:
+                                                              goal_name.text)),
+
+                                                      // Get.to(const Landing())
                                                     }
                                                 })
                                       }
