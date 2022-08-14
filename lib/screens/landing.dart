@@ -49,7 +49,7 @@ class _LandingState extends State<Landing> {
       'product_description': 'Nice and friendly to wear',
       'sold': '12',
       'product_image':
-          'http://ng.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/01/9486731/1.jpg?5979'
+          'https://cutewallpaper.org/21/nike-air-max-1-wallpaper/Black-And-Silver-Air-Force-Ones-28-Cool-Wallpaper-.jpeg'
     };
 
     details.forEach((k, v) => allProducts.add(details));
@@ -98,55 +98,71 @@ class _LandingState extends State<Landing> {
                     child: NavDrawer(),
                   ),
                   appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(29.0),
+                      preferredSize: Size.fromHeight(27.0),
                       child: AppBar(
-                          leading: Builder(
-                              builder: (context) => IconButton(
-                                    icon: const Icon(Icons.menu,
-                                        size: 30,
-                                        color: Color.fromARGB(255, 0, 0, 0)),
-                                    onPressed: () => Scaffold.of(context)
-                                        .openDrawer(), // open side menu},
-                                  )),
+                          automaticallyImplyLeading: false,
                           backgroundColor: Colors.white,
-                          elevation: 0.3,
-                          // ignore: prefer_const_literals_to_create_immutables
-                          actions: [
-                            GestureDetector(
-                                onTap: (() {
-                                  Get.to(Notifications());
-                                }),
-                                child: Container(
-                                    child: SvgPicture.asset(
-                                  "assets/images/svg/notification-svgrepo-com.svg",
-                                  height: 23,
-                                  width: 23,
-                                  fit: BoxFit.scaleDown,
-                                ))),
-                            const SizedBox(width: 20),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(const Profile());
-                              },
+                          elevation: 0.0,
+                          title: Container(
+                            width: double.maxFinite,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Builder(
+                                    builder: (context) => IconButton(
+                                      icon: const Icon(Icons.menu,
+                                          size: 30,
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                      onPressed: () => Scaffold.of(context)
+                                          .openDrawer(), // open side menu},
+                                    ),
+                                  ),
 
-                              child: cachedProfileImg.toString() != "" &&
-                                      cachedProfileImg.toString() != "null"
-                                  ? Container(
-                                      decoration:
-                                          BoxDecoration(shape: BoxShape.circle),
-                                      child: Image.network(
-                                          "https://statup.ng/statup/" +
-                                              cachedProfileImg.toString(),
-                                          height: 14,
-                                          width: 14))
-                                  : const Icon(Icons.account_circle,
-                                      color: Colors.black, size: 22),
+                                  Spacer(),
 
-                              //
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                          title: Text(""))),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                          onTap: (() {
+                                            Get.to(Notifications());
+                                          }),
+                                          child: Container(
+                                              child: SvgPicture.asset(
+                                            "assets/images/svg/notification-svgrepo-com.svg",
+                                            height: 23,
+                                            width: 23,
+                                            fit: BoxFit.scaleDown,
+                                          ))),
+                                      const SizedBox(width: 20),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(const Profile());
+                                        },
+
+                                        child: cachedProfileImg.toString() !=
+                                                    "" &&
+                                                cachedProfileImg.toString() !=
+                                                    "null"
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle),
+                                                child: Image.network(
+                                                    "https://statup.ng/statup/" +
+                                                        cachedProfileImg
+                                                            .toString(),
+                                                    height: 14,
+                                                    width: 14))
+                                            : const Icon(Icons.account_circle,
+                                                color: Colors.black, size: 22),
+
+                                        //
+                                      ),
+                                    ],
+                                  )
+                                  // Your widgets here
+                                ]),
+                          ))),
                   body: Container(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     color: Colors.white,
@@ -172,7 +188,7 @@ class _LandingState extends State<Landing> {
                                           ? "₦" + overallTarget.toString()
                                           : "₦0.00",
                                       style: const TextStyle(
-                                          fontSize: 11,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black)),
                                   const SizedBox(width: 5),
@@ -582,7 +598,9 @@ class _LandingState extends State<Landing> {
                                       color: color.grey2()),
                                 )
                               : const SizedBox(),
-                          const SizedBox(height: 5),
+                          extend == true
+                              ? const SizedBox(height: 5)
+                              : SizedBox(),
 
                           allSavingsPlans!.isEmpty || extend == true
                               ? Container(
@@ -702,7 +720,7 @@ class _LandingState extends State<Landing> {
                                 width: 18,
                                 fit: BoxFit.scaleDown,
                               ))),
-                          const SizedBox(height: 3),
+                          const SizedBox(height: 1),
 
                           SizedBox(
                               height: (Get.height * 0.6) - 20,
@@ -717,7 +735,7 @@ class _LandingState extends State<Landing> {
                                 },
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
-                                      width: Get.width - 43,
+                                      width: Get.width - 50,
                                       height: 100,
                                       color: Colors.white,
                                       child: Column(
@@ -732,13 +750,13 @@ class _LandingState extends State<Landing> {
                                                   ["product_image"],
                                               width: double.infinity,
                                               fit: BoxFit.cover,
-                                              height: 260,
+                                              height: 270,
                                               placeholder: (ctx, text) {
                                                 return loader();
                                               },
                                             ),
                                           ),
-                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 1),
                                           Row(
                                             children: [
                                               Column(
@@ -753,7 +771,7 @@ class _LandingState extends State<Landing> {
                                                       textAlign:
                                                           TextAlign.center,
                                                       style: const TextStyle(
-                                                          fontSize: 11,
+                                                          fontSize: 15,
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -828,7 +846,7 @@ class _LandingState extends State<Landing> {
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 2),
                                           Material(
                                               borderRadius:
                                                   BorderRadius.circular(25.0),
@@ -848,7 +866,7 @@ class _LandingState extends State<Landing> {
                                                   child: Center(
                                                     child: const Text("Buy",
                                                         style: TextStyle(
-                                                            fontSize: 14,
+                                                            fontSize: 12,
                                                             color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight
@@ -880,6 +898,9 @@ class _LandingState extends State<Landing> {
                       ),
                       Column(
                         children: [
+                          const SizedBox(
+                            height: 3,
+                          ),
                           GestureDetector(
                             onTap: (() {
                               Get.to(const CustomiseGoals());
@@ -891,13 +912,10 @@ class _LandingState extends State<Landing> {
                               fit: BoxFit.scaleDown,
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
                           const Text("Customise",
                               style: TextStyle(
                                   fontSize: 7,
-                                  fontFamily: 'BonvenoCF-Light',
+                                  // fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.normal)),
@@ -906,6 +924,9 @@ class _LandingState extends State<Landing> {
                       const Spacer(),
                       Column(
                         children: [
+                          const SizedBox(
+                            height: 3,
+                          ),
                           GestureDetector(
                               onTap: (() {
                                 Get.to(const AddBusiness());
@@ -916,13 +937,10 @@ class _LandingState extends State<Landing> {
                                 width: 29,
                                 fit: BoxFit.scaleDown,
                               )),
-                          const SizedBox(
-                            height: 5,
-                          ),
                           const Text("Invoice",
                               style: TextStyle(
                                   fontSize: 7,
-                                  fontFamily: 'BonvenoCF-Light',
+                                  // fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.normal)),
@@ -931,6 +949,9 @@ class _LandingState extends State<Landing> {
                       const Spacer(),
                       Column(
                         children: [
+                          const SizedBox(
+                            height: 3,
+                          ),
                           GestureDetector(
                               onTap: (() {
                                 Get.to(const Transaction());
@@ -941,13 +962,10 @@ class _LandingState extends State<Landing> {
                                 width: 29,
                                 fit: BoxFit.scaleDown,
                               )),
-                          const SizedBox(
-                            height: 5,
-                          ),
                           const Text("Transactions",
                               style: TextStyle(
                                   fontSize: 7,
-                                  fontFamily: 'BonvenoCF-Light',
+                                  // fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.normal)),
@@ -956,19 +974,19 @@ class _LandingState extends State<Landing> {
                       const Spacer(),
                       Column(
                         children: [
+                          const SizedBox(
+                            height: 3,
+                          ),
                           SvgPicture.asset(
                             "assets/images/svg/explore.svg",
                             height: 29,
                             width: 29,
                             fit: BoxFit.scaleDown,
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
                           const Text("Explore",
                               style: TextStyle(
                                   fontSize: 7,
-                                  fontFamily: 'BonvenoCF-Light',
+                                  // fontFamily: 'BonvenoCF-Light',
                                   decoration: TextDecoration.none,
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.normal)),

@@ -28,6 +28,8 @@ class _TransactionState extends State<Transaction> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            titleSpacing: 0,
+            centerTitle: true,
             leading: IconButton(
                 icon: const Icon(Icons.arrow_back,
                     color: Color.fromARGB(255, 0, 0, 0)),
