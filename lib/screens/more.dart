@@ -146,7 +146,7 @@ class More extends StatelessWidget {
                       {
                         platform = 'iOS',
                         app_share_link =
-                            "https://statup.com.ng/images/appstore.png",
+                            "https://apps.apple.com/us/app/statup/id1608627091",
                         Share.share(
                           app_share_link,
                         )
@@ -200,20 +200,14 @@ class More extends StatelessWidget {
                     if (Platform.isIOS)
                       {
                         platform = 'iOS',
-                        app_share_link =
-                            "https://statup.com.ng/images/appstore.png",
-                        Share.share(
-                          app_share_link,
-                        )
+                        launchAppstore(
+                            "https://play.google.com/store/apps/details?id=com.statup.app")
                       }
                     else
                       {
                         platform = 'Android',
-                        app_share_link =
-                            "https://play.google.com/store/apps/details?id=com.statup.app",
-                        Share.share(
-                          app_share_link,
-                        )
+                        launchPlaystore(
+                            "https://play.google.com/store/apps/details?id=com.statup.app")
                       }
                   }),
             )),
@@ -337,6 +331,24 @@ class More extends StatelessWidget {
     } else {
       await launchUrl(Uri.parse("http://t.me/getstatup"),
           mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> launchPlaystore(String url) async {
+    if (!await canLaunchUrl(Uri.parse(url))) {
+      print("could not launch link");
+      throw 'Could not launch telegram url';
+    } else {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> launchAppstore(String url) async {
+    if (!await canLaunchUrl(Uri.parse(url))) {
+      print("could not launch link");
+      throw 'Could not launch telegram url';
+    } else {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     }
   }
 }
