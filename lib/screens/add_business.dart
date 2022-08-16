@@ -22,6 +22,7 @@ class AddBusiness extends StatefulWidget {
 
 class _AddBusinessState extends State<AddBusiness> {
   TextEditingController business_name = TextEditingController();
+  TextEditingController business_address = TextEditingController();
   TextEditingController business_phone = TextEditingController();
   TextEditingController acc_name = TextEditingController();
   TextEditingController acc_num = TextEditingController();
@@ -57,6 +58,7 @@ class _AddBusinessState extends State<AddBusiness> {
     if (business != null && business.isNotEmpty) {
       setState(() {
         business_name.text = business["business_name"];
+        business_address.text = business["business_address"];
         category = business["category"];
         location = business["location"];
         business_phone.text = business["phone"];
@@ -331,6 +333,20 @@ class _AddBusinessState extends State<AddBusiness> {
                                       color: Colors.black),
                                 ],
                               )))),
+                  const SizedBox(height: 5),
+                  Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: CustomField1(
+                        controller: business_address,
+                        obscureText: false,
+                        hint: business_address.text == ""
+                            ? "Full Business Address"
+                            : business_address.text,
+                        label: "",
+                      )),
                   const SizedBox(height: 25),
                   Padding(
                       padding: const EdgeInsets.only(
@@ -601,11 +617,12 @@ class _AddBusinessState extends State<AddBusiness> {
                                 print(networkImage.toString()),
 
                                 if (business_name.text.isNotEmpty &&
+                                    business_address.text.isNotEmpty &&
                                     category.isNotEmpty &&
                                     location.isNotEmpty &&
                                     business_phone.text.isNotEmpty)
                                   {
-                                    if (((selectedLogo.isEmpty ||
+                                    /* if (((selectedLogo.isEmpty ||
                                                 selectedSignature.isEmpty) &&
                                             networkImage == true) ||
                                         ((selectedLogo.isNotEmpty &&
@@ -614,82 +631,81 @@ class _AddBusinessState extends State<AddBusiness> {
                                         (selectedLogo.isNotEmpty &&
                                                 selectedSignature.isNotEmpty) &&
                                             networkImage == true)
+                                      {*/
+                                    if (_controller.value == true &&
+                                        acc_name.text.isNotEmpty &&
+                                        acc_num.text.isNotEmpty &&
+                                        bank.isNotEmpty)
                                       {
-                                        if (_controller.value == true &&
-                                            acc_name.text.isNotEmpty &&
-                                            acc_num.text.isNotEmpty &&
-                                            bank.isNotEmpty)
-                                          {
-                                            loading("savings...", context),
-                                            Invoice()
-                                                .newBusiness(
-                                                    business_name:
-                                                        business_name.text,
-                                                    category: category,
-                                                    location: location,
-                                                    phone: business_phone.text,
-                                                    bank: bank,
-                                                    account_name: acc_name.text,
-                                                    account_num: acc_num.text,
-                                                    logo:
-                                                        selectedLogo.isNotEmpty
-                                                            ? selectedLogo[0]
-                                                            : null,
-                                                    signature: selectedSignature
-                                                            .isNotEmpty
+                                        loading("savings...", context),
+                                        Invoice()
+                                            .newBusiness(
+                                                business_name:
+                                                    business_name.text,
+                                                business_address:
+                                                    business_address.text,
+                                                category: category,
+                                                location: location,
+                                                phone: business_phone.text,
+                                                bank: bank,
+                                                account_name: acc_name.text,
+                                                account_num: acc_num.text,
+                                                logo: selectedLogo.isNotEmpty
+                                                    ? selectedLogo[0]
+                                                    : null,
+                                                signature:
+                                                    selectedSignature.isNotEmpty
                                                         ? selectedSignature[0]
                                                         : null)
-                                                .then((value) => {
-                                                      if (value == 1)
-                                                        {
-                                                          Get.to(NewInvoice(
-                                                              business_id:
-                                                                  business_id)),
-                                                          Navigator.of(context,
-                                                                  rootNavigator:
-                                                                      true)
-                                                              .pop(),
-                                                        }
-                                                      else
-                                                        {
-                                                          showErrorToast(
-                                                              "An Error  Occured! Please try again!")
-                                                        }
-                                                    })
-                                          }
-                                        else if (_controller.value == false)
-                                          {
-                                            Invoice()
-                                                .newBusiness(
-                                                    business_name:
-                                                        business_name.text,
-                                                    category: category,
-                                                    location: location,
-                                                    phone: business_phone.text,
-                                                    bank: "",
-                                                    account_name: "",
-                                                    logo:
-                                                        selectedLogo.isNotEmpty
-                                                            ? selectedLogo[0]
-                                                            : null,
-                                                    signature: selectedSignature
-                                                            .isNotEmpty
+                                            .then((value) => {
+                                                  if (value == 1)
+                                                    {
+                                                      Get.to(NewInvoice(
+                                                          business_id:
+                                                              business_id)),
+                                                      Navigator.of(context,
+                                                              rootNavigator:
+                                                                  true)
+                                                          .pop(),
+                                                    }
+                                                  else
+                                                    {
+                                                      showErrorToast(
+                                                          "An Error  Occured! Please try again!")
+                                                    }
+                                                })
+                                      }
+                                    else if (_controller.value == false)
+                                      {
+                                        Invoice()
+                                            .newBusiness(
+                                                business_name:
+                                                    business_name.text,
+                                                business_address:
+                                                    business_address.text,
+                                                category: category,
+                                                location: location,
+                                                phone: business_phone.text,
+                                                bank: "",
+                                                account_name: "",
+                                                logo: selectedLogo.isNotEmpty
+                                                    ? selectedLogo[0]
+                                                    : null,
+                                                signature:
+                                                    selectedSignature.isNotEmpty
                                                         ? selectedSignature[0]
                                                         : null,
-                                                    account_num: "")
-                                                .then((value) => {
-                                                      if (value == 1)
-                                                        {
-                                                          Get.to(
-                                                              const NewInvoice())
-                                                        }
-                                                      else
-                                                        {
-                                                          showErrorToast(
-                                                              "An Error  Occured! Please try again!")
-                                                        }
-                                                    })
-                                          }
+                                                account_num: "")
+                                            .then((value) => {
+                                                  if (value == 1)
+                                                    {Get.to(const NewInvoice())}
+                                                  else
+                                                    {
+                                                      showErrorToast(
+                                                          "An Error  Occured! Please try again!")
+                                                    }
+                                                })
+                                        // }
                                       }
                                     else if ((selectedLogo.isEmpty ||
                                             selectedSignature.isEmpty) &&

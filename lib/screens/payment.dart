@@ -64,7 +64,7 @@ class _PaymentState extends State<Payment> {
             var data = jsonDecode(message.message);
 
             if (data["code"] == 1) {
-              Hive.box("statup").put("savings", data["data"]);
+              Hive.box("statup").put("savings", data["data"]["savings"]);
               Get.offAll(Landing());
 
               showToast("Successfully deposited into ${widget.savingsName}");

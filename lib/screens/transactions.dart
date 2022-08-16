@@ -30,24 +30,16 @@ class _TransactionState extends State<Transaction> {
         appBar: AppBar(
             titleSpacing: 0,
             centerTitle: true,
-            leading: IconButton(
-                icon: const Icon(Icons.arrow_back,
-                    color: Color.fromARGB(255, 0, 0, 0)),
-                onPressed: () => Get.back()
-                // open side menu},
-                ),
             backgroundColor: color.green(),
             elevation: 0.0,
             // ignore: prefer_const_literals_to_create_immutables
 
-            title: const Center(
-              child: Text(
-                "Transaction History",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w200,
-                  color: Colors.white,
-                ),
+            title: Text(
+              "Transaction History",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w200,
+                color: Colors.white,
               ),
             )),
         body: FutureBuilder(

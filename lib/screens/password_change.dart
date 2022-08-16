@@ -54,27 +54,20 @@ class _PasswordSettingsState extends State<PasswordSettings> {
 
     return Scaffold(
         appBar: AppBar(
-            leading: IconButton(
-                icon: const Icon(Icons.arrow_back,
-                    color: Color.fromARGB(255, 0, 0, 0)),
-                onPressed: () => Get.back()
-                // open side menu},
-                ),
-            backgroundColor: color.green(),
-            elevation: 0.0,
-            // ignore: prefer_const_literals_to_create_immutables
+          backgroundColor: color.green(),
+          elevation: 0.0,
+          centerTitle: true,
+          // ignore: prefer_const_literals_to_create_immutables
 
-            title: Row(children: [
-              SizedBox(width: 50),
-              Text(
-                "Password",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w200,
-                  color: Colors.white,
-                ),
-              ),
-            ])),
+          title: Text(
+            "Password",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w200,
+              color: Colors.white,
+            ),
+          ),
+        ),
         body: Container(
             height: double.maxFinite,
             width: double.maxFinite,

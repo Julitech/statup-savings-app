@@ -51,6 +51,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return WillPopScope(
         onWillPop: onWillPop,
         child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0.0,
+              centerTitle: true,
+              leading: GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  )
+
+                  //
+                  ),
+              // ignore: prefer_const_literals_to_create_immutables
+
+              title: Text(
+                "",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w200,
+                  color: color.green(),
+                ),
+              ),
+            ),
             body: Container(
                 color: Colors.white,
                 width: double.maxFinite,
@@ -133,6 +159,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   //rest of the existing code
                                   ))),
                       const SizedBox(height: 25),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Get.to(const ForgotPassword());
+                              },
+                              child: Text("Resend Code",
+                                  // textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      color: color.green(),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold))),
+                        ],
+                      )
                     ],
                   ),
                 ))));

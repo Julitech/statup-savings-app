@@ -771,3 +771,74 @@ class CustomField7 extends StatelessWidget {
     );
   }
 }
+
+class CustomField8 extends StatelessWidget {
+  final String? label;
+  final String? hint;
+  final TextEditingController? controller;
+  final TextInputType? type;
+  final bool? obscureText;
+  final Color? focus;
+  final FocusNode? node;
+
+  const CustomField8(
+      {Key? key,
+      this.hint,
+      this.label,
+      this.controller,
+      this.type,
+      this.node,
+      this.obscureText,
+      this.focus})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 5),
+        SizedBox(
+          child: TextField(
+            controller: controller,
+            maxLines: 20,
+            cursorColor: Colors.green,
+            obscureText: obscureText ?? false,
+            keyboardType: type ?? TextInputType.text,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              // suffixIcon: ,
+              labelText: label,
+              labelStyle: TextStyle(
+                fontSize: 12,
+                height: 1.5,
+                color: color.green(),
+              ),
+              hintStyle: TextStyle(
+                fontSize: 12,
+                height: 1.5,
+                color: const Color.fromARGB(255, 65, 65, 65).withOpacity(.8),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: color.green().withOpacity(.8)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide:
+                    BorderSide(color: color.green().withOpacity(.8), width: 2),
+              ),
+              // filled: true,
+              // fillColor: node.hasFocus ? black : white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

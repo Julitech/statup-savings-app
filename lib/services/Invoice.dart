@@ -44,7 +44,7 @@ class Invoice {
         'business_id': business_id
       });
 
-      var response = await dio.post(baseUrl + 'invoice/saveinvoice',
+      var response = await dio.post(baseUrl + 'invoice/saveInvoice',
           data: formData,
           options: eos.Options(
             headers: {
@@ -83,6 +83,7 @@ class Invoice {
 
   Future<dynamic> newBusiness({
     @required String? business_name,
+    @required String? business_address,
     @required String? category,
     @required String? location,
     @required String? phone,
@@ -101,6 +102,7 @@ class Invoice {
 
       var formData = eos.FormData.fromMap({
         'business_name': business_name,
+        'business_address': business_address,
         'category': category,
         'location': location,
         'phone': phone,

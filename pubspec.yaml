@@ -60,6 +60,9 @@ dependencies:
   dropdown_search2: ^1.0.2
   flutterwave_standard: ^1.0.4
   webview_flutter: ^3.0.4
+  url_launcher: ^6.1.5
+  
+  
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +78,8 @@ dev_dependencies:
   flutter_screenutil: ^5.0.0+2
   hive_generator: ^1.1.2
   build_runner: ^2.1.7
+  change_app_package_name: ^1.1.0
+
 
 
 flutter_icons:

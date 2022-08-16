@@ -1,4 +1,4 @@
-package com.statup.statup
+package com.statup.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

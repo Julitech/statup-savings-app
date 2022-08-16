@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share/share.dart';
 import 'package:statup/screens/settings.dart';
+import 'package:statup/screens/support.dart';
 import '../components/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 
 class More extends StatelessWidget {
   const More({
@@ -11,6 +16,8 @@ class More extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String platform;
+    String app_share_link = "";
     myColors color = myColors();
     return Scaffold(
         body: ListView(
@@ -134,7 +141,26 @@ class More extends StatelessWidget {
                           fontSize: 13),
                     ),
                   ]),
-              onTap: () => {},
+              onTap: (() => {
+                    if (Platform.isIOS)
+                      {
+                        platform = 'iOS',
+                        app_share_link =
+                            "https://statup.com.ng/images/appstore.png",
+                        Share.share(
+                          app_share_link,
+                        )
+                      }
+                    else
+                      {
+                        platform = 'Android',
+                        app_share_link =
+                            "https://play.google.com/store/apps/details?id=com.statup.app",
+                        Share.share(
+                          app_share_link,
+                        )
+                      }
+                  }),
             )),
         Container(
             padding: const EdgeInsets.all(10),
@@ -170,7 +196,26 @@ class More extends StatelessWidget {
                           fontSize: 13),
                     ),
                   ]),
-              onTap: () => {},
+              onTap: (() => {
+                    if (Platform.isIOS)
+                      {
+                        platform = 'iOS',
+                        app_share_link =
+                            "https://statup.com.ng/images/appstore.png",
+                        Share.share(
+                          app_share_link,
+                        )
+                      }
+                    else
+                      {
+                        platform = 'Android',
+                        app_share_link =
+                            "https://play.google.com/store/apps/details?id=com.statup.app",
+                        Share.share(
+                          app_share_link,
+                        )
+                      }
+                  }),
             )),
         Container(
             padding: const EdgeInsets.all(10),
@@ -206,8 +251,45 @@ class More extends StatelessWidget {
                           fontSize: 13),
                     ),
                   ]),
-              onTap: () => {},
+              onTap: () => {Get.to(Support())},
             )),
+        Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(width: 1.0, color: color.grey2()),
+              ),
+              color: Colors.white,
+            ),
+            child: ListTile(
+              leading: SvgPicture.asset(
+                "assets/images/svg/telegram-svgrepo-com.svg",
+                height: 21,
+                width: 21,
+                fit: BoxFit.scaleDown,
+                color: color.green(),
+              ),
+              title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Telegram',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: color.green(),
+                          fontSize: 15),
+                    ),
+                    Text(
+                      'Join Our Telegram Community',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: color.grey(),
+                          fontSize: 13),
+                    ),
+                  ]),
+              onTap: () => {_launchUrl()},
+            )),
+
         Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
@@ -235,16 +317,26 @@ class More extends StatelessWidget {
                           fontSize: 15),
                     ),
                     Text(
-                      'Learn More About StartUp Policies',
+                      'Learn More About StatUp Policies',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color.grey(),
                           fontSize: 13),
                     ),
                   ]),
-              onTap: () => {},
+              onTap: () => {Get.to(Support())},
             )),
       ],
     ));
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await canLaunchUrl(Uri.parse("https://t.me/getstatup"))) {
+      print("could not launch link");
+      throw 'Could not launch telegram url';
+    } else {
+      await launchUrl(Uri.parse("http://t.me/getstatup"),
+          mode: LaunchMode.externalApplication);
+    }
   }
 }

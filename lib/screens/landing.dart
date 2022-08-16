@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:statup/screens/add_business.dart';
 import 'package:statup/screens/customise_savings.dart';
+import 'package:statup/screens/explore.dart';
 import 'package:statup/screens/profile.dart';
 import 'package:statup/screens/set_savings.dart';
 import 'package:statup/screens/transactions.dart';
+import 'package:statup/services/others.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -186,7 +188,7 @@ class _LandingState extends State<Landing> {
                                   Text(
                                       overallTargetVisibility == true
                                           ? "₦" + overallTarget.toString()
-                                          : "₦0.00",
+                                          : "--+--",
                                       style: const TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
@@ -722,162 +724,227 @@ class _LandingState extends State<Landing> {
                               ))),
                           const SizedBox(height: 1),
 
-                          SizedBox(
-                              height: (Get.height * 0.6) - 20,
-                              width: double.maxFinite,
-                              child: ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: allProducts.length,
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                separatorBuilder: (c, i) {
-                                  return const SizedBox(width: 10);
-                                },
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                      width: Get.width - 50,
-                                      height: 100,
-                                      color: Colors.white,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            child: CachedNetworkImage(
-                                              imageUrl: allProducts[index]
-                                                  ["product_image"],
-                                              width: double.infinity,
-                                              fit: BoxFit.cover,
-                                              height: 270,
-                                              placeholder: (ctx, text) {
-                                                return loader();
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(height: 1),
-                                          Row(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                      allProducts[index]
-                                                          ["product_name"],
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  const SizedBox(height: 2),
-                                                  Text(
-                                                      allProducts[index][
-                                                          "product_description"],
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          fontSize: 8,
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight
-                                                              .normal)),
-                                                ],
-                                              ),
-                                              Spacer(),
-                                              Column(
-                                                children: [
-                                                  Text("N5,800",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: color.green(),
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                  Row(
-                                                    children: [
-                                                      const Text("Sold",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: 11,
-                                                              color:
-                                                                  Colors.black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      SizedBox(width: 5),
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6),
-                                                            border: Border.all(
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        207,
-                                                                        207,
-                                                                        207))),
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 10,
-                                                                right: 10,
-                                                                top: 3,
-                                                                bottom: 3),
-                                                        child: const Text("25",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              fontSize: 11,
-                                                              color:
-                                                                  Colors.black,
-                                                            )),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Material(
-                                              borderRadius:
-                                                  BorderRadius.circular(25.0),
-                                              elevation: 10,
-                                              shadowColor: Color.fromARGB(
-                                                  255, 209, 209, 209),
-                                              child: Container(
-                                                  height: 30,
-                                                  width: double.maxFinite,
-                                                  decoration: BoxDecoration(
-                                                    color: color.orange(),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(25.0),
+                          FutureBuilder(
+                              future: Others().getProducts(),
+                              builder: (context, AsyncSnapshot snapshot) {
+                                if (!snapshot.hasData) {
+                                  return loader();
+                                } else {
+                                  if (snapshot.data.isNotEmpty &&
+                                      snapshot.data != null) {
+                                    List? products = snapshot.data;
+                                    return SizedBox(
+                                        height: (Get.height * 0.6) - 20,
+                                        width: double.maxFinite,
+                                        child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemCount: products!.length,
+                                          scrollDirection: Axis.horizontal,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          separatorBuilder: (c, i) {
+                                            return const SizedBox(width: 10);
+                                          },
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Container(
+                                                width: Get.width - 50,
+                                                height: 100,
+                                                color: Colors.white,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            "https://statup.ng/statup/" +
+                                                                products[index]
+                                                                    ["image"],
+                                                        width: double.infinity,
+                                                        fit: BoxFit.cover,
+                                                        height: 270,
+                                                        placeholder:
+                                                            (ctx, text) {
+                                                          return loader();
+                                                        },
+                                                      ),
                                                     ),
-                                                  ),
-                                                  child: Center(
-                                                    child: const Text("Buy",
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  )
-                                                  //rest of the existing code
-                                                  ))
-                                        ],
-                                      ));
-                                },
-                              )),
+                                                    const SizedBox(height: 1),
+                                                    Row(
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                products[index][
+                                                                    "product_name"],
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                            const SizedBox(
+                                                                height: 2),
+                                                            Text(
+                                                                products[index][
+                                                                    "product_desc"],
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontSize: 8,
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal)),
+                                                          ],
+                                                        ),
+                                                        Spacer(),
+                                                        Column(
+                                                          children: [
+                                                            Text(
+                                                                "₦" +
+                                                                    products[index]
+                                                                        [
+                                                                        "product_price"],
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: color
+                                                                        .green(),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                            Row(
+                                                              children: [
+                                                                const Text(
+                                                                    "Sold",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            11,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              6),
+                                                                      border: Border.all(
+                                                                          color: Color.fromARGB(
+                                                                              255,
+                                                                              207,
+                                                                              207,
+                                                                              207))),
+                                                                  padding: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              10,
+                                                                          right:
+                                                                              10,
+                                                                          top:
+                                                                              3,
+                                                                          bottom:
+                                                                              3),
+                                                                  child: Text(
+                                                                      products[
+                                                                              index]
+                                                                          [
+                                                                          "sold"],
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            11,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      )),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 2),
+                                                    Material(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.0),
+                                                        elevation: 10,
+                                                        shadowColor:
+                                                            Color.fromARGB(255,
+                                                                209, 209, 209),
+                                                        child: Container(
+                                                            height: 30,
+                                                            width:
+                                                                double
+                                                                    .maxFinite,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: color
+                                                                  .orange(),
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    25.0),
+                                                              ),
+                                                            ),
+                                                            child: Center(
+                                                              child: const Text(
+                                                                  "Buy",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold)),
+                                                            )
+                                                            //rest of the existing code
+                                                            ))
+                                                  ],
+                                                ));
+                                          },
+                                        ));
+                                  } else {
+                                    return Container(
+                                        child: const Center(
+                                      child:
+                                          Text("Could Not Retrieve Products"),
+                                    ));
+                                  }
+                                }
+                              })
                         ],
                       ),
                     ),
@@ -977,12 +1044,16 @@ class _LandingState extends State<Landing> {
                           const SizedBox(
                             height: 3,
                           ),
-                          SvgPicture.asset(
-                            "assets/images/svg/explore.svg",
-                            height: 29,
-                            width: 29,
-                            fit: BoxFit.scaleDown,
-                          ),
+                          GestureDetector(
+                              onTap: (() {
+                                Get.to(const Explore());
+                              }),
+                              child: SvgPicture.asset(
+                                "assets/images/svg/explore.svg",
+                                height: 29,
+                                width: 29,
+                                fit: BoxFit.scaleDown,
+                              )),
                           const Text("Explore",
                               style: TextStyle(
                                   fontSize: 7,
