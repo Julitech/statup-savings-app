@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/verify_otp.dart';
-import 'package:statup/services/auth.dart';
+import '/screens/verify_otp.dart';
+import '/services/auth.dart';
 import '../components/constants.dart';
 import 'package:get/get.dart';
 import '../components/colors.dart';

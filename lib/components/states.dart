@@ -1,5 +1,5 @@
 class States {
-  List states = [
+  List<String> states = [
     "Abia",
     "Adamawa",
     "Akwa Ibom",

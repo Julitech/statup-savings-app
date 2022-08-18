@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:statup/services/savings.dart';
+import '/services/savings.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:statup/screens/more.dart';
-import 'package:statup/screens/signup_login.dart';
+import '/screens/more.dart';
+import '/screens/signup_login.dart';
 import '../screens/tab_in.dart';
 import 'colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';

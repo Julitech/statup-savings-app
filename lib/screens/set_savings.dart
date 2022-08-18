@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:statup/screens/landing.dart';
-import 'package:statup/screens/payment.dart';
+import '/screens/landing.dart';
+import '/screens/payment.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -44,6 +44,7 @@ class _SetSavingsState extends State<SetSavings> {
   ];
 
   List<String> preselectedStartingAmount = [
+    "3,000",
     "5,000",
     "10,000",
     "20,000",
@@ -205,7 +206,7 @@ class _SetSavingsState extends State<SetSavings> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N5,000',
+                            hintText: 'Minimum is N3,000',
                             hintStyle: TextStyle(
                               fontSize: 14,
                               height: 1.5,
@@ -368,7 +369,7 @@ class _SetSavingsState extends State<SetSavings> {
                                                 3000)
                                               {
                                                 showErrorToast(
-                                                    "The Starting Amount Must Not Be Less Than N5,000 !"),
+                                                    "The Starting Amount Must Not Be Less Than N3,000 !"),
                                               }
                                           }
                                         else

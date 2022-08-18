@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/landing.dart';
-import 'package:statup/services/auth.dart';
+import '/screens/landing.dart';
+import '/services/auth.dart';
 import '../components/banks.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';

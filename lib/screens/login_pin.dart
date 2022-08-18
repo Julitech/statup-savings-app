@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_svg/svg.dart';
-import 'package:statup/screens/tab_in.dart';
-import 'package:statup/services/auth.dart';
+import '/screens/tab_in.dart';
+import '/services/auth.dart';
 import 'package:get/get.dart';
 import '../components/constants.dart';
 import 'package:flutter/material.dart';

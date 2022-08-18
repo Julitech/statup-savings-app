@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
-import 'package:statup/screens/settings.dart';
-import 'package:statup/screens/support.dart';
+import '/screens/referrals.dart';
+import '/screens/settings.dart';
+import '/screens/support.dart';
 import '../components/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'legal.dart';
 
 class More extends StatelessWidget {
   const More({
@@ -61,7 +64,7 @@ class More extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Referral',
+                      'Referrals',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color.green(),
@@ -75,7 +78,7 @@ class More extends StatelessWidget {
                           fontSize: 13),
                     ),
                   ]),
-              onTap: () => {},
+              onTap: () => {Get.to(Referrals())},
             )),
         Container(
             padding: const EdgeInsets.all(10),
@@ -127,14 +130,14 @@ class More extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Review StatUp',
+                      'Share StatUp',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color.green(),
                           fontSize: 15),
                     ),
                     Text(
-                      'Rate Us On Appstore',
+                      'Share StatUp With Your Friends',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color.grey(),
@@ -182,14 +185,14 @@ class More extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Share StatUp',
+                      'Review StatUp',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color.green(),
                           fontSize: 15),
                     ),
                     Text(
-                      'Share StatUp With Your Friends',
+                      'Rate Us On Appstore',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color.grey(),
@@ -318,7 +321,7 @@ class More extends StatelessWidget {
                           fontSize: 13),
                     ),
                   ]),
-              onTap: () => {Get.to(Support())},
+              onTap: (() => {Get.to(Legal())}),
             )),
       ],
     ));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:get/get.dart';
-import 'package:statup/components/constants.dart';
+import '/components/constants.dart';
 import '../components/colors.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:statup/screens/landing.dart';
-import 'package:statup/screens/signup.dart';
-import 'package:statup/screens/verify_otp.dart';
+import '/screens/landing.dart';
+import '/screens/signup.dart';
+import '/screens/verify_otp.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';

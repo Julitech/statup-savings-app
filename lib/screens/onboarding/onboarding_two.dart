@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:statup/screens/onboarding/onboarding_three.dart';
+import '/screens/onboarding/onboarding_three.dart';
 
 import '../../components/colors.dart';
 import '../tab_in.dart';

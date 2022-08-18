@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/pin.dart';
-import 'package:statup/screens/signup.dart';
-import 'package:statup/services/auth.dart';
+import '/screens/pin.dart';
+import '/screens/signup.dart';
+import '/services/auth.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';

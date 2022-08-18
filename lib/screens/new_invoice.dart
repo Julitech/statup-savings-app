@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:statup/components/units.dart';
-import 'package:statup/screens/getInvoice.dart';
-import 'package:statup/services/Invoice.dart';
+import '/components/units.dart';
+import '/screens/getInvoice.dart';
+import '/services/Invoice.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:hive/hive.dart';

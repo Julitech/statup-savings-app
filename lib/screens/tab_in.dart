@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/signup.dart';
+import '/screens/signup.dart';
 import '../components/colors.dart';
 import 'login.dart';
 import 'package:flutter_svg/flutter_svg.dart';

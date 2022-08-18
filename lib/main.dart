@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/login_pin.dart';
-import 'package:statup/screens/onboarding/onboarding_one.dart';
-import 'package:statup/screens/tab_in.dart';
+import '/screens/login_pin.dart';
+import '/screens/onboarding/onboarding_one.dart';
+import '/screens/tab_in.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -51,14 +52,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return ScreenUtilInit(
+      designSize: Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'StatUp',
+          // You can use the library anywhere in the app even in theme
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+
+            //   scaffoldBackgroundColor: Colors.transparent,
+            appBarTheme: const AppBarTheme(
+              color: Colors.transparent,
+              elevation: 0,
+            ),
+          ),
+          home:
+              loggedIn == null ? const OnboardingOne() : const PinLoginScreen(),
+        );
+      },
+      //child: const HomePage(title: 'First Method'),
+    );
+
+    /*GetMaterialApp(
       //for navigation dont forget to use GetMaterialApp
       title: 'StatUp',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: loggedIn == null ? const OnboardingOne() : const PinLoginScreen(),
-    );
+    );*/
 
     //const Login();
   }
