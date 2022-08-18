@@ -157,6 +157,9 @@ class AuthService {
           Hive.box("statup").put("loggedIn", true);
           Hive.box("statup").put("savings", data["savings_plans"]);
 
+          Hive.box("statup").put("android_version", data["android_version"]);
+          Hive.box("statup").put("ios_version", data["ios_version"]);
+
           return 1;
         } else {
           return "error!";
@@ -210,6 +213,14 @@ class AuthService {
           Hive.box("statup").put("first_name", data["data"]['0']["first_name"]);
           Hive.box("statup").put("last_name", data["data"]['0']["last_name"]);
           Hive.box("statup").put("pin", data["data"]['0']["pin"]);
+
+          Hive.box("statup").put("android_version", data["android_version"]);
+
+          Hive.box("statup").put("ios_version", data["ios_version"]);
+
+          Hive.box("statup")
+              .put("referral_code", data["data"]['0']["ref_code"]);
+
           Hive.box("statup")
               .put("access_token", data["data"]['0']["access_token"]);
           return 1;
@@ -273,6 +284,9 @@ class AuthService {
           Hive.box("statup")
               .put("profile_image", data["data"]["profile_picture"]);
           Hive.box("statup").put("bank", data["data"]["bank"]);
+
+          Hive.box("statup").put("referral_code", data["data"]["ref_code"]);
+
           Hive.box("statup").put("loggedIn", true);
           Hive.box("statup").put("savings", data["data"]["savings_plans"]);
           print("logged In successfully!");
@@ -281,7 +295,9 @@ class AuthService {
           return 1;
         } else if (data["code"] == 2) {
           print("Sorry! No account was found with that email!");
-          return "Sorry! No account was found with that email!";
+          return 2;
+        } else if (data["data"]["email_verification_status"] == "0") {
+          return 3;
         } else {
           print("An error occured!");
           return "An error occured!";

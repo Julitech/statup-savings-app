@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'landing.dart';
 
-class Payment extends StatefulWidget {
+class Purchase extends StatefulWidget {
   final amount, savings_id, freq, savingsName;
-  const Payment({
+  const Purchase({
     Key? key,
     this.amount,
     this.savings_id,
@@ -19,10 +19,10 @@ class Payment extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PaymentState createState() => _PaymentState();
+  _PurchaseState createState() => _PurchaseState();
 }
 
-class _PaymentState extends State<Payment> {
+class _PurchaseState extends State<Purchase> {
   WebViewController? _webViewController;
   bool isLoading = true;
   String accessToken = Hive.box("statup").get("access_token");
@@ -67,10 +67,10 @@ class _PaymentState extends State<Payment> {
             var data = jsonDecode(message.message);
 
             if (data["code"] == 1) {
-              Hive.box("statup").put("savings", data["data"]["savings"]);
+              //  Hive.box("statup").put("savings", data["data"]["savings"]);
               Get.offAll(Landing());
 
-              showToast("Successfully deposited into ${widget.savingsName}");
+              showToast("You've successfully made a purchase");
             }
 
             final script =
@@ -90,7 +90,7 @@ class _PaymentState extends State<Payment> {
         _webViewController = webViewController;
         String fileContent = await rootBundle.loadString('assets/index.html');
         _webViewController?.loadUrl(
-            'https://statup.ng/statup/index.php/goals/payment?amount=${widget.amount}&savings_id=${widget.savings_id}&freq=${widget.freq}&user_id=$user_id&first_name=$firstName&last_name=$last&email=$email'
+            'https://statup.ng/statup/index.php/ecom/makePurchase?amount=${widget.amount}&state=${widget.savings_id}&phone=${widget.freq}&user_id=$user_id&address=$firstName'
                 .toString());
       },
     );

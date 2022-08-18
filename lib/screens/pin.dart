@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:statup/services/auth.dart';
+import '/services/auth.dart';
 import 'package:get/get.dart';
 import '../components/constants.dart';
 import 'package:flutter/material.dart';

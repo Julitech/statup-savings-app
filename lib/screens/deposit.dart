@@ -5,9 +5,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:statup/screens/payment.dart';
-import 'package:statup/screens/withdraw.dart';
-import 'package:statup/services/savings.dart';
+import '/screens/payment.dart';
+import '/screens/withdraw.dart';
+import '/services/savings.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
@@ -47,6 +47,7 @@ class _DepositState extends State<Deposit> {
   int trans_code = 0;
 
   List<String> preselectedSavings = [
+    "3,000",
     "5,000",
     "10,000",
     "20,000",
@@ -195,7 +196,7 @@ class _DepositState extends State<Deposit> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N5,000',
+                            hintText: 'Minimum is N3,000',
                             hintStyle: TextStyle(
                               fontSize: 14,
                               height: 1.5,
@@ -223,6 +224,14 @@ class _DepositState extends State<Deposit> {
                           children: _generateChildren(
                               preselectedSavings, "preselectedTarget")),
 
+                      const SizedBox(height: 30, width: double.maxFinite),
+                      const Text(
+                        "How often do you want to crush your goals?",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      ),
                       const SizedBox(height: 30, width: double.maxFinite),
 
                       SizedBox(

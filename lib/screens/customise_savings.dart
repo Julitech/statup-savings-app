@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:statup/screens/payment.dart';
-import 'package:statup/services/savings.dart';
+import '/screens/payment.dart';
+import '/services/savings.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -41,6 +41,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
   ];
 
   List<String> preselectedStartingAmount = [
+    "3,000",
     "5,000",
     "10,000",
     "20,000",
@@ -121,7 +122,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                       const SizedBox(height: 10, width: double.maxFinite),
                       SizedBox(
                         child: TextField(
-                          maxLength: 50,
+                          maxLength: 12,
                           controller: goal_name,
                           cursorColor: color.green(),
                           obscureText: false,
@@ -233,7 +234,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N5,000',
+                            hintText: 'Minimum is N3,000',
                             hintStyle: TextStyle(
                               fontSize: 14,
                               height: 1.5,
@@ -376,7 +377,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                                 3000)
                                               {
                                                 showErrorToast(
-                                                    "The Starting Amount Must Not Be Less Than N5,000 !"),
+                                                    "The Starting Amount Must Not Be Less Than N3,000 !"),
                                               }
                                           }
                                         else

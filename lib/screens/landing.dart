@@ -1,12 +1,16 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:statup/screens/add_business.dart';
-import 'package:statup/screens/customise_savings.dart';
-import 'package:statup/screens/explore.dart';
-import 'package:statup/screens/profile.dart';
-import 'package:statup/screens/set_savings.dart';
-import 'package:statup/screens/transactions.dart';
-import 'package:statup/services/others.dart';
+import '/screens/add_business.dart';
+import '/screens/customise_savings.dart';
+import '/screens/explore.dart';
+import '/screens/profile.dart';
+import '/screens/set_savings.dart';
+import '/screens/transactions.dart';
+import '/services/Invoice.dart';
+import '/screens/purchase.dart';
+import '/services/others.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -15,10 +19,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../components/drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:dropdown_search2/dropdown_search2.dart';
 import 'deposit.dart';
 import 'notifications.dart';
 import 'onboarding/onboarding_one.dart';
+import '../components/states.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Landing extends StatefulWidget {
   const Landing();
@@ -29,7 +37,8 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   myColors color = myColors();
-
+  States states = States();
+  String platform = "";
   List allProducts = <Map<String, String>>[];
   List img = [];
   late DateTime currentBackPressTime;
@@ -40,10 +49,23 @@ class _LandingState extends State<Landing> {
   int overallTarget = 0;
   int overallSavings = 0;
   String? cachedProfileImg = Hive.box("statup").get("profile_image");
+  bool showBusinessPlan = true;
+  bool showRentPlan = true;
+  int _selectedIndex = 0;
+  bool updateNotif = false;
+  TextEditingController _phoneController = TextEditingController();
+  String state = "Select State";
 
   @override
   initState() {
     super.initState();
+
+    Timer(const Duration(seconds: 2), () {
+      // _showMaterialDialog2(context);
+      /*setState(() {
+        welcomeGIFVisible = false;
+      });*/
+    });
 
     Map<String, String> details = {
       'product_name': 'Crocs',
@@ -62,10 +84,22 @@ class _LandingState extends State<Landing> {
 
     if (savingsPlans != null) {
       print(savingsPlans.toString());
+
       allSavingsPlans = List.from(savingsPlans!.reversed);
 
       for (var i = 0; i < savingsPlans!.length; i++) {
+        if (allSavingsPlans![i]["name"] == "business-default") {
+          setState(() {
+            showBusinessPlan = false;
+          });
+        }
+        if (allSavingsPlans![i]["name"] == "rent-default") {
+          setState(() {
+            showRentPlan = false;
+          });
+        }
         print(savingsPlans![i]["target"]);
+
         overallTarget =
             overallTarget + int.parse(allSavingsPlans![i]["target"]);
         overallSavings =
@@ -78,17 +112,50 @@ class _LandingState extends State<Landing> {
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
-    if (now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
+    if (now.difference(currentBackPressTime) < const Duration(seconds: 2)) {
       currentBackPressTime = now;
       Fluttertoast.showToast(
           msg: "Press back to exit app", gravity: ToastGravity.TOP);
-      return Future.value(false);
+      return Future.value(true);
     }
     return Future.value(true);
   }
 
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      //style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      // style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      // style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+
+      if (index == 0) {
+        Get.to(const CustomiseGoals());
+      } else if (index == 1) {
+        Get.to(AddBusiness());
+      } else if (index == 2) {
+        Get.to(Transaction());
+      } else if (index == 3) {
+        Get.to(Explore());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(Get.height.toString());
+
     return WillPopScope(
         onWillPop: onWillPop,
         child: Stack(children: [
@@ -99,8 +166,66 @@ class _LandingState extends State<Landing> {
                     width: MediaQuery.of(context).size.width * 0.50,
                     child: NavDrawer(),
                   ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          "assets/images/svg/customize.svg",
+                          height: 29.sp,
+                          width: 29.sp,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        label: 'Customise',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          "assets/images/svg/invoice.svg",
+                          height: 29.sp,
+                          width: 29.sp,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        label: 'Invoice',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          "assets/images/svg/transactions.svg",
+                          height: 29.sp,
+                          width: 29.sp,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        label: 'Transactions',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          "assets/images/svg/explore.svg",
+                          height: 29.sp,
+                          width: 29.sp,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        label: 'Explore',
+                      ),
+                    ],
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: Color.fromARGB(255, 24, 24, 24),
+                    showUnselectedLabels: true,
+                    showSelectedLabels: true,
+                    type: BottomNavigationBarType.fixed,
+                    onTap: _onItemTapped,
+                    selectedLabelStyle: TextStyle(
+                        fontSize: 7.sp,
+                        // fontFamily: 'BonvenoCF-Light',
+                        decoration: TextDecoration.none,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.normal),
+                    unselectedLabelStyle: TextStyle(
+                        fontSize: 7.sp,
+                        // fontFamily: 'BonvenoCF-Light',
+                        decoration: TextDecoration.none,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.normal),
+                  ),
                   appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(27.0),
+                      preferredSize: Size.fromHeight(27.0.sp),
                       child: AppBar(
                           automaticallyImplyLeading: false,
                           backgroundColor: Colors.white,
@@ -113,8 +238,8 @@ class _LandingState extends State<Landing> {
                                 children: <Widget>[
                                   Builder(
                                     builder: (context) => IconButton(
-                                      icon: const Icon(Icons.menu,
-                                          size: 30,
+                                      icon: Icon(Icons.menu,
+                                          size: 30.sp,
                                           color: Color.fromARGB(255, 0, 0, 0)),
                                       onPressed: () => Scaffold.of(context)
                                           .openDrawer(), // open side menu},
@@ -132,11 +257,11 @@ class _LandingState extends State<Landing> {
                                           child: Container(
                                               child: SvgPicture.asset(
                                             "assets/images/svg/notification-svgrepo-com.svg",
-                                            height: 23,
-                                            width: 23,
+                                            height: 23.h,
+                                            width: 23.w,
                                             fit: BoxFit.scaleDown,
                                           ))),
-                                      const SizedBox(width: 20),
+                                      SizedBox(width: 20.w),
                                       GestureDetector(
                                         onTap: () {
                                           Get.to(const Profile());
@@ -153,10 +278,11 @@ class _LandingState extends State<Landing> {
                                                     "https://statup.ng/statup/" +
                                                         cachedProfileImg
                                                             .toString(),
-                                                    height: 14,
-                                                    width: 14))
-                                            : const Icon(Icons.account_circle,
-                                                color: Colors.black, size: 22),
+                                                    height: 14.h,
+                                                    width: 14.w))
+                                            : Icon(Icons.account_circle,
+                                                color: Colors.black,
+                                                size: 22.sp),
 
                                         //
                                       ),
@@ -166,21 +292,21 @@ class _LandingState extends State<Landing> {
                                 ]),
                           ))),
                   body: Container(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    padding: EdgeInsets.only(left: 20, right: 20),
                     color: Colors.white,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          SizedBox(height: 3),
+                          SizedBox(height: 3.h),
                           Center(
                               child: Column(
                             children: [
-                              const Text("Overall Target",
+                              Text("Overall Target",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 9, color: Colors.black)),
+                                      fontSize: 9.sp, color: Colors.black)),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -189,11 +315,11 @@ class _LandingState extends State<Landing> {
                                       overallTargetVisibility == true
                                           ? "₦" + overallTarget.toString()
                                           : "--+--",
-                                      style: const TextStyle(
-                                          fontSize: 13,
+                                      style: TextStyle(
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black)),
-                                  const SizedBox(width: 5),
+                                  SizedBox(width: 5.w),
                                   GestureDetector(
                                       onTap: () => {
                                             setState(() {
@@ -201,14 +327,14 @@ class _LandingState extends State<Landing> {
                                                   !overallTargetVisibility;
                                             })
                                           },
-                                      child: const Icon(Icons.visibility_off,
-                                          size: 13, color: Colors.black))
+                                      child: Icon(Icons.visibility_off,
+                                          size: 13.sp, color: Colors.black))
                                 ],
                               ),
                             ],
                           )),
 
-                          SizedBox(height: 5),
+                          SizedBox(height: 5.h),
                           //
                           Row(
                             children: [
@@ -218,14 +344,14 @@ class _LandingState extends State<Landing> {
                                 child: Container(
                                     margin: EdgeInsets.only(left: 5),
                                     padding: EdgeInsets.only(
-                                        top: 22,
-                                        bottom: 22,
-                                        left: 10,
-                                        right: 10),
+                                        top: 22.sp,
+                                        bottom: 22.sp,
+                                        left: 10.sp,
+                                        right: 10.sp),
                                     decoration: BoxDecoration(
                                       color: color.green(),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(24)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(24.sp)),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.grey.withOpacity(0.6),
@@ -239,15 +365,15 @@ class _LandingState extends State<Landing> {
                                     child: Container(
                                       width: double.maxFinite,
                                       child: Column(
-                                        children: const [
+                                        children: [
                                           Text("Crushed Goals",
                                               style: TextStyle(
-                                                  fontSize: 6,
+                                                  fontSize: 6.sp,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold)),
-                                          Text("₦0.00",
+                                          Text("₦" + overallSavings.toString(),
                                               style: TextStyle(
-                                                  fontSize: 9,
+                                                  fontSize: 9.sp,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold)),
                                         ],
@@ -260,12 +386,12 @@ class _LandingState extends State<Landing> {
                                       (MediaQuery.of(context).size.width / 2) -
                                           36,
                                   child: Container(
-                                      padding:
-                                          EdgeInsets.only(top: 20, bottom: 20),
+                                      padding: EdgeInsets.only(
+                                          top: 20.sp, bottom: 20.sp),
                                       decoration: BoxDecoration(
                                         color: Colors.black,
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(24)),
+                                            Radius.circular(24.sp)),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.grey.withOpacity(0.6),
@@ -285,20 +411,19 @@ class _LandingState extends State<Landing> {
                                                     _showMaterialDialog(context)
                                                   }),
                                               child: Container(
-                                                child: const Center(
+                                                child: Center(
                                                     child: Text("StaQ",
                                                         style: TextStyle(
-                                                            fontSize: 12,
+                                                            fontSize: 12.sp,
                                                             color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold))),
-                                                padding:
-                                                    const EdgeInsets.all(5),
+                                                padding: EdgeInsets.all(5.sp),
                                               )))))
                             ],
                           ),
-                          SizedBox(height: 5),
+                          SizedBox(height: 5.h),
                           allSavingsPlans!.isNotEmpty
                               ? SizedBox(
                                   //height: extend == false ? 180 : 280,
@@ -315,8 +440,8 @@ class _LandingState extends State<Landing> {
                                       scrollDirection: Axis.vertical,
                                       physics: const BouncingScrollPhysics(),
                                       separatorBuilder: (c, i) {
-                                        return const SizedBox(
-                                          width: 10,
+                                        return SizedBox(
+                                          height: 10.h,
                                         );
                                       },
                                       itemBuilder:
@@ -356,7 +481,7 @@ class _LandingState extends State<Landing> {
                                                                         index]
                                                                     ["name"],
                                                         style: TextStyle(
-                                                            fontSize: 10,
+                                                            fontSize: 10.sp,
                                                             color:
                                                                 color.green(),
                                                             fontWeight:
@@ -368,45 +493,44 @@ class _LandingState extends State<Landing> {
                                                         size: 10),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 10),
-                                                const SizedBox(width: 40),
+                                                SizedBox(height: 10.sp),
+                                                SizedBox(width: 40.sp),
                                                 Row(
                                                   children: [
-                                                    const SizedBox(height: 10),
+                                                    SizedBox(height: 10.sp),
                                                     SvgPicture.asset(
                                                       "assets/images/svg/target.svg",
-                                                      height: 13,
+                                                      height: 13.h,
                                                       color: color.green(),
-                                                      width: 13,
+                                                      width: 13.w,
                                                       fit: BoxFit.scaleDown,
                                                     ),
-                                                    const SizedBox(width: 10),
+                                                    SizedBox(width: 10.w),
                                                     Text(
                                                         "₦" +
                                                             allSavingsPlans![
                                                                         index]
                                                                     ["target"]
                                                                 .toString(),
-                                                        style: const TextStyle(
-                                                            fontSize: 10,
+                                                        style: TextStyle(
+                                                            fontSize: 10.sp,
                                                             color: Colors.black,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold)),
-                                                    const SizedBox(width: 5),
-                                                    const Icon(
-                                                        Icons.visibility_off,
+                                                    SizedBox(width: 5.sp),
+                                                    Icon(Icons.visibility_off,
                                                         color: Colors.black,
-                                                        size: 10),
+                                                        size: 10.sp),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 5),
+                                                SizedBox(height: 5.h),
                                                 Text(
                                                     percentageCrushed
                                                             .toString() +
                                                         "% Achieved",
-                                                    style: const TextStyle(
-                                                        fontSize: 7,
+                                                    style: TextStyle(
+                                                        fontSize: 7.sp,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.bold)),
@@ -421,7 +545,7 @@ class _LandingState extends State<Landing> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    SizedBox(width: 23),
+                                                    SizedBox(width: 23.sp),
                                                     GestureDetector(
                                                         onTap: (() => Get.to(Deposit(
                                                             savingsID:
@@ -444,27 +568,27 @@ class _LandingState extends State<Landing> {
                                                           FontAwesomeIcons
                                                               .circlePlus,
                                                           color: color.green(),
-                                                          size: 15,
+                                                          size: 15.sp,
                                                         )),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 10),
+                                                SizedBox(height: 10.sp),
                                                 Row(
                                                   children: [
-                                                    SizedBox(width: 14),
+                                                    SizedBox(width: 14.sp),
                                                     Column(
                                                       children: [
-                                                        const Text("Interest",
+                                                        Text("Interest",
                                                             style: TextStyle(
-                                                                fontSize: 7,
+                                                                fontSize: 7.sp,
                                                                 color: Colors
                                                                     .black,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal)),
-                                                        const Text("₦0.00",
+                                                        Text("₦0.00",
                                                             style: TextStyle(
-                                                                fontSize: 9,
+                                                                fontSize: 9.sp,
                                                                 color: Colors
                                                                     .black,
                                                                 fontWeight:
@@ -478,15 +602,16 @@ class _LandingState extends State<Landing> {
                                             )
                                           ]),
                                           width: double.maxFinite,
-                                          padding: const EdgeInsets.only(
-                                              left: 14,
-                                              right: 14,
-                                              top: 7,
-                                              bottom: 7),
+                                          padding: EdgeInsets.only(
+                                              left: 14.sp,
+                                              right: 14.sp,
+                                              top: 7.sp,
+                                              bottom: 7.sp),
                                           decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(18),
-                                              color: color.grey2()),
+                                                  BorderRadius.circular(18.sp),
+                                              color:
+                                                  Colors.grey.withOpacity(0.1)),
                                         );
                                       }))
                               //This second container has a shorter height
@@ -494,12 +619,13 @@ class _LandingState extends State<Landing> {
                               : const SizedBox(),
 
                           extend == true
-                              ? const SizedBox(height: 5)
-                              : SizedBox(height: 4),
+                              ? SizedBox(height: 5.sp)
+                              : SizedBox(height: 4.sp),
 
-                          allSavingsPlans!.isEmpty ||
-                                  extend == true ||
-                                  allSavingsPlans!.length == 1
+                          (allSavingsPlans!.isEmpty ||
+                                      extend == true ||
+                                      allSavingsPlans!.length == 1) &&
+                                  showBusinessPlan == true
                               ? Container(
                                   child: Row(children: [
                                     Column(
@@ -512,43 +638,44 @@ class _LandingState extends State<Landing> {
                                           children: [
                                             Text("Business",
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 10.sp,
                                                     color: color.green(),
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            const SizedBox(width: 5),
-                                            const Icon(Icons.lock,
-                                                color: Colors.black, size: 10),
+                                            SizedBox(width: 5.sp),
+                                            Icon(Icons.lock,
+                                                color: Colors.black,
+                                                size: 10.sp),
                                           ],
                                         ),
-                                        const SizedBox(height: 10),
-                                        const SizedBox(width: 40),
+                                        SizedBox(height: 10.h),
+                                        SizedBox(width: 40.w),
                                         Row(
                                           children: [
-                                            const SizedBox(height: 10),
+                                            SizedBox(height: 10.h),
                                             SvgPicture.asset(
                                               "assets/images/svg/target.svg",
                                               height: 13,
                                               color: color.green(),
-                                              width: 13,
+                                              width: 13.sp,
                                               fit: BoxFit.scaleDown,
                                             ),
-                                            const SizedBox(width: 10),
-                                            const Text("₦0.00",
+                                            SizedBox(width: 10.w),
+                                            Text("₦0.00",
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 10.sp,
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            const SizedBox(width: 5),
-                                            const Icon(Icons.visibility_off,
+                                            SizedBox(width: 5.sp),
+                                            Icon(Icons.visibility_off,
                                                 color: Colors.black, size: 10),
                                           ],
                                         ),
                                         const SizedBox(height: 5),
-                                        const Text("0% Achieved",
+                                        Text("0% Achieved",
                                             style: TextStyle(
-                                                fontSize: 7,
+                                                fontSize: 7.sp,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold)),
                                       ],
@@ -561,7 +688,7 @@ class _LandingState extends State<Landing> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Row(children: [
-                                          SizedBox(width: 14),
+                                          SizedBox(width: 14.sp),
                                           GestureDetector(
                                               onTap: (() =>
                                                   Get.to(const SetSavings(
@@ -571,21 +698,21 @@ class _LandingState extends State<Landing> {
                                               child: Icon(
                                                 FontAwesomeIcons.circlePlus,
                                                 color: color.green(),
-                                                size: 15,
+                                                size: 15.sp,
                                               ))
                                         ]),
                                         const SizedBox(height: 10),
                                         Column(children: [
-                                          SizedBox(width: 14),
+                                          SizedBox(width: 14.sp),
                                           const Text("Interest",
                                               style: TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.black,
                                                   fontWeight:
                                                       FontWeight.normal)),
-                                          const Text("₦0.00",
+                                          Text("₦0.00",
                                               style: TextStyle(
-                                                  fontSize: 7,
+                                                  fontSize: 7.sp,
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold)),
                                         ])
@@ -593,18 +720,23 @@ class _LandingState extends State<Landing> {
                                     )
                                   ]),
                                   width: double.maxFinite,
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 7, bottom: 7),
+                                  padding: EdgeInsets.only(
+                                      left: 10.sp,
+                                      right: 10.sp,
+                                      top: 7.sp,
+                                      bottom: 7.sp),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(18),
-                                      color: color.grey2()),
+                                      borderRadius:
+                                          BorderRadius.circular(18.sp),
+                                      color: Colors.grey.withOpacity(0.1)),
                                 )
                               : const SizedBox(),
-                          extend == true
-                              ? const SizedBox(height: 5)
-                              : SizedBox(),
+                          extend == true ? SizedBox(height: 5.sp) : SizedBox(),
 
-                          allSavingsPlans!.isEmpty || extend == true
+                          (allSavingsPlans!.isEmpty ||
+                                      extend == true ||
+                                      allSavingsPlans!.length < 2) &&
+                                  showRentPlan == true
                               ? Container(
                                   child: Row(children: [
                                     Column(
@@ -617,43 +749,45 @@ class _LandingState extends State<Landing> {
                                           children: [
                                             Text("Rent",
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 10.sp,
                                                     color: color.green(),
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            const SizedBox(width: 5),
-                                            const Icon(Icons.lock,
-                                                color: Colors.black, size: 10),
+                                            SizedBox(width: 5.sp),
+                                            Icon(Icons.lock,
+                                                color: Colors.black,
+                                                size: 10.sp),
                                           ],
                                         ),
-                                        const SizedBox(height: 10),
-                                        const SizedBox(width: 40),
+                                        SizedBox(height: 10.h),
+                                        SizedBox(width: 40.w),
                                         Row(
                                           children: [
-                                            const SizedBox(height: 10),
+                                            SizedBox(height: 10.h),
                                             SvgPicture.asset(
                                               "assets/images/svg/target.svg",
-                                              height: 12,
+                                              height: 12.sp,
                                               color: color.green(),
-                                              width: 12,
+                                              width: 12.sp,
                                               fit: BoxFit.scaleDown,
                                             ),
                                             const SizedBox(width: 10),
-                                            const Text("₦0.00",
+                                            Text("₦0.00",
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 10.sp,
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.bold)),
-                                            const SizedBox(width: 5),
-                                            const Icon(Icons.visibility_off,
-                                                color: Colors.black, size: 10),
+                                            SizedBox(width: 5.sp),
+                                            Icon(Icons.visibility_off,
+                                                color: Colors.black,
+                                                size: 10.sp),
                                           ],
                                         ),
                                         const SizedBox(height: 5),
                                         Text("0% Achieved",
-                                            style: const TextStyle(
-                                                fontSize: 7,
+                                            style: TextStyle(
+                                                fontSize: 7.sp,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold)),
                                       ],
@@ -666,7 +800,7 @@ class _LandingState extends State<Landing> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Row(children: [
-                                          SizedBox(width: 14),
+                                          SizedBox(width: 14.sp),
                                           GestureDetector(
                                               onTap: (() =>
                                                   Get.to(const SetSavings(
@@ -676,21 +810,21 @@ class _LandingState extends State<Landing> {
                                               child: Icon(
                                                 FontAwesomeIcons.circlePlus,
                                                 color: color.green(),
-                                                size: 15,
+                                                size: 15.sp,
                                               ))
                                         ]),
                                         const SizedBox(height: 10),
                                         Column(children: [
-                                          SizedBox(width: 14),
-                                          const Text("Interest",
+                                          SizedBox(width: 14.w),
+                                          Text("Interest",
                                               style: TextStyle(
-                                                  fontSize: 9,
+                                                  fontSize: 9.sp,
                                                   color: Colors.black,
                                                   fontWeight:
                                                       FontWeight.normal)),
-                                          const Text("₦0.00",
+                                          Text("₦0.00",
                                               style: TextStyle(
-                                                  fontSize: 7,
+                                                  fontSize: 7.sp,
                                                   color: Colors.black,
                                                   fontWeight: FontWeight.bold)),
                                         ])
@@ -698,11 +832,15 @@ class _LandingState extends State<Landing> {
                                     )
                                   ]),
                                   width: double.maxFinite,
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 10, bottom: 10),
+                                  padding: EdgeInsets.only(
+                                      left: 10.sp,
+                                      right: 10.sp,
+                                      top: 10.sp,
+                                      bottom: 10.sp),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(18),
-                                      color: color.grey1()),
+                                      borderRadius:
+                                          BorderRadius.circular(18.sp),
+                                      color: Colors.grey.withOpacity(0.1)),
                                 )
                               : const SizedBox(),
 
@@ -717,39 +855,40 @@ class _LandingState extends State<Landing> {
                               child: Center(
                                   child: SvgPicture.asset(
                                 "assets/images/svg/down-outlined-arrow-down.svg",
-                                height: 18,
+                                height: 18.sp,
                                 color: color.green(),
-                                width: 18,
+                                width: 18.sp,
                                 fit: BoxFit.scaleDown,
                               ))),
                           const SizedBox(height: 1),
 
-                          FutureBuilder(
-                              future: Others().getProducts(),
-                              builder: (context, AsyncSnapshot snapshot) {
-                                if (!snapshot.hasData) {
-                                  return loader();
-                                } else {
-                                  if (snapshot.data.isNotEmpty &&
-                                      snapshot.data != null) {
-                                    List? products = snapshot.data;
-                                    return SizedBox(
-                                        height: (Get.height * 0.6) - 20,
-                                        width: double.maxFinite,
-                                        child: ListView.separated(
+                          Container(
+                              height: Get.height < 1300 ? 335.sp : 355.sp,
+                              width: double.maxFinite,
+                              margin: EdgeInsets.only(bottom: 0),
+                              child: FutureBuilder(
+                                  future: Others().getProducts(),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return loader();
+                                    } else {
+                                      if (snapshot.data.isNotEmpty &&
+                                          snapshot.data != null) {
+                                        List? products = snapshot.data;
+                                        return ListView.separated(
                                           shrinkWrap: true,
                                           itemCount: products!.length,
                                           scrollDirection: Axis.horizontal,
                                           physics:
                                               const BouncingScrollPhysics(),
                                           separatorBuilder: (c, i) {
-                                            return const SizedBox(width: 10);
+                                            return SizedBox(width: 10.sp);
                                           },
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             return Container(
                                                 width: Get.width - 50,
-                                                height: 100,
+                                                // height: 120,
                                                 color: Colors.white,
                                                 child: Column(
                                                   crossAxisAlignment:
@@ -758,22 +897,25 @@ class _LandingState extends State<Landing> {
                                                     ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              25),
+                                                              25.sp),
                                                       child: CachedNetworkImage(
                                                         imageUrl:
                                                             "https://statup.ng/statup/" +
                                                                 products[index]
                                                                     ["image"],
-                                                        width: double.infinity,
+                                                        width: Get.width,
                                                         fit: BoxFit.cover,
-                                                        height: 270,
+                                                        height:
+                                                            Get.height < 1300
+                                                                ? 245.sp
+                                                                : 270.sp,
                                                         placeholder:
                                                             (ctx, text) {
                                                           return loader();
                                                         },
                                                       ),
                                                     ),
-                                                    const SizedBox(height: 1),
+                                                    const SizedBox(height: 2),
                                                     Row(
                                                       children: [
                                                         Column(
@@ -790,24 +932,25 @@ class _LandingState extends State<Landing> {
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                     fontSize:
-                                                                        15,
+                                                                        15.sp,
                                                                     color: Colors
                                                                         .black,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold)),
-                                                            const SizedBox(
-                                                                height: 2),
+                                                            SizedBox(
+                                                                height: 2.sp),
                                                             Text(
                                                                 products[index][
                                                                     "product_desc"],
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
-                                                                style: const TextStyle(
-                                                                    fontSize: 8,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        8.sp,
                                                                     color: Colors
                                                                         .black,
                                                                     fontWeight:
@@ -820,7 +963,8 @@ class _LandingState extends State<Landing> {
                                                           children: [
                                                             Text(
                                                                 "₦" +
-                                                                    products[index]
+                                                                    products[
+                                                                            index]
                                                                         [
                                                                         "product_price"],
                                                                 textAlign:
@@ -828,7 +972,7 @@ class _LandingState extends State<Landing> {
                                                                         .center,
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                        15,
+                                                                        15.sp,
                                                                     color: color
                                                                         .green(),
                                                                     fontWeight:
@@ -836,41 +980,38 @@ class _LandingState extends State<Landing> {
                                                                             .bold)),
                                                             Row(
                                                               children: [
-                                                                const Text(
-                                                                    "Sold",
+                                                                Text("Sold",
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
                                                                     style: TextStyle(
-                                                                        fontSize:
-                                                                            11,
+                                                                        fontSize: 11
+                                                                            .sp,
                                                                         color: Colors
                                                                             .black,
                                                                         fontWeight:
                                                                             FontWeight.bold)),
                                                                 SizedBox(
-                                                                    width: 5),
+                                                                    width: 5.w),
                                                                 Container(
                                                                   decoration: BoxDecoration(
                                                                       borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              6),
+                                                                          BorderRadius.circular(6
+                                                                              .sp),
                                                                       border: Border.all(
                                                                           color: Color.fromARGB(
                                                                               255,
                                                                               207,
                                                                               207,
                                                                               207))),
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          left:
-                                                                              10,
-                                                                          right:
-                                                                              10,
-                                                                          top:
-                                                                              3,
-                                                                          bottom:
-                                                                              3),
+                                                                  padding: EdgeInsets.only(
+                                                                      left:
+                                                                          10.sp,
+                                                                      right:
+                                                                          10.sp,
+                                                                      top: 3.sp,
+                                                                      bottom:
+                                                                          3.sp),
                                                                   child: Text(
                                                                       products[
                                                                               index]
@@ -882,7 +1023,7 @@ class _LandingState extends State<Landing> {
                                                                       style:
                                                                           TextStyle(
                                                                         fontSize:
-                                                                            11,
+                                                                            11.sp,
                                                                         color: Colors
                                                                             .black,
                                                                       )),
@@ -893,183 +1034,130 @@ class _LandingState extends State<Landing> {
                                                         ),
                                                       ],
                                                     ),
-                                                    const SizedBox(height: 2),
-                                                    Material(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25.0),
-                                                        elevation: 10,
-                                                        shadowColor:
-                                                            Color.fromARGB(255,
-                                                                209, 209, 209),
-                                                        child: Container(
-                                                            height: 30,
-                                                            width:
-                                                                double
-                                                                    .maxFinite,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .orange(),
-                                                              borderRadius:
-                                                                  const BorderRadius
-                                                                      .all(
-                                                                Radius.circular(
+                                                    SizedBox(height: 2.sp),
+                                                    GestureDetector(
+                                                        onTap: (() {
+                                                          _buy(context);
+                                                        }),
+                                                        child: Material(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
                                                                     25.0),
-                                                              ),
-                                                            ),
-                                                            child: Center(
-                                                              child: const Text(
-                                                                  "Buy",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold)),
-                                                            )
-                                                            //rest of the existing code
-                                                            ))
+                                                            elevation: 10.sp,
+                                                            shadowColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    209,
+                                                                    209,
+                                                                    209),
+                                                            child: Container(
+                                                                height:
+                                                                    Get.height >
+                                                                            1300
+                                                                        ? 44.sp
+                                                                        : 30.sp,
+                                                                width: double
+                                                                    .maxFinite,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: color
+                                                                      .orange(),
+                                                                  borderRadius:
+                                                                      const BorderRadius
+                                                                          .all(
+                                                                    Radius.circular(
+                                                                        25.0),
+                                                                  ),
+                                                                ),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                      "Buy",
+                                                                      style: TextStyle(
+                                                                          fontSize: 12
+                                                                              .sp,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                )
+                                                                //rest of the existing code
+                                                                )))
                                                   ],
                                                 ));
                                           },
+                                        );
+                                      } else {
+                                        return Container(
+                                            child: const Center(
+                                          child: Text(
+                                              "Could Not Retrieve Products"),
                                         ));
-                                  } else {
-                                    return Container(
-                                        child: const Center(
-                                      child:
-                                          Text("Could Not Retrieve Products"),
-                                    ));
-                                  }
-                                }
-                              })
+                                      }
+                                    }
+                                  }))
                         ],
                       ),
                     ),
                   )))),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SizedBox(height: 10),
-              Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(top: 10),
-                  height: 44,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          GestureDetector(
-                            onTap: (() {
-                              Get.to(const CustomiseGoals());
-                            }),
-                            child: SvgPicture.asset(
-                              "assets/images/svg/customize.svg",
-                              height: 29,
-                              width: 29,
-                              fit: BoxFit.scaleDown,
-                            ),
-                          ),
-                          const Text("Customise",
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  // fontFamily: 'BonvenoCF-Light',
-                                  decoration: TextDecoration.none,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.normal)),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          GestureDetector(
-                              onTap: (() {
-                                Get.to(const AddBusiness());
-                              }),
-                              child: SvgPicture.asset(
-                                "assets/images/svg/invoice.svg",
-                                height: 29,
-                                width: 29,
-                                fit: BoxFit.scaleDown,
-                              )),
-                          const Text("Invoice",
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  // fontFamily: 'BonvenoCF-Light',
-                                  decoration: TextDecoration.none,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.normal)),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          GestureDetector(
-                              onTap: (() {
-                                Get.to(const Transaction());
-                              }),
-                              child: SvgPicture.asset(
-                                "assets/images/svg/transactions.svg",
-                                height: 29,
-                                width: 29,
-                                fit: BoxFit.scaleDown,
-                              )),
-                          const Text("Transactions",
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  // fontFamily: 'BonvenoCF-Light',
-                                  decoration: TextDecoration.none,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.normal)),
-                        ],
-                      ),
-                      const Spacer(),
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          GestureDetector(
-                              onTap: (() {
-                                Get.to(const Explore());
-                              }),
-                              child: SvgPicture.asset(
-                                "assets/images/svg/explore.svg",
-                                height: 29,
-                                width: 29,
-                                fit: BoxFit.scaleDown,
-                              )),
-                          const Text("Explore",
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  // fontFamily: 'BonvenoCF-Light',
-                                  decoration: TextDecoration.none,
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontWeight: FontWeight.normal)),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  )),
-            ],
-          )
+          Visibility(
+              visible: updateNotif,
+              child: Material(
+                  color: Colors.black.withOpacity(.2),
+                  child: Container(
+                      // <-- Add this, if needed Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      color: Colors.black.withOpacity(0.3),
+                      child: Center(
+                          child: SizedBox(
+                              height: 300.sp,
+                              child: Column(children: [
+                                Text(
+                                    'Hello, this app has a new update. Please update to the latest version to enjoy the best experience.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 20.sp,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                                SizedBox(height: 20.sp),
+                                GestureDetector(
+                                    onTap: (() {
+                                      if (Platform.isIOS) {
+                                        platform = 'iOS';
+                                        launchAppstore(
+                                            "https://play.google.com/store/apps/details?id=com.statup.app");
+                                      } else {
+                                        platform = 'Android';
+                                        launchPlaystore(
+                                            "https://play.google.com/store/apps/details?id=com.statup.app");
+                                      }
+                                    }),
+                                    child: Material(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0.sp),
+                                        elevation: 10,
+                                        shadowColor:
+                                            Color.fromARGB(255, 209, 209, 209),
+                                        child: Container(
+                                            height: 35.sp,
+                                            width: 100.sp,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(25.0.sp),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text("Update",
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            )
+                                            //rest of the existing code
+                                            )))
+                              ])))))),
         ]));
   }
 
@@ -1093,8 +1181,132 @@ class _LandingState extends State<Landing> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
                 ),
-                child: const Center(
+                child: Center(
                     child: Text("Coming Soon",
+                        style: TextStyle(
+                            fontSize: 25.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)))),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _buy(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+          child: Material(
+              color: Colors.black.withOpacity(.2),
+              child: Center(
+                child: Container(
+                    margin: EdgeInsets.all(20.sp),
+                    width: double.maxFinite,
+                    height: 360.sp,
+                    padding: EdgeInsets.all(20.sp),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.sp),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Spacer(),
+                            GestureDetector(
+                              onTap: (() => {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop(),
+                                  }),
+                              child: Icon(Icons.close, size: 20.sp),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Text("You are about to make a purchase",
+                            style: TextStyle(fontSize: 20.sp)),
+                        SizedBox(height: 20),
+                        SizedBox(
+                          child: DropdownSearch<String>(
+                              mode: Mode.MENU,
+                              dropdownButtonSplashRadius: 20,
+                              // showSelectedItem: true,
+                              items: states.getStates(),
+                              label: "Select State",
+                              hint: state,
+                              popupItemDisabled: (String s) =>
+                                  s.startsWith('I'),
+                              onChanged: (data) {
+                                setState(() {
+                                  state = data.toString();
+                                  print("davido + states");
+                                });
+                              },
+                              selectedItem: state),
+                        ),
+                        SizedBox(height: 20.sp),
+                        CustomField4(
+                          hint: "Contact Phone Number",
+                          controller: _phoneController,
+                        ),
+                        SizedBox(height: 10.sp),
+                        CustomField4(
+                          hint: "Contact Address",
+                          controller: _phoneController,
+                        ),
+                        SizedBox(height: 10.sp),
+                        GestureDetector(
+                            onTap: (() {
+                              Get.to(Purchase());
+                            }),
+                            child: Material(
+                                borderRadius: BorderRadius.circular(25.0.sp),
+                                elevation: 10,
+                                shadowColor: Color.fromARGB(255, 209, 209, 209),
+                                child: Container(
+                                    height: 40.sp,
+                                    width: double.maxFinite,
+                                    decoration: BoxDecoration(
+                                      color: color.orange(),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(25.0),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: const Text("Make Purchase",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold)),
+                                    )
+                                    //rest of the existing code
+                                    )))
+                      ],
+                    )),
+              ))),
+    );
+  }
+
+  void _showMaterialDialog2(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+        child: Material(
+          color: Colors.black.withOpacity(.2),
+          child: Center(
+            child: Container(
+                width: 250,
+                height: 250,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: const Center(
+                    child: Text(
+                        "You're using an old version of the app\nPlease update to the latest version",
                         style: TextStyle(
                             fontSize: 25,
                             color: Colors.black,
@@ -1103,5 +1315,50 @@ class _LandingState extends State<Landing> {
         ),
       ),
     );
+  }
+
+  Future<void> launchPlaystore(String url) async {
+    if (!await canLaunchUrl(Uri.parse(url))) {
+      print("could not launch link");
+      throw 'Could not launch telegram url';
+    } else {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> launchAppstore(String url) async {
+    if (!await canLaunchUrl(Uri.parse(url))) {
+      print("could not launch link");
+      throw 'Could not launch telegram url';
+    } else {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    }
+  }
+
+  getAppInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    int androidVersion = int.parse(Hive.box("statup").get("android_version"));
+
+    int iosVersion = int.parse(Hive.box("statup").get("ios_version"));
+
+    int version = int.parse(packageInfo.version);
+    int buildNumber = int.parse(packageInfo.buildNumber);
+
+    if (Platform.isIOS) {
+      platform = 'iOS';
+      if (buildNumber > iosVersion) {
+        setState(() {
+          updateNotif = true;
+        });
+      }
+    } else {
+      if (version > androidVersion) {
+        setState(() {
+          updateNotif = true;
+        });
+      }
+      platform = 'Android';
+    }
   }
 }

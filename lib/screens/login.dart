@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/forgot_password.dart';
-import 'package:statup/screens/landing.dart';
-import 'package:statup/screens/pin.dart';
-import 'package:statup/screens/signup.dart';
-import 'package:statup/screens/verify_otp.dart';
+import '/screens/forgot_password.dart';
+import '/screens/landing.dart';
+import '/screens/pin.dart';
+import '/screens/signup.dart';
+import '/screens/verify_otp.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
                                                         if (value == 1)
                                                           {
                                                             showToast(
-                                                                "Welcome!"),
+                                                                "Successful!"),
                                                             Get.to(
                                                                 const PinCodeVerificationScreen()),
                                                             setState(() {
@@ -146,16 +146,24 @@ class _LoginState extends State<Login> {
                                                                   !isLoaderVisible;
                                                             }),
                                                           }
-                                                        else
+                                                        else if (value == 2)
                                                           {
-                                                            showErrorToast(value
-                                                                .toString()),
+                                                            showErrorToast(
+                                                                "Sorry! No account was found with that email!"),
                                                             setState(() {
                                                               enabled = true;
 
                                                               isLoaderVisible =
                                                                   !isLoaderVisible;
                                                             }),
+                                                          }
+                                                        else if (value == 3)
+                                                          {
+                                                            Get.to(
+                                                                const ForgotPassword(
+                                                              prev:
+                                                                  "Your account registration isn't complete. Please follow the steps below to finish...",
+                                                            ))
                                                           }
                                                       })
                                             }
@@ -222,7 +230,9 @@ class _LoginState extends State<Login> {
                           children: [
                             GestureDetector(
                                 onTap: () {
-                                  Get.to(const ForgotPassword());
+                                  Get.to(const ForgotPassword(
+                                    prev: "Recover your account",
+                                  ));
                                 },
                                 child: Text("Forgot Password?",
                                     // textAlign: TextAlign.center,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:statup/screens/landing.dart';
-import 'package:statup/screens/new_password.dart';
-import 'package:statup/screens/signup.dart';
-import 'package:statup/screens/verify_otp.dart';
+import '/screens/landing.dart';
+import '/screens/new_password.dart';
+import '/screens/signup.dart';
+import '/screens/verify_otp.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
@@ -11,7 +11,11 @@ import '../services/auth.dart';
 import 'pin.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword();
+  final prev;
+  const ForgotPassword({
+    Key? key,
+    this.prev,
+  });
 
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
@@ -48,136 +52,134 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: onWillPop,
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0.0,
-              centerTitle: true,
-              leading: GestureDetector(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  )
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          centerTitle: true,
+          leading: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              )
 
-                  //
-                  ),
-              // ignore: prefer_const_literals_to_create_immutables
-
-              title: Text(
-                "",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w200,
-                  color: color.green(),
-                ),
+              //
               ),
+          // ignore: prefer_const_literals_to_create_immutables
+
+          title: Text(
+            "",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w200,
+              color: color.green(),
             ),
-            body: Container(
-                color: Colors.white,
-                width: double.maxFinite,
-                height: double.maxFinite,
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 150),
-                      Text("Recover Account",
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              color: Colors.black.withOpacity(0.8),
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 14),
-                      Text(
-                          "Enter your email here and we'll send a code to your email",
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              color: Colors.black.withOpacity(0.8),
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal)),
-                      const SizedBox(height: 30),
-                      CustomField4(
-                        controller: email,
-                        obscureText: false,
-                        hint: 'Email',
-                        label: "Email",
-                      ),
-                      const SizedBox(height: 40),
-                      GestureDetector(
-                          onTap: () => {
-                                loading("loading", context),
-                                AuthService()
-                                    .forgotPassword(
-                                      email: email.text,
-                                    )
-                                    .then((value) => {
-                                          if (value == 1)
-                                            {
-                                              Get.offAll(const NewPassword()),
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop(),
-                                            }
-                                          else
-                                            {
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop(),
-                                              print(value.toString()),
-                                              print(email.text),
-                                              showErrorToast(
-                                                  "Sorry! Could not verify. Please try again!"),
-                                            }
-                                        })
-                              },
-                          child: Material(
-                              borderRadius: BorderRadius.circular(25.0),
-                              elevation: 10,
-                              shadowColor: Color.fromARGB(255, 209, 209, 209),
-                              child: Container(
-                                  height: 40,
-                                  width: double.maxFinite,
-                                  decoration: BoxDecoration(
-                                    color: color.green(),
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(25.0),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text("Send Code",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                  )
-                                  //rest of the existing code
-                                  ))),
-                      const SizedBox(height: 25),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                Get.to(const ForgotPassword());
-                              },
-                              child: Text("Resend Code",
-                                  // textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      color: color.green(),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold))),
-                        ],
-                      )
-                    ],
+          ),
+        ),
+        body: Container(
+            color: Colors.white,
+            width: double.maxFinite,
+            height: double.maxFinite,
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 150),
+                  Text(widget.prev,
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.black.withOpacity(0.8),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 14),
+                  Text(
+                      "Enter your email here and we'll send a code to your email",
+                      style: TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.black.withOpacity(0.8),
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal)),
+                  const SizedBox(height: 30),
+                  CustomField4(
+                    controller: email,
+                    obscureText: false,
+                    hint: 'Email',
+                    label: "Email",
                   ),
-                ))));
+                  const SizedBox(height: 40),
+                  GestureDetector(
+                      onTap: () => {
+                            loading("loading", context),
+                            AuthService()
+                                .forgotPassword(
+                                  email: email.text,
+                                )
+                                .then((value) => {
+                                      if (value == 1)
+                                        {
+                                          Get.offAll(const NewPassword()),
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop(),
+                                        }
+                                      else
+                                        {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop(),
+                                          print(value.toString()),
+                                          print(email.text),
+                                          showErrorToast(
+                                              "Sorry! Could not verify. Please try again!"),
+                                        }
+                                    })
+                          },
+                      child: Material(
+                          borderRadius: BorderRadius.circular(25.0),
+                          elevation: 10,
+                          shadowColor: Color.fromARGB(255, 209, 209, 209),
+                          child: Container(
+                              height: 40,
+                              width: double.maxFinite,
+                              decoration: BoxDecoration(
+                                color: color.green(),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(25.0),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text("Send Code",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
+                              )
+                              //rest of the existing code
+                              ))),
+                  const SizedBox(height: 25),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(const ForgotPassword());
+                          },
+                          child: Text("Resend Code",
+                              // textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  color: color.green(),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold))),
+                    ],
+                  )
+                ],
+              ),
+            )));
   }
 }
