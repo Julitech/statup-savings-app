@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:share/share.dart';
 import '../components/colors.dart';
 import '../components/constants.dart';
+import '../services/others.dart';
 import '../services/savings.dart';
 import 'landing.dart';
 import 'profile.dart';
@@ -160,6 +161,9 @@ class _ReferralsState extends State<Referrals> {
                           color: color.green(),
                           fontSize: 16,
                           fontWeight: FontWeight.bold))),
+              SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ));
@@ -169,39 +173,75 @@ class _ReferralsState extends State<Referrals> {
     showDialog(
       context: context,
       builder: (BuildContext context) => Center(
-        child: Material(
-          color: Colors.black.withOpacity(.2),
-          child: Container(
-              padding:
-                  EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-              width: double.maxFinite - 10,
-              height: double.maxFinite,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
-              ),
+          child: Material(
+        color: Colors.black.withOpacity(.2),
+        child: Container(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+          width: double.maxFinite - 10,
+          height: double.maxFinite,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+          ),
+          child: SingleChildScrollView(
               child: Column(children: [
-                Row(
-                  children: [
-                    Text("My Referrals",
-                        // textAlign: TextAlign.center,
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          color: color.green(),
-                          fontSize: 25,
-                        )),
-                    Spacer(),
-                    GestureDetector(
-                        onTap: (() => {
-                              Navigator.of(context, rootNavigator: true).pop(),
-                            }),
-                        child:
-                            Icon(Icons.close, color: Colors.black, size: 30)),
-                  ],
-                )
-              ])),
+            Row(
+              children: [
+                Text("My Referrals",
+                    // textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: color.green(),
+                      fontSize: 25,
+                    )),
+                Spacer(),
+                GestureDetector(
+                    onTap: (() => {
+                          Navigator.of(context, rootNavigator: true).pop(),
+                        }),
+                    child: Icon(Icons.close, color: Colors.black, size: 30)),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            FutureBuilder(
+                future: Others().getReferrals(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return loader();
+                  } else {
+                    if (snapshot.data.isNotEmpty && snapshot.data != null) {
+                      List? referrals = snapshot.data;
+                      return ListView.separated(
+                          itemCount: referrals!.length,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 10);
+                          },
+                          padding: const EdgeInsets.all(10),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                referrals[index]["first_name"] +
+                                    " " +
+                                    referrals[index]["last_name"],
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            );
+                          });
+                    } else {
+                      return Container(
+                          child: const Center(
+                              child: Text("Could Not Load Referrals")));
+                    }
+                  }
+                }),
+          ])),
         ),
-      ),
+      )),
     );
   }
 }

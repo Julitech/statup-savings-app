@@ -78,7 +78,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
                 ),
                 SizedBox(height: 15),
                 Text(
-                  "Pay bills and receive money from your personal account",
+                  "Pay Bills, send and receive money from your personal account.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 13, color: Colors.black.withOpacity(0.8)),
