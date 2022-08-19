@@ -189,105 +189,150 @@ class _ExploreState extends State<Explore> {
                   }
                 }),
             SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.all(10),
-              width: double.maxFinite,
-              height: 130,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 6,
-                  child: Container(
-                      height: double.maxFinite,
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text("Set Financial Goals",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Color.fromARGB(255, 0, 0, 0))),
-                          SizedBox(height: 10),
-                          Text(
-                              "One way to not run out of funds is by planning. A second way is by... Read More",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color.fromARGB(255, 0, 0, 0)))
-                        ],
-                      ))),
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              width: double.maxFinite,
-              height: 260,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 6,
-                  child: Container(
-                    height: double.maxFinite,
-                    width: double.maxFinite,
-                    child: Image.network(
-                        "https://statup.ng/statup/explore_images/20220814_191950.jpg"),
-                  )),
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              width: double.maxFinite,
-              height: 270,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 6,
-                  child: Column(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text("Set Financial Goals",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Color.fromARGB(255, 0, 0, 0))),
-                          ),
-                          SizedBox(height: 10),
-                          Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                  "One way to not run out of funds is by planning. A second way is by... Read More",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromARGB(255, 0, 0, 0)))),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        height: 120,
-                        width: double.maxFinite,
-                        child: Image.network(
-                            "https://statup.ng/statup/explore_images/20220814_191950.jpg"),
-                      ),
-                      SizedBox(height: 3),
-                    ],
-                  )),
-            )
+            FutureBuilder(
+                future: Others().getExplore(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return loader();
+                  } else {
+                    if (snapshot.data.isNotEmpty && snapshot.data != null) {
+                      List? explore = snapshot.data;
+                      return ListView.separated(
+                          itemCount: explore!.length,
+                          //scrollDirection: Axis.vertical,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 10);
+                          },
+                          padding: const EdgeInsets.all(10),
+                          itemBuilder: (context, index) {
+                            if (explore[index]["type"] == "both") {
+                              return Container(
+                                padding: EdgeInsets.all(10),
+                                width: double.maxFinite,
+                                height: 270,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 6,
+                                    child: Column(
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [
+                                            Padding(
+                                              padding: EdgeInsets.all(10),
+                                              child: Text("Set Financial Goals",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                      color: Color.fromARGB(
+                                                          255, 0, 0, 0))),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                    "One way to not run out of funds is by planning. A second way is by... Read More",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Color.fromARGB(
+                                                            255, 0, 0, 0)))),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Container(
+                                          height: 120,
+                                          width: double.maxFinite,
+                                          child: Image.network(
+                                              "https://statup.ng/statup/explore_images/20220814_191950.jpg"),
+                                        ),
+                                        SizedBox(height: 3),
+                                      ],
+                                    )),
+                              );
+                            } else if (explore[index]["type"] == "text") {
+                              return Container(
+                                padding: EdgeInsets.all(10),
+                                width: double.maxFinite,
+                                height: 130,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 6,
+                                    child: Container(
+                                        height: double.maxFinite,
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [
+                                            Text("Set Financial Goals",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                    color: Color.fromARGB(
+                                                        255, 0, 0, 0))),
+                                            SizedBox(height: 10),
+                                            Text(
+                                                "One way to not run out of funds is by planning. A second way is by... Read More",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Color.fromARGB(
+                                                        255, 0, 0, 0)))
+                                          ],
+                                        ))),
+                              );
+                            } else if (explore[index]["type"] == "image") {
+                              return Container(
+                                padding: EdgeInsets.all(10),
+                                width: double.maxFinite,
+                                height: 260,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 6,
+                                    child: Container(
+                                      height: double.maxFinite,
+                                      width: double.maxFinite,
+                                      child: Image.network(
+                                          "https://statup.ng/statup/explore_images/20220814_191950.jpg"),
+                                    )),
+                              );
+                            } else {
+                              return SizedBox();
+                            }
+                          });
+                    } else {
+                      return Container(
+                          child: const Center(
+                              child: Text("Could Not Load Products")));
+                    }
+                  }
+                }),
           ],
         )));
   }

@@ -291,814 +291,1669 @@ class _LandingState extends State<Landing> {
                                   // Your widgets here
                                 ]),
                           ))),
-                  body: Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(height: 3.h),
-                          Center(
-                              child: Column(
-                            children: [
-                              Text("Overall Target",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 9.sp, color: Colors.black)),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      overallTargetVisibility == true
-                                          ? "₦" + overallTarget.toString()
-                                          : "--+--",
-                                      style: TextStyle(
-                                          fontSize: 13.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
-                                  SizedBox(width: 5.w),
-                                  GestureDetector(
-                                      onTap: () => {
-                                            setState(() {
-                                              overallTargetVisibility =
-                                                  !overallTargetVisibility;
-                                            })
-                                          },
-                                      child: Icon(Icons.visibility_off,
-                                          size: 13.sp, color: Colors.black))
-                                ],
-                              ),
-                            ],
-                          )),
-
-                          SizedBox(height: 5.h),
-                          //
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: (MediaQuery.of(context).size.width / 2) -
-                                    20,
-                                child: Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    padding: EdgeInsets.only(
-                                        top: 22.sp,
-                                        bottom: 22.sp,
-                                        left: 10.sp,
-                                        right: 10.sp),
-                                    decoration: BoxDecoration(
-                                      color: color.green(),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(24.sp)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.6),
-                                          spreadRadius: 3,
-                                          blurRadius: 4,
-                                          offset: Offset(0,
-                                              2), // changes position of shadow
-                                        ),
+                  body: extend == true
+                      ? //enable scrolling
+                      Container(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          color: Colors.white,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(height: 3.h),
+                                Center(
+                                    child: Column(
+                                  children: [
+                                    Text("Overall Target",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 9.sp,
+                                            color: Colors.black)),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                            overallTargetVisibility == true
+                                                ? "₦" + overallTarget.toString()
+                                                : "--+--",
+                                            style: TextStyle(
+                                                fontSize: 13.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black)),
+                                        SizedBox(width: 5.w),
+                                        GestureDetector(
+                                            onTap: () => {
+                                                  setState(() {
+                                                    overallTargetVisibility =
+                                                        !overallTargetVisibility;
+                                                  })
+                                                },
+                                            child: Icon(Icons.visibility_off,
+                                                size: 13.sp,
+                                                color: Colors.black))
                                       ],
                                     ),
-                                    child: Container(
-                                      width: double.maxFinite,
-                                      child: Column(
-                                        children: [
-                                          Text("Crushed Goals",
-                                              style: TextStyle(
-                                                  fontSize: 6.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text("₦" + overallSavings.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 9.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold)),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                              const SizedBox(width: 10),
-                              SizedBox(
-                                  width:
-                                      (MediaQuery.of(context).size.width / 2) -
-                                          36,
-                                  child: Container(
-                                      padding: EdgeInsets.only(
-                                          top: 20.sp, bottom: 20.sp),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(24.sp)),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.6),
-                                            spreadRadius: 3,
-                                            blurRadius: 4,
-                                            offset: Offset(0,
-                                                2), // changes position of shadow
+                                  ],
+                                )),
+
+                                SizedBox(height: 5.h),
+                                //
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              20,
+                                      child: Container(
+                                          margin: EdgeInsets.only(left: 5),
+                                          padding: EdgeInsets.only(
+                                              top: 22.sp,
+                                              bottom: 22.sp,
+                                              left: 10.sp,
+                                              right: 10.sp),
+                                          decoration: BoxDecoration(
+                                            color: color.green(),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(24.sp)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.6),
+                                                spreadRadius: 3,
+                                                blurRadius: 4,
+                                                offset: Offset(0,
+                                                    2), // changes position of shadow
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      child: GestureDetector(
-                                          onTap: (() => Get.to(
-                                                const OnboardingOne(),
-                                              )),
-                                          child: GestureDetector(
-                                              onTap: (() => {
-                                                    _showMaterialDialog(context)
-                                                  }),
-                                              child: Container(
-                                                child: Center(
-                                                    child: Text("StaQ",
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold))),
-                                                padding: EdgeInsets.all(5.sp),
-                                              )))))
-                            ],
-                          ),
-                          SizedBox(height: 5.h),
-                          allSavingsPlans!.isNotEmpty
-                              ? SizedBox(
-                                  //height: extend == false ? 180 : 280,
-                                  // constraints:
-                                  //  BoxConstraints(minHeight: 180, ),
-
-                                  child: ListView.separated(
-                                      shrinkWrap: true,
-                                      itemCount: extend == true
-                                          ? allSavingsPlans!.length
-                                          : allSavingsPlans!.length >= 2
-                                              ? 2
-                                              : allSavingsPlans!.length,
-                                      scrollDirection: Axis.vertical,
-                                      physics: const BouncingScrollPhysics(),
-                                      separatorBuilder: (c, i) {
-                                        return SizedBox(
-                                          height: 10.h,
-                                        );
-                                      },
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        String totalSaved =
-                                            allSavingsPlans![index]
-                                                ["total_saved"];
-
-                                        String target =
-                                            allSavingsPlans![index]["target"];
-
-                                        int percentageCrushed =
-                                            percentageAchieved(
-                                                int.parse(totalSaved),
-                                                int.parse(target));
-
-                                        return Container(
-                                          margin: const EdgeInsets.only(top: 5),
-                                          child: Row(children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                          child: Container(
+                                            width: double.maxFinite,
+                                            child: Column(
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        allSavingsPlans![index]
-                                                                    ["name"] ==
-                                                                "business-default"
-                                                            ? "Business"
-                                                            : ["name"] ==
-                                                                    "rent-default"
-                                                                ? "Rent"
-                                                                : allSavingsPlans![
-                                                                        index]
-                                                                    ["name"],
-                                                        style: TextStyle(
-                                                            fontSize: 10.sp,
+                                                Text("Crushed Goals",
+                                                    style: TextStyle(
+                                                        fontSize: 6.sp,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                Text(
+                                                    "₦" +
+                                                        overallSavings
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 9.sp,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ],
+                                            ),
+                                          )),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    SizedBox(
+                                        width:
+                                            (MediaQuery.of(context).size.width /
+                                                    2) -
+                                                36,
+                                        child: Container(
+                                            padding: EdgeInsets.only(
+                                                top: 20.sp, bottom: 20.sp),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(24.sp)),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.6),
+                                                  spreadRadius: 3,
+                                                  blurRadius: 4,
+                                                  offset: Offset(0,
+                                                      2), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: GestureDetector(
+                                                onTap: (() => Get.to(
+                                                      const OnboardingOne(),
+                                                    )),
+                                                child: GestureDetector(
+                                                    onTap: (() => {
+                                                          _showMaterialDialog(
+                                                              context)
+                                                        }),
+                                                    child: Container(
+                                                      child: Center(
+                                                          child: Text("StaQ",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold))),
+                                                      padding:
+                                                          EdgeInsets.all(5.sp),
+                                                    )))))
+                                  ],
+                                ),
+                                SizedBox(height: 5.h),
+                                allSavingsPlans!.isNotEmpty
+                                    ? SizedBox(
+                                        //height: extend == false ? 180 : 280,
+                                        // constraints:
+                                        //  BoxConstraints(minHeight: 180, ),
+
+                                        child: ListView.separated(
+                                            shrinkWrap: true,
+                                            itemCount: extend == true
+                                                ? allSavingsPlans!.length
+                                                : allSavingsPlans!.length >= 2
+                                                    ? 2
+                                                    : allSavingsPlans!.length,
+                                            scrollDirection: Axis.vertical,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            separatorBuilder: (c, i) {
+                                              return SizedBox(
+                                                height: 5.sp,
+                                              );
+                                            },
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              String totalSaved =
+                                                  allSavingsPlans![index]
+                                                      ["total_saved"];
+
+                                              String target =
+                                                  allSavingsPlans![index]
+                                                      ["target"];
+
+                                              int percentageCrushed =
+                                                  percentageAchieved(
+                                                      int.parse(totalSaved),
+                                                      int.parse(target));
+
+                                              return Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Row(children: [
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                              allSavingsPlans![
+                                                                              index]
+                                                                          [
+                                                                          "name"] ==
+                                                                      "business-default"
+                                                                  ? "Business"
+                                                                  : ["name"] ==
+                                                                          "rent-default"
+                                                                      ? "Rent"
+                                                                      : allSavingsPlans![
+                                                                              index]
+                                                                          [
+                                                                          "name"],
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      10.sp,
+                                                                  color: color
+                                                                      .green(),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                          const SizedBox(
+                                                              width: 5),
+                                                          const Icon(Icons.lock,
+                                                              color:
+                                                                  Colors.black,
+                                                              size: 10),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10.sp),
+                                                      SizedBox(width: 40.sp),
+                                                      Row(
+                                                        children: [
+                                                          SizedBox(
+                                                              height: 10.sp),
+                                                          SvgPicture.asset(
+                                                            "assets/images/svg/target.svg",
+                                                            height: 13.h,
                                                             color:
                                                                 color.green(),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                    const SizedBox(width: 5),
-                                                    const Icon(Icons.lock,
-                                                        color: Colors.black,
-                                                        size: 10),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10.sp),
-                                                SizedBox(width: 40.sp),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(height: 10.sp),
-                                                    SvgPicture.asset(
-                                                      "assets/images/svg/target.svg",
-                                                      height: 13.h,
+                                                            width: 13.w,
+                                                            fit: BoxFit
+                                                                .scaleDown,
+                                                          ),
+                                                          SizedBox(width: 10.w),
+                                                          Text(
+                                                              "₦" +
+                                                                  allSavingsPlans![
+                                                                              index]
+                                                                          [
+                                                                          "target"]
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      10.sp,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                          SizedBox(width: 5.sp),
+                                                          Icon(
+                                                              Icons
+                                                                  .visibility_off,
+                                                              color:
+                                                                  Colors.black,
+                                                              size: 10.sp),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 5.h),
+                                                      Text(
+                                                          percentageCrushed
+                                                                  .toString() +
+                                                              "% Achieved",
+                                                          style: TextStyle(
+                                                              fontSize: 7.sp,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                    ],
+                                                  ),
+                                                  const Spacer(),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          SizedBox(
+                                                              width: 23.sp),
+                                                          GestureDetector(
+                                                              onTap: (() => Get.to(Deposit(
+                                                                  savingsID:
+                                                                      allSavingsPlans?[index]
+                                                                          [
+                                                                          "id"],
+                                                                  savingsName:
+                                                                      allSavingsPlans?[index]
+                                                                          [
+                                                                          "name"],
+                                                                  target: allSavingsPlans?[
+                                                                          index]
+                                                                      [
+                                                                      "target"],
+                                                                  totalSaved: allSavingsPlans?[
+                                                                          index]
+                                                                      ["total_saved"]))),
+                                                              child: Icon(
+                                                                FontAwesomeIcons
+                                                                    .circlePlus,
+                                                                color: color
+                                                                    .green(),
+                                                                size: 15.sp,
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10.sp),
+                                                      Row(
+                                                        children: [
+                                                          SizedBox(
+                                                              width: 14.sp),
+                                                          Column(
+                                                            children: [
+                                                              Text("Interest",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          7.sp,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal)),
+                                                              Text("₦0.00",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          9.sp,
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold)),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  )
+                                                ]),
+                                                width: double.maxFinite,
+                                                padding: EdgeInsets.only(
+                                                    left: 14.sp,
+                                                    right: 14.sp,
+                                                    top: 7.sp,
+                                                    bottom: 7.sp),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            18.sp),
+                                                    color: Colors.grey
+                                                        .withOpacity(0.1)),
+                                              );
+                                            }))
+                                    //This second container has a shorter height
+
+                                    : const SizedBox(),
+
+                                extend == true
+                                    ? SizedBox(height: 5.sp)
+                                    : SizedBox(height: 4.sp),
+
+                                (allSavingsPlans!.isEmpty)
+                                    ? Container(
+                                        child: Row(children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text("Business",
+                                                      style: TextStyle(
+                                                          fontSize: 10.sp,
+                                                          color: color.green(),
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  SizedBox(width: 5.sp),
+                                                  Icon(Icons.lock,
+                                                      color: Colors.black,
+                                                      size: 10.sp),
+                                                ],
+                                              ),
+                                              SizedBox(height: 10.h),
+                                              SizedBox(width: 40.w),
+                                              Row(
+                                                children: [
+                                                  SizedBox(height: 10.h),
+                                                  SvgPicture.asset(
+                                                    "assets/images/svg/target.svg",
+                                                    height: 13,
+                                                    color: color.green(),
+                                                    width: 13.sp,
+                                                    fit: BoxFit.scaleDown,
+                                                  ),
+                                                  SizedBox(width: 10.w),
+                                                  Text("₦0.00",
+                                                      style: TextStyle(
+                                                          fontSize: 10.sp,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  SizedBox(width: 5.sp),
+                                                  Icon(Icons.visibility_off,
+                                                      color: Colors.black,
+                                                      size: 10),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text("0% Achieved",
+                                                  style: TextStyle(
+                                                      fontSize: 7.sp,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(children: [
+                                                SizedBox(width: 14.sp),
+                                                GestureDetector(
+                                                    onTap: (() =>
+                                                        Get.to(const SetSavings(
+                                                          defaultSavingsName:
+                                                              "business-default",
+                                                        ))),
+                                                    child: Icon(
+                                                      FontAwesomeIcons
+                                                          .circlePlus,
                                                       color: color.green(),
-                                                      width: 13.w,
-                                                      fit: BoxFit.scaleDown,
-                                                    ),
-                                                    SizedBox(width: 10.w),
-                                                    Text(
-                                                        "₦" +
-                                                            allSavingsPlans![
-                                                                        index]
-                                                                    ["target"]
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 10.sp,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                    SizedBox(width: 5.sp),
-                                                    Icon(Icons.visibility_off,
+                                                      size: 15.sp,
+                                                    ))
+                                              ]),
+                                              const SizedBox(height: 10),
+                                              Column(children: [
+                                                SizedBox(width: 14.sp),
+                                                const Text("Interest",
+                                                    style: TextStyle(
+                                                        fontSize: 9,
                                                         color: Colors.black,
-                                                        size: 10.sp),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 5.h),
-                                                Text(
-                                                    percentageCrushed
-                                                            .toString() +
-                                                        "% Achieved",
+                                                        fontWeight:
+                                                            FontWeight.normal)),
+                                                Text("₦0.00",
                                                     style: TextStyle(
                                                         fontSize: 7.sp,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.bold)),
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    SizedBox(width: 23.sp),
-                                                    GestureDetector(
-                                                        onTap: (() => Get.to(Deposit(
-                                                            savingsID:
-                                                                allSavingsPlans?[
-                                                                        index]
-                                                                    ["id"],
-                                                            savingsName:
-                                                                allSavingsPlans?[
-                                                                        index]
-                                                                    ["name"],
-                                                            target:
-                                                                allSavingsPlans?[
-                                                                        index]
-                                                                    ["target"],
-                                                            totalSaved:
-                                                                allSavingsPlans?[
-                                                                        index]
-                                                                    ["total_saved"]))),
-                                                        child: Icon(
-                                                          FontAwesomeIcons
-                                                              .circlePlus,
+                                              ])
+                                            ],
+                                          )
+                                        ]),
+                                        width: double.maxFinite,
+                                        padding: EdgeInsets.only(
+                                            left: 10.sp,
+                                            right: 10.sp,
+                                            top: 7.sp,
+                                            bottom: 7.sp),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(18.sp),
+                                            color:
+                                                Colors.grey.withOpacity(0.1)),
+                                      )
+                                    : const SizedBox(),
+                                extend == true
+                                    ? SizedBox(height: 5.sp)
+                                    : SizedBox(),
+
+                                (allSavingsPlans!.isEmpty)
+                                    ? Container(
+                                        child: Row(children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text("Rent",
+                                                      style: TextStyle(
+                                                          fontSize: 10.sp,
                                                           color: color.green(),
-                                                          size: 15.sp,
-                                                        )),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10.sp),
-                                                Row(
-                                                  children: [
-                                                    SizedBox(width: 14.sp),
-                                                    Column(
-                                                      children: [
-                                                        Text("Interest",
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  SizedBox(width: 5.sp),
+                                                  Icon(Icons.lock,
+                                                      color: Colors.black,
+                                                      size: 10.sp),
+                                                ],
+                                              ),
+                                              SizedBox(height: 10.h),
+                                              SizedBox(width: 40.w),
+                                              Row(
+                                                children: [
+                                                  SizedBox(height: 10.h),
+                                                  SvgPicture.asset(
+                                                    "assets/images/svg/target.svg",
+                                                    height: 12.sp,
+                                                    color: color.green(),
+                                                    width: 12.sp,
+                                                    fit: BoxFit.scaleDown,
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  Text("₦0.00",
+                                                      style: TextStyle(
+                                                          fontSize: 10.sp,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  SizedBox(width: 5.sp),
+                                                  Icon(Icons.visibility_off,
+                                                      color: Colors.black,
+                                                      size: 10.sp),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text("0% Achieved",
+                                                  style: TextStyle(
+                                                      fontSize: 7.sp,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(children: [
+                                                SizedBox(width: 14.sp),
+                                                GestureDetector(
+                                                    onTap: (() =>
+                                                        Get.to(const SetSavings(
+                                                          defaultSavingsName:
+                                                              "rent-default",
+                                                        ))),
+                                                    child: Icon(
+                                                      FontAwesomeIcons
+                                                          .circlePlus,
+                                                      color: color.green(),
+                                                      size: 15.sp,
+                                                    ))
+                                              ]),
+                                              const SizedBox(height: 10),
+                                              Column(children: [
+                                                SizedBox(width: 14.w),
+                                                Text("Interest",
+                                                    style: TextStyle(
+                                                        fontSize: 9.sp,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.normal)),
+                                                Text("₦0.00",
+                                                    style: TextStyle(
+                                                        fontSize: 7.sp,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ])
+                                            ],
+                                          )
+                                        ]),
+                                        width: double.maxFinite,
+                                        padding: EdgeInsets.only(
+                                            left: 10.sp,
+                                            right: 10.sp,
+                                            top: 10.sp,
+                                            bottom: 10.sp),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(18.sp),
+                                            color:
+                                                Colors.grey.withOpacity(0.1)),
+                                      )
+                                    : const SizedBox(),
+
+                                GestureDetector(
+                                    onTap: () => {
+                                          setState(() {
+                                            extend = !extend;
+
+                                            print(extend.toString());
+                                          })
+                                        },
+                                    child: Center(
+                                        child: SvgPicture.asset(
+                                      "assets/images/svg/down-outlined-arrow-down.svg",
+                                      height: 18.sp,
+                                      color: color.green(),
+                                      width: 18.sp,
+                                      fit: BoxFit.scaleDown,
+                                    ))),
+                                const SizedBox(height: 1),
+
+                                Container(
+                                    height: Get.height < 1300 ? 335.sp : 355.sp,
+                                    width: double.maxFinite,
+                                    margin: EdgeInsets.only(bottom: 0),
+                                    child: FutureBuilder(
+                                        future: Others().getProducts(),
+                                        builder:
+                                            (context, AsyncSnapshot snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return loader();
+                                          } else {
+                                            if (snapshot.data.isNotEmpty &&
+                                                snapshot.data != null) {
+                                              List? products = snapshot.data;
+                                              return ListView.separated(
+                                                shrinkWrap: true,
+                                                itemCount: products!.length,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                separatorBuilder: (c, i) {
+                                                  return SizedBox(width: 10.sp);
+                                                },
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Container(
+                                                      width: Get.width - 50,
+                                                      // height: 120,
+                                                      color: Colors.white,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Expanded(
+                                                              child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25.sp),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: "https://statup.ng/statup/" +
+                                                                  products[
+                                                                          index]
+                                                                      ["image"],
+                                                              width: Get.width,
+                                                              fit: BoxFit.cover,
+                                                              height:
+                                                                  Get.height <
+                                                                          1100
+                                                                      ? 248.sp
+                                                                      : 270.sp,
+                                                              placeholder:
+                                                                  (ctx, text) {
+                                                                return loader();
+                                                              },
+                                                            ),
+                                                          )),
+                                                          SizedBox(
+                                                              height: 2.sp),
+                                                          Row(
+                                                            children: [
+                                                              Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                      products[index]
+                                                                          [
+                                                                          "product_name"],
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          fontSize: 15
+                                                                              .sp,
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          2.sp),
+                                                                  Text(
+                                                                      products[index]
+                                                                          [
+                                                                          "product_desc"],
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          fontSize: 8
+                                                                              .sp,
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontWeight:
+                                                                              FontWeight.normal)),
+                                                                ],
+                                                              ),
+                                                              Spacer(),
+                                                              Column(
+                                                                children: [
+                                                                  Text(
+                                                                      "₦" +
+                                                                          products[index]
+                                                                              [
+                                                                              "product_price"],
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          fontSize: 15
+                                                                              .sp,
+                                                                          color: color
+                                                                              .green(),
+                                                                          fontWeight:
+                                                                              FontWeight.bold)),
+                                                                  Row(
+                                                                    children: [
+                                                                      Text(
+                                                                          "Sold",
+                                                                          textAlign: TextAlign
+                                                                              .center,
+                                                                          style: TextStyle(
+                                                                              fontSize: 11.sp,
+                                                                              color: Colors.black,
+                                                                              fontWeight: FontWeight.bold)),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              5.w),
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(6.sp),
+                                                                            border: Border.all(color: Color.fromARGB(255, 207, 207, 207))),
+                                                                        padding: EdgeInsets.only(
+                                                                            left:
+                                                                                10.sp,
+                                                                            right: 10.sp,
+                                                                            top: 3.sp,
+                                                                            bottom: 3.sp),
+                                                                        child: Text(
+                                                                            products[index][
+                                                                                "sold"],
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: TextStyle(
+                                                                              fontSize: 11.sp,
+                                                                              color: Colors.black,
+                                                                            )),
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                              height: 2.sp),
+                                                          GestureDetector(
+                                                              onTap: (() {
+                                                                _buy(context);
+                                                              }),
+                                                              child: Material(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              25.0),
+                                                                  elevation:
+                                                                      10.sp,
+                                                                  shadowColor: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          209,
+                                                                          209,
+                                                                          209),
+                                                                  child: Container(
+                                                                      height: Get.height > 1300 ? 44.sp : 30.sp,
+                                                                      width: double.maxFinite,
+                                                                      decoration: BoxDecoration(
+                                                                        color: color
+                                                                            .orange(),
+                                                                        borderRadius:
+                                                                            const BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              25.0),
+                                                                        ),
+                                                                      ),
+                                                                      child: Center(
+                                                                        child: Text(
+                                                                            "Buy",
+                                                                            style: TextStyle(
+                                                                                fontSize: 12.sp,
+                                                                                color: Colors.white,
+                                                                                fontWeight: FontWeight.bold)),
+                                                                      )
+                                                                      //rest of the existing code
+                                                                      )))
+                                                        ],
+                                                      ));
+                                                },
+                                              );
+                                            } else {
+                                              return Container(
+                                                  child: const Center(
+                                                child: Text(
+                                                    "Could Not Retrieve Products"),
+                                              ));
+                                            }
+                                          }
+                                        }))
+                              ],
+                            ),
+                          ),
+                        )
+                      : //disabled scrolling
+
+                      Container(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(height: 3.h),
+                              Center(
+                                  child: Column(
+                                children: [
+                                  Text("Overall Target",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 9.sp, color: Colors.black)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                          overallTargetVisibility == true
+                                              ? "₦" + overallTarget.toString()
+                                              : "--+--",
+                                          style: TextStyle(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black)),
+                                      SizedBox(width: 5.w),
+                                      GestureDetector(
+                                          onTap: () => {
+                                                setState(() {
+                                                  overallTargetVisibility =
+                                                      !overallTargetVisibility;
+                                                })
+                                              },
+                                          child: Icon(Icons.visibility_off,
+                                              size: 13.sp, color: Colors.black))
+                                    ],
+                                  ),
+                                ],
+                              )),
+
+                              SizedBox(height: 5.h),
+                              //
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: (MediaQuery.of(context).size.width /
+                                            2) -
+                                        20,
+                                    child: Container(
+                                        margin: EdgeInsets.only(left: 5),
+                                        padding: EdgeInsets.only(
+                                            top: 22.sp,
+                                            bottom: 22.sp,
+                                            left: 10.sp,
+                                            right: 10.sp),
+                                        decoration: BoxDecoration(
+                                          color: color.green(),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(24.sp)),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.6),
+                                              spreadRadius: 3,
+                                              blurRadius: 4,
+                                              offset: Offset(0,
+                                                  2), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                        child: Container(
+                                          width: double.maxFinite,
+                                          child: Column(
+                                            children: [
+                                              Text("Crushed Goals",
+                                                  style: TextStyle(
+                                                      fontSize: 6.sp,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Text(
+                                                  "₦" +
+                                                      overallSavings.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 9.sp,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  SizedBox(
+                                      width:
+                                          (MediaQuery.of(context).size.width /
+                                                  2) -
+                                              36,
+                                      child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 20.sp, bottom: 20.sp),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(24.sp)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.6),
+                                                spreadRadius: 3,
+                                                blurRadius: 4,
+                                                offset: Offset(0,
+                                                    2), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child: GestureDetector(
+                                              onTap: (() => Get.to(
+                                                    const OnboardingOne(),
+                                                  )),
+                                              child: GestureDetector(
+                                                  onTap: (() => {
+                                                        _showMaterialDialog(
+                                                            context)
+                                                      }),
+                                                  child: Container(
+                                                    child: Center(
+                                                        child: Text("StaQ",
                                                             style: TextStyle(
-                                                                fontSize: 7.sp,
+                                                                fontSize: 12.sp,
                                                                 color: Colors
-                                                                    .black,
+                                                                    .white,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .normal)),
-                                                        Text("₦0.00",
+                                                                        .bold))),
+                                                    padding:
+                                                        EdgeInsets.all(5.sp),
+                                                  )))))
+                                ],
+                              ),
+                              SizedBox(height: 5.h),
+                              allSavingsPlans!.isNotEmpty
+                                  ? SizedBox(
+                                      //height: extend == false ? 180 : 280,
+                                      // constraints:
+                                      //  BoxConstraints(minHeight: 180, ),
+
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          itemCount: extend == true
+                                              ? allSavingsPlans!.length
+                                              : allSavingsPlans!.length >= 2
+                                                  ? 2
+                                                  : allSavingsPlans!.length,
+                                          scrollDirection: Axis.vertical,
+                                          primary: false,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          separatorBuilder: (c, i) {
+                                            return SizedBox(
+                                              height: 5.sp,
+                                            );
+                                          },
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            String totalSaved =
+                                                allSavingsPlans![index]
+                                                    ["total_saved"];
+
+                                            String target =
+                                                allSavingsPlans![index]
+                                                    ["target"];
+
+                                            int percentageCrushed =
+                                                percentageAchieved(
+                                                    int.parse(totalSaved),
+                                                    int.parse(target));
+
+                                            return Container(
+                                              margin:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: Row(children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                            allSavingsPlans![
+                                                                            index]
+                                                                        [
+                                                                        "name"] ==
+                                                                    "business-default"
+                                                                ? "Business"
+                                                                : ["name"] ==
+                                                                        "rent-default"
+                                                                    ? "Rent"
+                                                                    : allSavingsPlans![
+                                                                            index]
+                                                                        [
+                                                                        "name"],
                                                             style: TextStyle(
-                                                                fontSize: 9.sp,
+                                                                fontSize: 10.sp,
+                                                                color: color
+                                                                    .green(),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        const Icon(Icons.lock,
+                                                            color: Colors.black,
+                                                            size: 10),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10.sp),
+                                                    SizedBox(width: 40.sp),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(height: 10.sp),
+                                                        SvgPicture.asset(
+                                                          "assets/images/svg/target.svg",
+                                                          height: 13.h,
+                                                          color: color.green(),
+                                                          width: 13.w,
+                                                          fit: BoxFit.scaleDown,
+                                                        ),
+                                                        SizedBox(width: 10.w),
+                                                        Text(
+                                                            "₦" +
+                                                                allSavingsPlans![
+                                                                            index]
+                                                                        [
+                                                                        "target"]
+                                                                    .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 10.sp,
                                                                 color: Colors
                                                                     .black,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold)),
+                                                        SizedBox(width: 5.sp),
+                                                        Icon(
+                                                            Icons
+                                                                .visibility_off,
+                                                            color: Colors.black,
+                                                            size: 10.sp),
                                                       ],
-                                                    )
+                                                    ),
+                                                    SizedBox(height: 5.h),
+                                                    Text(
+                                                        percentageCrushed
+                                                                .toString() +
+                                                            "% Achieved",
+                                                        style: TextStyle(
+                                                            fontSize: 7.sp,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
                                                   ],
-                                                )
-                                              ],
-                                            )
-                                          ]),
-                                          width: double.maxFinite,
-                                          padding: EdgeInsets.only(
-                                              left: 14.sp,
-                                              right: 14.sp,
-                                              top: 7.sp,
-                                              bottom: 7.sp),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.sp),
-                                              color:
-                                                  Colors.grey.withOpacity(0.1)),
-                                        );
-                                      }))
-                              //This second container has a shorter height
-
-                              : const SizedBox(),
-
-                          extend == true
-                              ? SizedBox(height: 5.sp)
-                              : SizedBox(height: 4.sp),
-
-                          (allSavingsPlans!.isEmpty ||
-                                      extend == true ||
-                                      allSavingsPlans!.length == 1) &&
-                                  showBusinessPlan == true
-                              ? Container(
-                                  child: Row(children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text("Business",
-                                                style: TextStyle(
-                                                    fontSize: 10.sp,
-                                                    color: color.green(),
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            SizedBox(width: 5.sp),
-                                            Icon(Icons.lock,
-                                                color: Colors.black,
-                                                size: 10.sp),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10.h),
-                                        SizedBox(width: 40.w),
-                                        Row(
-                                          children: [
-                                            SizedBox(height: 10.h),
-                                            SvgPicture.asset(
-                                              "assets/images/svg/target.svg",
-                                              height: 13,
-                                              color: color.green(),
-                                              width: 13.sp,
-                                              fit: BoxFit.scaleDown,
-                                            ),
-                                            SizedBox(width: 10.w),
-                                            Text("₦0.00",
-                                                style: TextStyle(
-                                                    fontSize: 10.sp,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            SizedBox(width: 5.sp),
-                                            Icon(Icons.visibility_off,
-                                                color: Colors.black, size: 10),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text("0% Achieved",
-                                            style: TextStyle(
-                                                fontSize: 7.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(children: [
-                                          SizedBox(width: 14.sp),
-                                          GestureDetector(
-                                              onTap: (() =>
-                                                  Get.to(const SetSavings(
-                                                    defaultSavingsName:
-                                                        "business-default",
-                                                  ))),
-                                              child: Icon(
-                                                FontAwesomeIcons.circlePlus,
-                                                color: color.green(),
-                                                size: 15.sp,
-                                              ))
-                                        ]),
-                                        const SizedBox(height: 10),
-                                        Column(children: [
-                                          SizedBox(width: 14.sp),
-                                          const Text("Interest",
-                                              style: TextStyle(
-                                                  fontSize: 9,
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                      FontWeight.normal)),
-                                          Text("₦0.00",
-                                              style: TextStyle(
-                                                  fontSize: 7.sp,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold)),
-                                        ])
-                                      ],
-                                    )
-                                  ]),
-                                  width: double.maxFinite,
-                                  padding: EdgeInsets.only(
-                                      left: 10.sp,
-                                      right: 10.sp,
-                                      top: 7.sp,
-                                      bottom: 7.sp),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(18.sp),
-                                      color: Colors.grey.withOpacity(0.1)),
-                                )
-                              : const SizedBox(),
-                          extend == true ? SizedBox(height: 5.sp) : SizedBox(),
-
-                          (allSavingsPlans!.isEmpty ||
-                                      extend == true ||
-                                      allSavingsPlans!.length < 2) &&
-                                  showRentPlan == true
-                              ? Container(
-                                  child: Row(children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text("Rent",
-                                                style: TextStyle(
-                                                    fontSize: 10.sp,
-                                                    color: color.green(),
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            SizedBox(width: 5.sp),
-                                            Icon(Icons.lock,
-                                                color: Colors.black,
-                                                size: 10.sp),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10.h),
-                                        SizedBox(width: 40.w),
-                                        Row(
-                                          children: [
-                                            SizedBox(height: 10.h),
-                                            SvgPicture.asset(
-                                              "assets/images/svg/target.svg",
-                                              height: 12.sp,
-                                              color: color.green(),
-                                              width: 12.sp,
-                                              fit: BoxFit.scaleDown,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text("₦0.00",
-                                                style: TextStyle(
-                                                    fontSize: 10.sp,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            SizedBox(width: 5.sp),
-                                            Icon(Icons.visibility_off,
-                                                color: Colors.black,
-                                                size: 10.sp),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text("0% Achieved",
-                                            style: TextStyle(
-                                                fontSize: 7.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                    const Spacer(),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(children: [
-                                          SizedBox(width: 14.sp),
-                                          GestureDetector(
-                                              onTap: (() =>
-                                                  Get.to(const SetSavings(
-                                                    defaultSavingsName:
-                                                        "rent-default",
-                                                  ))),
-                                              child: Icon(
-                                                FontAwesomeIcons.circlePlus,
-                                                color: color.green(),
-                                                size: 15.sp,
-                                              ))
-                                        ]),
-                                        const SizedBox(height: 10),
-                                        Column(children: [
-                                          SizedBox(width: 14.w),
-                                          Text("Interest",
-                                              style: TextStyle(
-                                                  fontSize: 9.sp,
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                      FontWeight.normal)),
-                                          Text("₦0.00",
-                                              style: TextStyle(
-                                                  fontSize: 7.sp,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold)),
-                                        ])
-                                      ],
-                                    )
-                                  ]),
-                                  width: double.maxFinite,
-                                  padding: EdgeInsets.only(
-                                      left: 10.sp,
-                                      right: 10.sp,
-                                      top: 10.sp,
-                                      bottom: 10.sp),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(18.sp),
-                                      color: Colors.grey.withOpacity(0.1)),
-                                )
-                              : const SizedBox(),
-
-                          GestureDetector(
-                              onTap: () => {
-                                    setState(() {
-                                      extend = !extend;
-
-                                      print(extend.toString());
-                                    })
-                                  },
-                              child: Center(
-                                  child: SvgPicture.asset(
-                                "assets/images/svg/down-outlined-arrow-down.svg",
-                                height: 18.sp,
-                                color: color.green(),
-                                width: 18.sp,
-                                fit: BoxFit.scaleDown,
-                              ))),
-                          const SizedBox(height: 1),
-
-                          Container(
-                              height: Get.height < 1300 ? 335.sp : 355.sp,
-                              width: double.maxFinite,
-                              margin: EdgeInsets.only(bottom: 0),
-                              child: FutureBuilder(
-                                  future: Others().getProducts(),
-                                  builder: (context, AsyncSnapshot snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return loader();
-                                    } else {
-                                      if (snapshot.data.isNotEmpty &&
-                                          snapshot.data != null) {
-                                        List? products = snapshot.data;
-                                        return ListView.separated(
-                                          shrinkWrap: true,
-                                          itemCount: products!.length,
-                                          scrollDirection: Axis.horizontal,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          separatorBuilder: (c, i) {
-                                            return SizedBox(width: 10.sp);
-                                          },
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return Container(
-                                                width: Get.width - 50,
-                                                // height: 120,
-                                                color: Colors.white,
-                                                child: Column(
+                                                ),
+                                                const Spacer(),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25.sp),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            "https://statup.ng/statup/" +
-                                                                products[index]
-                                                                    ["image"],
-                                                        width: Get.width,
-                                                        fit: BoxFit.cover,
-                                                        height:
-                                                            Get.height < 1300
-                                                                ? 245.sp
-                                                                : 270.sp,
-                                                        placeholder:
-                                                            (ctx, text) {
-                                                          return loader();
-                                                        },
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 2),
                                                     Row(
                                                       children: [
+                                                        SizedBox(width: 23.sp),
+                                                        GestureDetector(
+                                                            onTap: (() => Get.to(Deposit(
+                                                                savingsID:
+                                                                    allSavingsPlans?[index]
+                                                                        ["id"],
+                                                                savingsName:
+                                                                    allSavingsPlans?[
+                                                                            index][
+                                                                        "name"],
+                                                                target: allSavingsPlans?[
+                                                                        index]
+                                                                    ["target"],
+                                                                totalSaved:
+                                                                    allSavingsPlans?[
+                                                                            index]
+                                                                        ["total_saved"]))),
+                                                            child: Icon(
+                                                              FontAwesomeIcons
+                                                                  .circlePlus,
+                                                              color:
+                                                                  color.green(),
+                                                              size: 15.sp,
+                                                            )),
+                                                      ],
+                                                    ),
+                                                    SizedBox(height: 10.sp),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(width: 14.sp),
                                                         Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
                                                           children: [
-                                                            Text(
-                                                                products[index][
-                                                                    "product_name"],
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                            Text("Interest",
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                        15.sp,
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                            SizedBox(
-                                                                height: 2.sp),
-                                                            Text(
-                                                                products[index][
-                                                                    "product_desc"],
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        8.sp,
+                                                                        7.sp,
                                                                     color: Colors
                                                                         .black,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .normal)),
-                                                          ],
-                                                        ),
-                                                        Spacer(),
-                                                        Column(
-                                                          children: [
-                                                            Text(
-                                                                "₦" +
-                                                                    products[
-                                                                            index]
-                                                                        [
-                                                                        "product_price"],
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                            Text("₦0.00",
                                                                 style: TextStyle(
                                                                     fontSize:
-                                                                        15.sp,
-                                                                    color: color
-                                                                        .green(),
+                                                                        9.sp,
+                                                                    color: Colors
+                                                                        .black,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold)),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ]),
+                                              width: double.maxFinite,
+                                              padding: EdgeInsets.only(
+                                                  left: 14.sp,
+                                                  right: 14.sp,
+                                                  top: 7.sp,
+                                                  bottom: 7.sp),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.sp),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1)),
+                                            );
+                                          }))
+                                  //This second container has a shorter height
+
+                                  : const SizedBox(),
+
+                              extend == true
+                                  ? SizedBox(height: 5.sp)
+                                  : SizedBox(height: 4.sp),
+
+                              (allSavingsPlans!.isEmpty)
+                                  ? Container(
+                                      child: Row(children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text("Business",
+                                                    style: TextStyle(
+                                                        fontSize: 10.sp,
+                                                        color: color.green(),
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                SizedBox(width: 5.sp),
+                                                Icon(Icons.lock,
+                                                    color: Colors.black,
+                                                    size: 10.sp),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            SizedBox(width: 40.w),
+                                            Row(
+                                              children: [
+                                                SizedBox(height: 10.h),
+                                                SvgPicture.asset(
+                                                  "assets/images/svg/target.svg",
+                                                  height: 13,
+                                                  color: color.green(),
+                                                  width: 13.sp,
+                                                  fit: BoxFit.scaleDown,
+                                                ),
+                                                SizedBox(width: 10.w),
+                                                Text("₦0.00",
+                                                    style: TextStyle(
+                                                        fontSize: 10.sp,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                SizedBox(width: 5.sp),
+                                                Icon(Icons.visibility_off,
+                                                    color: Colors.black,
+                                                    size: 10),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Text("0% Achieved",
+                                                style: TextStyle(
+                                                    fontSize: 7.sp,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(children: [
+                                              SizedBox(width: 14.sp),
+                                              GestureDetector(
+                                                  onTap: (() =>
+                                                      Get.to(const SetSavings(
+                                                        defaultSavingsName:
+                                                            "business-default",
+                                                      ))),
+                                                  child: Icon(
+                                                    FontAwesomeIcons.circlePlus,
+                                                    color: color.green(),
+                                                    size: 15.sp,
+                                                  ))
+                                            ]),
+                                            const SizedBox(height: 10),
+                                            Column(children: [
+                                              SizedBox(width: 14.sp),
+                                              const Text("Interest",
+                                                  style: TextStyle(
+                                                      fontSize: 9,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.normal)),
+                                              Text("₦0.00",
+                                                  style: TextStyle(
+                                                      fontSize: 7.sp,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ])
+                                          ],
+                                        )
+                                      ]),
+                                      width: double.maxFinite,
+                                      padding: EdgeInsets.only(
+                                          left: 10.sp,
+                                          right: 10.sp,
+                                          top: 7.sp,
+                                          bottom: 7.sp),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(18.sp),
+                                          color: Colors.grey.withOpacity(0.1)),
+                                    )
+                                  : const SizedBox(),
+                              extend == true
+                                  ? SizedBox(height: 5.sp)
+                                  : SizedBox(),
+
+                              (allSavingsPlans!.isEmpty)
+                                  ? Container(
+                                      child: Row(children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text("Rent",
+                                                    style: TextStyle(
+                                                        fontSize: 10.sp,
+                                                        color: color.green(),
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                SizedBox(width: 5.sp),
+                                                Icon(Icons.lock,
+                                                    color: Colors.black,
+                                                    size: 10.sp),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            SizedBox(width: 40.w),
+                                            Row(
+                                              children: [
+                                                SizedBox(height: 10.h),
+                                                SvgPicture.asset(
+                                                  "assets/images/svg/target.svg",
+                                                  height: 12.sp,
+                                                  color: color.green(),
+                                                  width: 12.sp,
+                                                  fit: BoxFit.scaleDown,
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Text("₦0.00",
+                                                    style: TextStyle(
+                                                        fontSize: 10.sp,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                SizedBox(width: 5.sp),
+                                                Icon(Icons.visibility_off,
+                                                    color: Colors.black,
+                                                    size: 10.sp),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Text("0% Achieved",
+                                                style: TextStyle(
+                                                    fontSize: 7.sp,
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(children: [
+                                              SizedBox(width: 14.sp),
+                                              GestureDetector(
+                                                  onTap: (() =>
+                                                      Get.to(const SetSavings(
+                                                        defaultSavingsName:
+                                                            "rent-default",
+                                                      ))),
+                                                  child: Icon(
+                                                    FontAwesomeIcons.circlePlus,
+                                                    color: color.green(),
+                                                    size: 15.sp,
+                                                  ))
+                                            ]),
+                                            const SizedBox(height: 10),
+                                            Column(children: [
+                                              SizedBox(width: 14.w),
+                                              Text("Interest",
+                                                  style: TextStyle(
+                                                      fontSize: 9.sp,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.normal)),
+                                              Text("₦0.00",
+                                                  style: TextStyle(
+                                                      fontSize: 7.sp,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ])
+                                          ],
+                                        )
+                                      ]),
+                                      width: double.maxFinite,
+                                      margin: EdgeInsets.only(top: 8),
+                                      padding: EdgeInsets.only(
+                                          left: 10.sp,
+                                          right: 10.sp,
+                                          top: 10.sp,
+                                          bottom: 10.sp),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(18.sp),
+                                          color: Colors.grey.withOpacity(0.1)),
+                                    )
+                                  : const SizedBox(),
+
+                              GestureDetector(
+                                  onTap: () => {
+                                        setState(() {
+                                          extend = !extend;
+
+                                          print(extend.toString());
+                                        })
+                                      },
+                                  child: Center(
+                                      child: SvgPicture.asset(
+                                    "assets/images/svg/down-outlined-arrow-down.svg",
+                                    height: 18.sp,
+                                    color: color.green(),
+                                    width: 18.sp,
+                                    fit: BoxFit.scaleDown,
+                                  ))),
+                              const SizedBox(height: 1),
+
+                              Expanded(
+                                  child: Container(
+                                      color: Colors.white,
+                                      width: double.maxFinite,
+                                      margin: EdgeInsets.only(bottom: 0),
+                                      child: FutureBuilder(
+                                          future: Others().getProducts(),
+                                          builder: (context,
+                                              AsyncSnapshot snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return loader();
+                                            } else {
+                                              if (snapshot.data.isNotEmpty &&
+                                                  snapshot.data != null) {
+                                                List? products = snapshot.data;
+                                                return ListView.separated(
+                                                  shrinkWrap: true,
+                                                  itemCount: products!.length,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  primary: false,
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  separatorBuilder: (c, i) {
+                                                    return SizedBox(
+                                                        width: 10.sp);
+                                                  },
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return Container(
+                                                        width: Get.width - 50,
+                                                        // height: 120,
+                                                        color: Colors.white,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Expanded(
+                                                                child:
+                                                                    ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          25.sp),
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: "https://statup.ng/statup/" +
+                                                                    products[
+                                                                            index]
+                                                                        [
+                                                                        "image"],
+                                                                width:
+                                                                    Get.width,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                height:
+                                                                    Get.height <
+                                                                            1100
+                                                                        ? 248.sp
+                                                                        : 270
+                                                                            .sp,
+                                                                placeholder:
+                                                                    (ctx,
+                                                                        text) {
+                                                                  return loader();
+                                                                },
+                                                              ),
+                                                            )),
+                                                            SizedBox(
+                                                                height: 2.sp),
                                                             Row(
                                                               children: [
-                                                                Text("Sold",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        fontSize: 11
-                                                                            .sp,
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                                SizedBox(
-                                                                    width: 5.w),
-                                                                Container(
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(6
-                                                                              .sp),
-                                                                      border: Border.all(
-                                                                          color: Color.fromARGB(
-                                                                              255,
-                                                                              207,
-                                                                              207,
-                                                                              207))),
-                                                                  padding: EdgeInsets.only(
-                                                                      left:
-                                                                          10.sp,
-                                                                      right:
-                                                                          10.sp,
-                                                                      top: 3.sp,
-                                                                      bottom:
-                                                                          3.sp),
-                                                                  child: Text(
-                                                                      products[
-                                                                              index]
-                                                                          [
-                                                                          "sold"],
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            11.sp,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      )),
-                                                                )
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(height: 2.sp),
-                                                    GestureDetector(
-                                                        onTap: (() {
-                                                          _buy(context);
-                                                        }),
-                                                        child: Material(
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    25.0),
-                                                            elevation: 10.sp,
-                                                            shadowColor:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    209,
-                                                                    209,
-                                                                    209),
-                                                            child: Container(
-                                                                height:
-                                                                    Get.height >
-                                                                            1300
-                                                                        ? 44.sp
-                                                                        : 30.sp,
-                                                                width: double
-                                                                    .maxFinite,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: color
-                                                                      .orange(),
-                                                                  borderRadius:
-                                                                      const BorderRadius
-                                                                          .all(
-                                                                    Radius.circular(
-                                                                        25.0),
-                                                                  ),
+                                                                Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                        products[index]
+                                                                            [
+                                                                            "product_name"],
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                15.sp,
+                                                                            color: Colors.black,
+                                                                            fontWeight: FontWeight.bold)),
+                                                                    SizedBox(
+                                                                        height:
+                                                                            2.sp),
+                                                                    Text(
+                                                                        products[index]
+                                                                            [
+                                                                            "product_desc"],
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                8.sp,
+                                                                            color: Colors.black,
+                                                                            fontWeight: FontWeight.normal)),
+                                                                  ],
                                                                 ),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                      "Buy",
-                                                                      style: TextStyle(
-                                                                          fontSize: 12
-                                                                              .sp,
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontWeight:
-                                                                              FontWeight.bold)),
-                                                                )
-                                                                //rest of the existing code
-                                                                )))
-                                                  ],
+                                                                Spacer(),
+                                                                Column(
+                                                                  children: [
+                                                                    Text(
+                                                                        "₦" +
+                                                                            products[index][
+                                                                                "product_price"],
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                15.sp,
+                                                                            color: color.green(),
+                                                                            fontWeight: FontWeight.bold)),
+                                                                    Row(
+                                                                      children: [
+                                                                        Text(
+                                                                            "Sold",
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: TextStyle(
+                                                                                fontSize: 11.sp,
+                                                                                color: Colors.black,
+                                                                                fontWeight: FontWeight.bold)),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                5.w),
+                                                                        Container(
+                                                                          decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(6.sp),
+                                                                              border: Border.all(color: Color.fromARGB(255, 207, 207, 207))),
+                                                                          padding: EdgeInsets.only(
+                                                                              left: 10.sp,
+                                                                              right: 10.sp,
+                                                                              top: 3.sp,
+                                                                              bottom: 3.sp),
+                                                                          child: Text(
+                                                                              products[index]["sold"],
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyle(
+                                                                                fontSize: 11.sp,
+                                                                                color: Colors.black,
+                                                                              )),
+                                                                        )
+                                                                      ],
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                                height: 2.sp),
+                                                            GestureDetector(
+                                                                onTap: (() {
+                                                                  _buy(context);
+                                                                }),
+                                                                child: Material(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            25.0),
+                                                                    elevation:
+                                                                        10.sp,
+                                                                    shadowColor:
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            209,
+                                                                            209,
+                                                                            209),
+                                                                    child: Container(
+                                                                        height: Get.height > 1300 ? 44.sp : 30.sp,
+                                                                        width: double.maxFinite,
+                                                                        decoration: BoxDecoration(
+                                                                          color:
+                                                                              color.orange(),
+                                                                          borderRadius:
+                                                                              const BorderRadius.all(
+                                                                            Radius.circular(25.0),
+                                                                          ),
+                                                                        ),
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                              "Buy",
+                                                                              style: TextStyle(fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.bold)),
+                                                                        )
+                                                                        //rest of the existing code
+                                                                        )))
+                                                          ],
+                                                        ));
+                                                  },
+                                                );
+                                              } else {
+                                                return Container(
+                                                    child: const Center(
+                                                  child: Text(
+                                                      "Could Not Retrieve Products"),
                                                 ));
-                                          },
-                                        );
-                                      } else {
-                                        return Container(
-                                            child: const Center(
-                                          child: Text(
-                                              "Could Not Retrieve Products"),
-                                        ));
-                                      }
-                                    }
-                                  }))
-                        ],
-                      ),
-                    ),
-                  )))),
+                                              }
+                                            }
+                                          }))),
+                            ],
+                          ),
+                        )))),
           Visibility(
               visible: updateNotif,
               child: Material(

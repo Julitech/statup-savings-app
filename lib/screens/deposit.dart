@@ -47,6 +47,7 @@ class _DepositState extends State<Deposit> {
   int trans_code = 0;
 
   List<String> preselectedSavings = [
+    "1,000",
     "3,000",
     "5,000",
     "10,000",
@@ -196,7 +197,7 @@ class _DepositState extends State<Deposit> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N3,000',
+                            hintText: 'Minimum is N1,000',
                             hintStyle: TextStyle(
                               fontSize: 14,
                               height: 1.5,
@@ -289,7 +290,7 @@ class _DepositState extends State<Deposit> {
                                         (int.parse(widget.totalSaved) +
                                                 (int.parse(targetAmt.text)) <=
                                             int.parse(widget.target)) &&
-                                        int.parse(targetAmt.text) >= 3000)
+                                        int.parse(targetAmt.text) >= 1000)
                                       {
                                         loading("Loading", context),
 
@@ -328,11 +329,11 @@ class _DepositState extends State<Deposit> {
                                         if (targetAmt.text.isNotEmpty)
                                           {
                                             if (int.parse(targetAmt.text) <
-                                                    3000 ||
+                                                    1000 ||
                                                 targetAmt.text.isEmpty)
                                               {
                                                 showErrorToast(
-                                                    "The Amount Must Not Be Less Than N3,000 !"),
+                                                    "The Amount Must Not Be Less Than N1000 !"),
                                               }
                                             else if ((int.parse(
                                                         widget.totalSaved) +

@@ -41,6 +41,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
   ];
 
   List<String> preselectedStartingAmount = [
+    "1,000",
     "3,000",
     "5,000",
     "10,000",
@@ -234,7 +235,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N3,000',
+                            hintText: 'Minimum is N1,000',
                             hintStyle: TextStyle(
                               fontSize: 14,
                               height: 1.5,
@@ -324,7 +325,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                         freqAmt.text.isNotEmpty &&
                                         goal_name.text.isNotEmpty &&
                                         int.parse(targetAmt.text) >= 100000 &&
-                                        int.parse(starterAmt.text) >= 3000)
+                                        int.parse(starterAmt.text) >= 1000)
                                       {
                                         loading("Loading", context),
                                         Savings()
@@ -374,7 +375,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                               }
                                             else if (int.parse(
                                                     starterAmt.text) <
-                                                3000)
+                                                1000)
                                               {
                                                 showErrorToast(
                                                     "The Starting Amount Must Not Be Less Than N3,000 !"),
