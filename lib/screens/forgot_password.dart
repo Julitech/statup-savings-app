@@ -160,24 +160,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               )
                               //rest of the existing code
                               ))),
-                  const SizedBox(height: 25),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                            Get.to(const ForgotPassword());
-                          },
-                          child: Text("Resend Code",
-                              // textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  color: color.green(),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold))),
-                    ],
-                  )
                 ],
               ),
             )));

@@ -8,6 +8,7 @@ import '../components/colors.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../services/auth.dart';
+import 'forgot_password.dart';
 import 'pin.dart';
 
 class NewPassword extends StatefulWidget {
@@ -176,6 +177,49 @@ class _NewPasswordState extends State<NewPassword> {
                                       )
                                       //rest of the existing code
                                       )))),
+                      const SizedBox(height: 25),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                // Get.to(const ForgotPassword());
+
+                                loading("loading", context);
+
+                                AuthService()
+                                    .resendEmail(
+                                      email.toString(),
+                                    )
+                                    .then((value) => {
+                                          if (value == 1)
+                                            {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(),
+                                              showErrorToast(
+                                                  "Code re-sent Successfully!"),
+                                            }
+                                          else
+                                            {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(),
+                                              showErrorToast(
+                                                  "Sorry!An error occured Could not verify. Please try again!"),
+                                            }
+                                        });
+                              },
+                              child: Text("Resend Code",
+                                  // textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      color: color.green(),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold))),
+                        ],
+                      )
                     ],
                   ),
                 ))));

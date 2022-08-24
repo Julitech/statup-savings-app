@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:dio/dio.dart' as eos;
@@ -39,7 +40,7 @@ class Others {
           print(Hive.box("statup").get("products").toString());
           return data["data"];
         } else {
-          return "error!";
+          return [];
         }
       }
     } catch (e) {
@@ -87,7 +88,7 @@ class Others {
         } else if (data["code"] == 1) {
           return 1;
         } else {
-          return "error!";
+          return [];
         }
       }
     } catch (e) {
@@ -96,7 +97,7 @@ class Others {
     }
     throw (e) {
       print("Error/Exception thrown" + e.toString());
-      return "An error occured!";
+      return [];
     };
   }
 
@@ -132,7 +133,7 @@ class Others {
           print(Hive.box("statup").get("explore").toString());
           return data["data"];
         } else {
-          return "error!";
+          return [];
         }
       }
     } catch (e) {
@@ -141,7 +142,7 @@ class Others {
     }
     throw (e) {
       print("Error/Exception thrown" + e.toString());
-      return "An error occured!";
+      return [];
     };
   }
 
@@ -177,16 +178,16 @@ class Others {
           print(Hive.box("statup").get("referrals").toString());
           return data["data"];
         } else {
-          return "error!";
+          return [];
         }
       }
     } catch (e) {
       print("Error/Exception caught" + e.toString());
-      return "An error occured1!" + e.toString();
+      return [];
     }
     throw (e) {
       print("Error/Exception thrown" + e.toString());
-      return "An error occured!";
+      return [];
     };
   }
 }

@@ -139,30 +139,56 @@ class _OtpState extends State<Otp> {
                                     borderRadius: BorderRadius.circular(5)),
                               ))),
                       const SizedBox(height: 25),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Didn't get it?  ",
-                              // textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  color: Colors.black.withOpacity(0.8),
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal)),
-                          GestureDetector(
-                              onTap: () {
-                                Get.to(const Signup());
-                              },
-                              child: Text("Resend",
+                      GestureDetector(
+                          onTap: (() => {
+                                loading("loading", context),
+                                AuthService()
+                                    .resendEmail(
+                                      userEmail.toString(),
+                                    )
+                                    .then((value) => {
+                                          if (value == 1)
+                                            {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(),
+                                              showErrorToast(
+                                                  "Code re-sent Successfully!"),
+                                            }
+                                          else
+                                            {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(),
+                                              showErrorToast(
+                                                  "Sorry!An error occured Could not verify. Please try again!"),
+                                            }
+                                        })
+                              }),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Didn't get it?  ",
                                   // textAlign: TextAlign.center,
                                   style: TextStyle(
                                       decoration: TextDecoration.none,
-                                      color: color.green(),
+                                      color: Colors.black.withOpacity(0.8),
                                       fontSize: 15,
-                                      fontWeight: FontWeight.bold))),
-                        ],
-                      )
+                                      fontWeight: FontWeight.normal)),
+                              GestureDetector(
+                                  onTap: () {
+                                    Get.to(const Signup());
+                                  },
+                                  child: Text("Resend",
+                                      // textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          decoration: TextDecoration.none,
+                                          color: color.green(),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold))),
+                            ],
+                          ))
                     ],
                   ),
                 ))));

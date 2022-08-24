@@ -204,7 +204,7 @@ class More extends StatelessWidget {
                       {
                         platform = 'iOS',
                         launchAppstore(
-                            "https://play.google.com/store/apps/details?id=com.statup.app")
+                            "https://apps.apple.com/us/app/statup/id1608627091")
                       }
                     else
                       {
