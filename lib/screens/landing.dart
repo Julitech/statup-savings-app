@@ -67,6 +67,8 @@ class _LandingState extends State<Landing> {
       });*/
     });
 
+    getAppInfo();
+
     Map<String, String> details = {
       'product_name': 'Crocs',
       'product_price': '1234',
@@ -494,19 +496,10 @@ class _LandingState extends State<Landing> {
                                                       Row(
                                                         children: [
                                                           Text(
-                                                              allSavingsPlans![
-                                                                              index]
-                                                                          [
-                                                                          "name"] ==
-                                                                      "business-default"
-                                                                  ? "Business"
-                                                                  : ["name"] ==
-                                                                          "rent-default"
-                                                                      ? "Rent"
-                                                                      : allSavingsPlans![
-                                                                              index]
-                                                                          [
-                                                                          "name"],
+                                                              setSavingsPlansFeName(
+                                                                  allSavingsPlans![
+                                                                          index]
+                                                                      ["name"]),
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       10.sp,
@@ -782,7 +775,7 @@ class _LandingState extends State<Landing> {
                                     : const SizedBox(),
                                 extend == true
                                     ? SizedBox(height: 5.sp)
-                                    : SizedBox(),
+                                    : SizedBox(height: 5.sp),
 
                                 (allSavingsPlans!.isEmpty)
                                     ? Container(
@@ -1332,19 +1325,10 @@ class _LandingState extends State<Landing> {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                            allSavingsPlans![
-                                                                            index]
-                                                                        [
-                                                                        "name"] ==
-                                                                    "business-default"
-                                                                ? "Business"
-                                                                : ["name"] ==
-                                                                        "rent-default"
-                                                                    ? "Rent"
-                                                                    : allSavingsPlans![
-                                                                            index]
-                                                                        [
-                                                                        "name"],
+                                                            setSavingsPlansFeName(
+                                                                allSavingsPlans![
+                                                                        index]
+                                                                    ["name"]),
                                                             style: TextStyle(
                                                                 fontSize: 10.sp,
                                                                 color: color
@@ -1608,7 +1592,8 @@ class _LandingState extends State<Landing> {
                                   ? SizedBox(height: 5.sp)
                                   : SizedBox(),
 
-                              (allSavingsPlans!.isEmpty)
+                              (allSavingsPlans!.isEmpty ||
+                                      allSavingsPlans!.length < 2)
                                   ? Container(
                                       child: Row(children: [
                                         Column(
@@ -2197,23 +2182,37 @@ class _LandingState extends State<Landing> {
 
     int iosVersion = int.parse(Hive.box("statup").get("ios_version"));
 
-    int version = int.parse(packageInfo.version);
+    int version = int.parse(packageInfo.buildNumber);
     int buildNumber = int.parse(packageInfo.buildNumber);
 
     if (Platform.isIOS) {
       platform = 'iOS';
-      if (buildNumber > iosVersion) {
+      if (buildNumber < iosVersion) {
         setState(() {
           updateNotif = true;
         });
       }
     } else {
-      if (version > androidVersion) {
+      if (version < androidVersion) {
         setState(() {
           updateNotif = true;
         });
       }
       platform = 'Android';
     }
+  }
+
+  String setSavingsPlansFeName(String name) {
+    String feName = "";
+    if (name == "business-default") {
+      feName = "Business";
+
+      feName = "Business";
+    } else if (name == "rent-default") {
+      feName = "Rent";
+
+      feName = "Rent";
+    }
+    return feName;
   }
 }

@@ -365,7 +365,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
 				MARKETING_VERSION = 1.0.9;
+=======
+>>>>>>> 7905420e2975e0491754335b9e30907e2fd68fe9
 				PRODUCT_BUNDLE_IDENTIFIER = com.statup.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -496,7 +499,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
 				MARKETING_VERSION = 1.0.9;
+=======
+>>>>>>> 7905420e2975e0491754335b9e30907e2fd68fe9
 				PRODUCT_BUNDLE_IDENTIFIER = com.statup.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -521,7 +527,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+<<<<<<< HEAD
 				MARKETING_VERSION = 1.0.9;
+=======
+>>>>>>> 7905420e2975e0491754335b9e30907e2fd68fe9
 				PRODUCT_BUNDLE_IDENTIFIER = com.statup.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";

@@ -157,8 +157,9 @@ class AuthService {
           Hive.box("statup").put("loggedIn", true);
           Hive.box("statup").put("savings", data["savings_plans"]);
 
-          Hive.box("statup").put("android_version", data["android_version"]);
-          Hive.box("statup").put("ios_version", data["ios_version"]);
+          Hive.box("statup")
+              .put("android_version", data["android_version"]["value"]);
+          Hive.box("statup").put("ios_version", data["ios_version"]["value"]);
 
           return 1;
         } else {
@@ -214,9 +215,12 @@ class AuthService {
           Hive.box("statup").put("last_name", data["data"]['0']["last_name"]);
           Hive.box("statup").put("pin", data["data"]['0']["pin"]);
 
-          Hive.box("statup").put("android_version", data["android_version"]);
+          Hive.box("statup")
+              .put("android_version", data["android_version"]["value"]);
 
-          Hive.box("statup").put("ios_version", data["ios_version"]);
+          print("android version ${data["android_version"]["value"]}");
+
+          Hive.box("statup").put("ios_version", data["ios_version"]["value"]);
 
           Hive.box("statup")
               .put("referral_code", data["data"]['0']["ref_code"]);
@@ -618,6 +622,48 @@ class AuthService {
     throw (e) {
       print("Error/Exception thrown" + e.toString());
       return "An error occured!";
+    };
+  }
+
+  Future<dynamic> resendEmail(String email) async {
+    try {
+      //eos.Response response;
+      var dio = eos.Dio();
+      //  response = await dio.get('/users/create');
+      //  print(response.data.toString());
+// Optionally the request above could also be done as
+
+      var response =
+          await dio.get(baseUrl + 'users/newVerificationCode?email=$email',
+              // data: formData,
+              options: eos.Options(
+                headers: {
+                  "accept": "application/json",
+                  // "Content-Type": "multipart/form-data",
+                  // "Authorization": Hive.box("statup").get("access_token")
+                },
+              ));
+
+      print(response.data.toString());
+      var data = jsonDecode(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (data["code"] == 0) {
+          //network or server error
+
+          return [];
+        } else if (data["code"] == 1) {
+          return 1;
+        } else {
+          return [];
+        }
+      }
+    } catch (e) {
+      print("Error/Exception caught" + e.toString());
+      return [];
+    }
+    throw (e) {
+      print("Error/Exception thrown" + e.toString());
+      return [];
     };
   }
 }

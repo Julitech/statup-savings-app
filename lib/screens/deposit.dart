@@ -45,6 +45,7 @@ class _DepositState extends State<Deposit> {
   myColors color = myColors();
   var responseCode;
   int trans_code = 0;
+  bool paystack_option_tapped = false;
 
   List<String> preselectedSavings = [
     "1,000",
@@ -281,31 +282,35 @@ class _DepositState extends State<Deposit> {
 
                       const SizedBox(height: 60),
                       // Spacer(),
-                      SizedBox(
-                          width: double.maxFinite,
-                          child: GestureDetector(
-                              onTap: () => {
-                                    if (targetAmt.text.isNotEmpty &&
-                                        freqAmt.text.isNotEmpty &&
-                                        (int.parse(widget.totalSaved) +
-                                                (int.parse(targetAmt.text)) <=
-                                            int.parse(widget.target)) &&
-                                        int.parse(targetAmt.text) >= 1000)
-                                      {
-                                        loading("Loading", context),
+                      Row(
+                        children: [
+                          SizedBox(
+                              width: Get.width / 2.3,
+                              child: GestureDetector(
+                                  onTap: () => {
+                                        if (targetAmt.text.isNotEmpty &&
+                                            freqAmt.text.isNotEmpty &&
+                                            (int.parse(widget.totalSaved) +
+                                                    (int.parse(
+                                                        targetAmt.text)) <=
+                                                int.parse(widget.target)) &&
+                                            int.parse(targetAmt.text) >= 100)
+                                          {
+                                            loading("Loading", context),
 
-                                        Get.to(Payment(
-                                            amount: targetAmt.text,
-                                            savings_id: widget.savingsID,
-                                            freq: freqAmt.text,
-                                            savingsName: widget.savingsName)),
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop(),
-                                        //   Get.to(MobPayTest())
-                                        // callQuickTeller()
+                                            Get.to(Payment(
+                                                amount: targetAmt.text,
+                                                savings_id: widget.savingsID,
+                                                freq: freqAmt.text,
+                                                savingsName:
+                                                    widget.savingsName)),
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop(),
+                                            //   Get.to(MobPayTest())
+                                            // callQuickTeller()
 
-                                        /* Savings()
+                                            /* Savings()
                                             .addSavings(
                                                 savingsID: widget.savingsID,
                                                 targetAmount: targetAmt.text,
@@ -323,58 +328,96 @@ class _DepositState extends State<Deposit> {
                                                       Get.to(const Landing())
                                                     }
                                                 })*/
-                                      }
-                                    else
-                                      {
-                                        if (targetAmt.text.isNotEmpty)
-                                          {
-                                            if (int.parse(targetAmt.text) <
-                                                    1000 ||
-                                                targetAmt.text.isEmpty)
-                                              {
-                                                showErrorToast(
-                                                    "The Amount Must Not Be Less Than N1000 !"),
-                                              }
-                                            else if ((int.parse(
-                                                        widget.totalSaved) +
-                                                    (int.parse(
-                                                        targetAmt.text)) >
-                                                int.parse(widget.target)))
-                                              {
-                                                showErrorToast(
-                                                    "Total Amount Will Be More Than Target!"),
-                                              }
                                           }
                                         else
                                           {
-                                            showErrorToast(
-                                                "Please fill out all fields!"),
+                                            if (targetAmt.text.isNotEmpty)
+                                              {
+                                                if (int.parse(targetAmt.text) <
+                                                        100 ||
+                                                    targetAmt.text.isEmpty)
+                                                  {
+                                                    showErrorToast(
+                                                        "The Amount Must Not Be Less Than N1000 !"),
+                                                  }
+                                                else if ((int.parse(
+                                                            widget.totalSaved) +
+                                                        (int.parse(
+                                                            targetAmt.text)) >
+                                                    int.parse(widget.target)))
+                                                  {
+                                                    showErrorToast(
+                                                        "Total Amount Will Be More Than Target!"),
+                                                  }
+                                              }
+                                            else
+                                              {
+                                                showErrorToast(
+                                                    "Please fill out all fields!"),
+                                              }
                                           }
-                                      }
-                                  },
-                              child: Material(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  elevation: 10,
-                                  shadowColor:
-                                      Color.fromARGB(255, 209, 209, 209),
-                                  child: Container(
-                                      height: 40,
-                                      width: double.maxFinite,
-                                      decoration: BoxDecoration(
-                                        color: color.green(),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(25.0),
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: const Text("Save",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold)),
-                                      )
-                                      //rest of the existing code
-                                      )))),
+                                      },
+                                  child: Material(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      elevation: 10,
+                                      shadowColor:
+                                          Color.fromARGB(255, 209, 209, 209),
+                                      child: Container(
+                                          height: 40,
+                                          width: double.maxFinite,
+                                          decoration: BoxDecoration(
+                                            color: color.green(),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(25.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: const Text(
+                                                "Pay With Paystack",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          )
+                                          //rest of the existing code
+                                          )))),
+                          SizedBox(width: 3),
+                          SizedBox(
+                              width: (Get.width / 2) - 17,
+                              child: GestureDetector(
+                                  onTap: () => {
+                                        confirmBankTransferPayment(context),
+                                      },
+                                  child: Material(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      elevation: 10,
+                                      shadowColor:
+                                          Color.fromARGB(255, 209, 209, 209),
+                                      child: Container(
+                                          height: 40,
+                                          width: double.maxFinite,
+                                          decoration: BoxDecoration(
+                                            color: color.grey(),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(25.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: const Text(
+                                                "Pay With Bank Transfer",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          )
+                                          //rest of the existing code
+                                          )))),
+                        ],
+                      ),
 
                       const SizedBox(height: 10),
                     ])))));
@@ -456,6 +499,152 @@ class _DepositState extends State<Deposit> {
                             fontWeight: FontWeight.bold)))),
           ),
         ),
+      ),
+    );
+  }
+
+  void confirmBankTransferPayment(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+        child: Material(
+            color: Colors.black.withOpacity(.2),
+            child: Center(
+                child: Container(
+                    width: 350,
+                    height: 350,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Spacer(),
+                            GestureDetector(
+                                onTap: (() {
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                }),
+                                child: Icon(Icons.close))
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                            onTap: (() {
+                              //Navigator.pop(context);
+                            }),
+                            child: Container(
+                                width: double.maxFinite,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: paystack_option_tapped == true
+                                        ? color.green()
+                                        : Color.fromARGB(255, 214, 214, 214),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Bank Transfer",
+                                      style: TextStyle(
+                                          fontSize: 20, color: color.green()),
+                                    ),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      "Go ahead and make a transfer of ${amt.text} to the following account:",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color:
+                                              Color.fromARGB(255, 95, 95, 95)),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Center(
+                                        child: Text(
+                                      "Zenith Bank",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color:
+                                              Color.fromARGB(255, 95, 95, 95)),
+                                    )),
+                                    SizedBox(height: 10),
+                                    Center(
+                                        child: Text(
+                                      "220077664433",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: color.green(),
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                    SizedBox(height: 10),
+                                    Center(
+                                        child: Text(
+                                      "StatUp ",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color:
+                                              Color.fromARGB(255, 95, 95, 95)),
+                                    )),
+                                    SizedBox(height: 20),
+                                    Center(
+                                        child: SizedBox(
+                                            width: (Get.width / 2) - 17,
+                                            child: GestureDetector(
+                                                onTap: () => {
+                                                      // confirmBankTransferPayment(context),
+                                                    },
+                                                child: Material(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0),
+                                                    elevation: 10,
+                                                    shadowColor: Color.fromARGB(
+                                                        255, 209, 209, 209),
+                                                    child: Container(
+                                                        height: 40,
+                                                        width: double.maxFinite,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(
+                                                            Radius.circular(
+                                                                25.0),
+                                                          ),
+                                                        ),
+                                                        child: Center(
+                                                          child: const Text(
+                                                              "Yes I Have Paid!",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          46,
+                                                                          46,
+                                                                          46),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                        )
+                                                        //rest of the existing code
+                                                        ))))),
+                                  ],
+                                )))
+                      ],
+                    )))),
       ),
     );
   }
