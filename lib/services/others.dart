@@ -190,4 +190,65 @@ class Others {
       return [];
     };
   }
+
+  Future<dynamic> updateBank({
+    @required String? state,
+    @required String? amount,
+    @required String? address,
+    @required String? product_id,
+  }) async {
+    try {
+      //eos.Response response;
+      var dio = eos.Dio();
+      //  response = await dio.get('/users/create');
+      //  print(response.data.toString());
+// Optionally the request above could also be done as
+
+      var formData = eos.FormData.fromMap({
+        'state': state,
+        'phone': Hive.box("statup").get("phone"),
+        'address': address?.trim(),
+        'user_id': Hive.box("statup").get("userID"),
+        'amount': amount,
+        'email': Hive.box("statup").get("email"),
+        'product_id': product_id,
+      });
+
+      var response = await dio.post(baseUrl + 'ecom/purchase',
+          data: formData,
+          options: eos.Options(
+            headers: {
+              "accept": "application/json",
+              // "Content-Type": "multipart/form-data",
+              "Authorization": Hive.box("statup").get("access_token")
+            },
+          ));
+
+      print(response.data.toString());
+      var data = jsonDecode(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (data["code"] == 0) {
+          //network or server error
+
+          return "An error occured!";
+        } else if (data["code"] == 1) {
+          Hive.box("statup").put("acc_name", data["data"]["account_name"]);
+          Hive.box("statup").put("acc_num", data["data"]["account_num"]);
+
+          Hive.box("statup").put("bank", data["data"]["bank"]);
+
+          return 1;
+        } else {
+          return "error!";
+        }
+      }
+    } catch (e) {
+      print("Error/Exception caught " + e.toString());
+      return "An error occured1!" + e.toString();
+    }
+    throw (e) {
+      print("Error/Exception thrown" + e.toString());
+      return "An error occured!";
+    };
+  }
 }

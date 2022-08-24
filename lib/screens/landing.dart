@@ -43,6 +43,7 @@ class _LandingState extends State<Landing> {
   List img = [];
   late DateTime currentBackPressTime;
   bool overallTargetVisibility = false;
+  bool crushedTargetVisibility = false;
   List? savingsPlans;
   bool extend = false;
   List? allSavingsPlans;
@@ -54,7 +55,12 @@ class _LandingState extends State<Landing> {
   int _selectedIndex = 0;
   bool updateNotif = false;
   TextEditingController _phoneController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
   String state = "Select State";
+
+  String? statup_corp_bank = Hive.box("statup").get("statup_corp_bank");
+  String? statup_corp_name = Hive.box("statup").get("statup_corp_name");
+  String? statup_corp_num = Hive.box("statup").get("statup_corp_num");
 
   @override
   initState() {
@@ -383,15 +389,50 @@ class _LandingState extends State<Landing> {
                                                         color: Colors.white,
                                                         fontWeight:
                                                             FontWeight.bold)),
-                                                Text(
-                                                    "₦" +
-                                                        overallSavings
-                                                            .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 9.sp,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
+                                                SizedBox(height: 2.sp),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                        crushedTargetVisibility ==
+                                                                true
+                                                            ? "₦" +
+                                                                overallSavings
+                                                                    .toString()
+                                                            : "--",
+                                                        style: TextStyle(
+                                                            fontSize: 9.sp,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    SizedBox(width: 5.sp),
+                                                    GestureDetector(
+                                                        onTap: () => {
+                                                              setState(() {
+                                                                crushedTargetVisibility =
+                                                                    !crushedTargetVisibility;
+                                                              })
+                                                            },
+                                                        child: Icon(
+                                                            crushedTargetVisibility ==
+                                                                    false
+                                                                ? Icons
+                                                                    .visibility_off
+                                                                : Icons
+                                                                    .visibility,
+                                                            size: 8.sp,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    255,
+                                                                    255)))
+                                                  ],
+                                                )
                                               ],
                                             ),
                                           )),
@@ -1214,14 +1255,48 @@ class _LandingState extends State<Landing> {
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold)),
-                                              Text(
-                                                  "₦" +
-                                                      overallSavings.toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 9.sp,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
+                                              SizedBox(height: 2.sp),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      crushedTargetVisibility ==
+                                                              true
+                                                          ? "₦" +
+                                                              overallSavings
+                                                                  .toString()
+                                                          : "--",
+                                                      style: TextStyle(
+                                                          fontSize: 9.sp,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  SizedBox(width: 5.sp),
+                                                  GestureDetector(
+                                                      onTap: () => {
+                                                            setState(() {
+                                                              crushedTargetVisibility =
+                                                                  !crushedTargetVisibility;
+                                                            })
+                                                          },
+                                                      child: Icon(
+                                                          crushedTargetVisibility ==
+                                                                  false
+                                                              ? Icons
+                                                                  .visibility_off
+                                                              : Icons
+                                                                  .visibility,
+                                                          size: 8.sp,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              255,
+                                                              255,
+                                                              255)))
+                                                ],
+                                              )
                                             ],
                                           ),
                                         )),
@@ -2038,6 +2113,106 @@ class _LandingState extends State<Landing> {
       context: context,
       builder: (BuildContext context) => Center(
           child: Material(
+        color: Colors.black.withOpacity(.2),
+        child: Container(
+            margin: EdgeInsets.only(bottom: 300.sp),
+            width: double.maxFinite,
+            height: 360.sp,
+            padding: EdgeInsets.all(20.sp),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.sp),
+              color: Colors.white,
+            ),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: [
+                Row(
+                  children: [
+                    Spacer(),
+                    GestureDetector(
+                      onTap: (() => {
+                            Navigator.of(context, rootNavigator: true).pop(),
+                          }),
+                      child: Icon(Icons.close, size: 20.sp),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10),
+                Text("You are about to make a purchase",
+                    style: TextStyle(fontSize: 20.sp)),
+                SizedBox(height: 20),
+                SizedBox(
+                  child: DropdownSearch<String>(
+                      mode: Mode.MENU,
+                      dropdownButtonSplashRadius: 20,
+                      // showSelectedItem: true,
+                      items: states.getStates(),
+                      label: "Select State",
+                      hint: state,
+                      popupItemDisabled: (String s) => s.startsWith('I'),
+                      onChanged: (data) {
+                        setState(() {
+                          state = data.toString();
+                          print("davido + states");
+                        });
+                      },
+                      selectedItem: state),
+                ),
+                SizedBox(height: 20.sp),
+                CustomField4(
+                  hint: "Contact Phone Number",
+                  controller: _phoneController,
+                ),
+                SizedBox(height: 10.sp),
+                CustomField4(
+                  hint: "Contact Address",
+                  controller: _addressController,
+                ),
+                SizedBox(height: 10.sp),
+                GestureDetector(
+                    onTap: (() {
+                      Get.to(Purchase());
+                    }),
+                    child: GestureDetector(
+                        onTap: (() {
+                          Navigator.of(context, rootNavigator: true).pop();
+
+                          _selectEcomPayment(context);
+                        }),
+                        child: Material(
+                            borderRadius: BorderRadius.circular(25.0.sp),
+                            elevation: 10,
+                            shadowColor: Color.fromARGB(255, 209, 209, 209),
+                            child: Container(
+                                height: 40.sp,
+                                width: double.maxFinite,
+                                decoration: BoxDecoration(
+                                  color: color.orange(),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(25.0),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: const Text("Make Purchase",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                )
+                                //rest of the existing code
+                                ))))
+              ],
+            )),
+      )),
+    );
+  }
+
+  void _selectEcomPayment(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+          child: Material(
               color: Colors.black.withOpacity(.2),
               child: Center(
                 child: Container(
@@ -2063,66 +2238,96 @@ class _LandingState extends State<Landing> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10),
-                        Text("You are about to make a purchase",
-                            style: TextStyle(fontSize: 20.sp)),
-                        SizedBox(height: 20),
-                        SizedBox(
-                          child: DropdownSearch<String>(
-                              mode: Mode.MENU,
-                              dropdownButtonSplashRadius: 20,
-                              // showSelectedItem: true,
-                              items: states.getStates(),
-                              label: "Select State",
-                              hint: state,
-                              popupItemDisabled: (String s) =>
-                                  s.startsWith('I'),
-                              onChanged: (data) {
-                                setState(() {
-                                  state = data.toString();
-                                  print("davido + states");
-                                });
-                              },
-                              selectedItem: state),
-                        ),
-                        SizedBox(height: 20.sp),
-                        CustomField4(
-                          hint: "Contact Phone Number",
-                          controller: _phoneController,
-                        ),
                         SizedBox(height: 10.sp),
-                        CustomField4(
-                          hint: "Contact Address",
-                          controller: _phoneController,
-                        ),
-                        SizedBox(height: 10.sp),
+                        Text("Select an option for payment",
+                            style: TextStyle(fontSize: 17.sp)),
+                        SizedBox(height: 6.sp),
+                        Text("Pay directly into our official account.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 13.sp)),
+                        SizedBox(height: 12.sp),
+                        Text(statup_corp_bank.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 6.sp),
+                        Text(statup_corp_num.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.bold,
+                                color: color.green())),
+                        SizedBox(height: 6.sp),
+                        Text(statup_corp_name.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 17.sp, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 6.sp),
                         GestureDetector(
                             onTap: (() {
                               Get.to(Purchase());
                             }),
                             child: Material(
                                 borderRadius: BorderRadius.circular(25.0.sp),
-                                elevation: 10,
+                                elevation: 10.sp,
                                 shadowColor: Color.fromARGB(255, 209, 209, 209),
                                 child: Container(
                                     height: 40.sp,
                                     width: double.maxFinite,
                                     decoration: BoxDecoration(
-                                      color: color.orange(),
+                                      color: Color.fromARGB(255, 189, 188, 188),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(25.0),
+                                      ),
+                                    ),
+                                    child: const Center(
+                                      child: Text("Yes, I've Paid!",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Color.fromARGB(
+                                                  255, 31, 30, 30),
+                                              fontWeight: FontWeight.bold)),
+                                    )
+                                    //rest of the existing code
+                                    ))),
+                        SizedBox(height: 10.sp),
+                        Text("OR",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color.fromARGB(255, 31, 30, 30),
+                                fontWeight: FontWeight.bold)),
+                        Divider(height: 2.sp, color: Colors.grey),
+                        SizedBox(height: 18.sp),
+                        GestureDetector(
+                            onTap: (() {
+                              Get.to(Purchase());
+                            }),
+                            child: Material(
+                                borderRadius: BorderRadius.circular(25.0.sp),
+                                elevation: 10.sp,
+                                shadowColor: Color.fromARGB(255, 209, 209, 209),
+                                child: Container(
+                                    height: 40.sp,
+                                    width: double.maxFinite,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 223, 223, 223),
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(25.0),
                                       ),
                                     ),
                                     child: Center(
-                                      child: const Text("Make Purchase",
+                                      child: Text("Pay With Paystack",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
+                                              fontSize: 12.sp,
+                                              color: Color.fromARGB(
+                                                  255, 31, 30, 30),
                                               fontWeight: FontWeight.bold)),
                                     )
                                     //rest of the existing code
-                                    )))
+                                    ))),
                       ],
                     )),
               ))),
@@ -2155,6 +2360,47 @@ class _LandingState extends State<Landing> {
         ),
       ),
     );
+  }
+
+  void requestSuccess(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => Center(
+              child: Material(
+                color: Colors.black.withOpacity(.2),
+                child: Center(
+                  child: Container(
+                    width: 250,
+                    height: 200,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                        child: Column(children: [
+                      const Text(
+                          "Your request has been successfully submitted! Once we receive your transfer, your savings wallet will be funded",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(height: 20),
+                      GestureDetector(
+                          onTap: (() => {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(),
+                                Get.to(Landing())
+                              }),
+                          child: const Text("Go back to home",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 20)))
+                    ])),
+                  ),
+                ),
+              ),
+            ));
   }
 
   Future<void> launchPlaystore(String url) async {

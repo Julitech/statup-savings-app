@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
 import '../components/colors.dart';
 import '../components/constants.dart';
 import '../services/others.dart';
@@ -79,10 +80,10 @@ class _ExploreState extends State<Explore> {
                           elevation: 10,
                           shadowColor: Color.fromARGB(255, 209, 209, 209),
                           child: Container(
-                              padding: EdgeInsets.only(bottom: 20),
+                              padding: EdgeInsets.only(bottom: 5),
                               color: Colors.white,
                               width: double.maxFinite,
-                              height: Get.height * 0.30,
+                              height: Get.height * 0.32,
                               child: ListView.separated(
                                   itemCount: products!.length,
                                   scrollDirection: Axis.horizontal,
@@ -211,7 +212,6 @@ class _ExploreState extends State<Explore> {
                               return Container(
                                 padding: EdgeInsets.all(10),
                                 width: double.maxFinite,
-                                height: 270,
                                 decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
@@ -227,10 +227,11 @@ class _ExploreState extends State<Explore> {
                                               MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: const [
+                                          children: [
                                             Padding(
                                               padding: EdgeInsets.all(10),
-                                              child: Text("Set Financial Goals",
+                                              child: Text(
+                                                  explore[index]["title"],
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -240,13 +241,11 @@ class _ExploreState extends State<Explore> {
                                             ),
                                             SizedBox(height: 10),
                                             Padding(
-                                                padding: EdgeInsets.all(10),
-                                                child: Text(
-                                                    "One way to not run out of funds is by planning. A second way is by... Read More",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Color.fromARGB(
-                                                            255, 0, 0, 0)))),
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
+                                              child: Html(
+                                                  data: explore[index]["body"]),
+                                            )
                                           ],
                                         ),
                                         SizedBox(height: 10),

@@ -24,7 +24,7 @@ class AuthService {
 
       var formData = eos.FormData.fromMap({
         'phone': phone!.trim(),
-        'email': email!.trim(),
+        'email': email!.trim().toLowerCase(),
         'first_name': first_name!.trim(),
         'last_name': last_name!.trim(),
         'password': pwd,
@@ -81,7 +81,7 @@ class AuthService {
 
       var formData = eos.FormData.fromMap({
         'otp': otp?.trim(),
-        'email': email?.trim(),
+        'email': email?.trim().toLowerCase(),
         'userID': userID,
       });
 
@@ -100,7 +100,7 @@ class AuthService {
           Hive.box("statup").put("userID", data['id']);
           Hive.box("statup").put("first_name", data['first_name']);
           Hive.box("statup").put("last_name", data['last_name']);
-          Hive.box("statup").put("email", data['email']);
+
           Hive.box("statup").put("access_token", data['access_token']);
           Hive.box("statup").put("id", data['id']);
           Hive.box("statup").put("phone", data['phone']);
@@ -160,6 +160,15 @@ class AuthService {
           Hive.box("statup")
               .put("android_version", data["android_version"]["value"]);
           Hive.box("statup").put("ios_version", data["ios_version"]["value"]);
+
+          Hive.box("statup")
+              .put("statup_corp_bank", data["bank_details"]["bank"]);
+
+          Hive.box("statup")
+              .put("statup_corp_name", data["bank_details"]["name"]);
+
+          Hive.box("statup")
+              .put("statup_corp_num", data["bank_details"]["acc_number"]);
 
           return 1;
         } else {
@@ -227,6 +236,17 @@ class AuthService {
 
           Hive.box("statup")
               .put("access_token", data["data"]['0']["access_token"]);
+
+          Hive.box("statup")
+              .put("statup_corp_bank", data["bank_details"]["bank"]);
+
+          Hive.box("statup")
+              .put("statup_corp_name", data["bank_details"]["name"]);
+
+          Hive.box("statup")
+              .put("statup_corp_num", data["bank_details"]["acc_number"]);
+
+          print(data["bank_details"].toString());
           return 1;
         } else {
           return "error!";
@@ -334,7 +354,7 @@ class AuthService {
       var formData = eos.FormData.fromMap({
         'first_name': first_name?.trim(),
         'last_name': last_name?.trim(),
-        'email': email?.trim(),
+        'email': email?.trim().toLowerCase(),
         'file': await eos.MultipartFile.fromFile(dp!.path, filename: dp.path),
       });
 
@@ -445,7 +465,7 @@ class AuthService {
 // Optionally the request above could also be done as
 
       var formData = eos.FormData.fromMap({
-        'email': email?.trim(),
+        'email': email?.trim().toLowerCase(),
       });
 
       var response =
@@ -488,7 +508,7 @@ class AuthService {
 // Optionally the request above could also be done as
 
       var formData = eos.FormData.fromMap({
-        'email': email!.trim(),
+        'email': email!.trim().toLowerCase(),
         'password': password!.trim(),
         'code': code!.trim(),
       });
