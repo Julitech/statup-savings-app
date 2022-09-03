@@ -78,7 +78,7 @@ class _SignupState extends State<Signup> {
                     const SizedBox(height: 20),
                     CustomField4(
                       controller: phone,
-                      obscureText: false,
+                      type: TextInputType.number,
                       hint: 'Phone Number',
                       label: "Phone Number",
                       enabled: enabled,

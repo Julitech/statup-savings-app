@@ -102,6 +102,8 @@ class _ExploreState extends State<Explore> {
                                               Image.network(
                                                 "https://statup.ng/statup/" +
                                                     products![index]["image"],
+                                                height: 140,
+                                                width: 160,
                                               ),
                                               Row(
                                                 children: [
@@ -253,7 +255,12 @@ class _ExploreState extends State<Explore> {
                                           height: 120,
                                           width: double.maxFinite,
                                           child: Image.network(
-                                              "https://statup.ng/statup/explore_images/20220814_191950.jpg"),
+                                            explore[index]["image"] != null &&
+                                                    explore[index]["image"] !=
+                                                        ""
+                                                ? "https://statup.ng/statup/${explore[index]["image"]}"
+                                                : "https://statup.ng/statup/explore_images/20220814_191950.jpg",
+                                          ),
                                         ),
                                         SizedBox(height: 3),
                                       ],
@@ -263,7 +270,6 @@ class _ExploreState extends State<Explore> {
                               return Container(
                                 padding: EdgeInsets.all(10),
                                 width: double.maxFinite,
-                                height: 130,
                                 decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
@@ -272,44 +278,39 @@ class _ExploreState extends State<Explore> {
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     elevation: 6,
-                                    child: Container(
-                                        height: double.maxFinite,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10))),
-                                        padding: EdgeInsets.all(10),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: const [
-                                            Text("Set Financial Goals",
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10, top: 10),
+                                            child: Text(explore[index]["title"],
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
                                                     color: Color.fromARGB(
-                                                        255, 0, 0, 0))),
-                                            SizedBox(height: 10),
-                                            Text(
-                                                "One way to not run out of funds is by planning. A second way is by... Read More",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Color.fromARGB(
-                                                        255, 0, 0, 0)))
-                                          ],
-                                        ))),
+                                                        255, 0, 0, 0)))),
+                                        SizedBox(height: 10),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Html(
+                                              data: explore[index]["body"]),
+                                        )
+                                      ],
+                                    )),
                               );
                             } else if (explore[index]["type"] == "image") {
                               return Container(
-                                padding: EdgeInsets.all(10),
-                                width: double.maxFinite,
-                                height: 260,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Card(
+                                  padding: EdgeInsets.all(10),
+                                  width: double.maxFinite,
+                                  height: 260,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Card(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
@@ -318,9 +319,13 @@ class _ExploreState extends State<Explore> {
                                       height: double.maxFinite,
                                       width: double.maxFinite,
                                       child: Image.network(
-                                          "https://statup.ng/statup/explore_images/20220814_191950.jpg"),
-                                    )),
-                              );
+                                        explore[index]["image"] != null &&
+                                                explore[index]["image"] != ""
+                                            ? "https://statup.ng/statup/${explore[index]["image"]}"
+                                            : "https://statup.ng/statup/explore_images/20220814_191950.jpg",
+                                      ),
+                                    ),
+                                  ));
                             } else {
                               return SizedBox();
                             }

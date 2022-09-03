@@ -191,11 +191,13 @@ class Others {
     };
   }
 
-  Future<dynamic> updateBank({
+  Future<dynamic> order({
     @required String? state,
     @required String? amount,
     @required String? address,
-    @required String? product_id,
+    @required String? productID,
+    @required String? phone,
+    @required String? tx_ref,
   }) async {
     try {
       //eos.Response response;
@@ -206,12 +208,12 @@ class Others {
 
       var formData = eos.FormData.fromMap({
         'state': state,
-        'phone': Hive.box("statup").get("phone"),
+        'phone': phone,
         'address': address?.trim(),
-        'user_id': Hive.box("statup").get("userID"),
         'amount': amount,
         'email': Hive.box("statup").get("email"),
-        'product_id': product_id,
+        'tx_ref': tx_ref,
+        'product_id': productID,
       });
 
       var response = await dio.post(baseUrl + 'ecom/purchase',
@@ -232,11 +234,6 @@ class Others {
 
           return "An error occured!";
         } else if (data["code"] == 1) {
-          Hive.box("statup").put("acc_name", data["data"]["account_name"]);
-          Hive.box("statup").put("acc_num", data["data"]["account_num"]);
-
-          Hive.box("statup").put("bank", data["data"]["bank"]);
-
           return 1;
         } else {
           return "error!";

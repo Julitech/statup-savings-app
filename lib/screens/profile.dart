@@ -6,7 +6,6 @@ import '../components/constants.dart';
 import '../components/colors.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';

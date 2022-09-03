@@ -185,6 +185,54 @@ class AuthService {
     };
   }
 
+  Future<dynamic> setFCMToken({
+    @required String? fcm_token,
+  }) async {
+    try {
+      //eos.Response response;
+      var dio = eos.Dio();
+      //  response = await dio.get('/users/create');
+      //  print(response.data.toString());
+// Optionally the request above could also be done as
+
+      var formData = eos.FormData.fromMap({
+        'fcm_token': fcm_token?.trim(),
+      });
+
+      var response = await dio.post(baseUrl + 'users/setFCMToken',
+          data: formData,
+          options: eos.Options(
+            headers: {
+              "accept": "application/json",
+              // "Content-Type": "multipart/form-data",
+              "Authorization": Hive.box("statup").get("access_token")
+            },
+          ));
+
+      print(response.data.toString());
+      var data = jsonDecode(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (data["code"] == 0) {
+          //network or server error
+
+          print("An error occured!");
+          return [];
+        } else if (data["code"] == 1) {
+          return 1;
+        } else {
+          return "error!";
+        }
+      }
+    } catch (e) {
+      print("Error/Exception caught " + e.toString());
+      return "An error occured1!" + e.toString();
+    }
+    throw (e) {
+      print("Error/Exception thrown" + e.toString());
+      return "An error occured!";
+    };
+  }
+
   Future<dynamic> loginWithPIN({
     @required String? pin,
   }) async {
@@ -245,6 +293,8 @@ class AuthService {
 
           Hive.box("statup")
               .put("statup_corp_num", data["bank_details"]["acc_number"]);
+
+          Hive.box("statup").put("unread-notifs", data["unread_notifs"]);
 
           print(data["bank_details"].toString());
           return 1;
@@ -313,6 +363,7 @@ class AuthService {
 
           Hive.box("statup").put("loggedIn", true);
           Hive.box("statup").put("savings", data["data"]["savings_plans"]);
+
           print("logged In successfully!");
           Hive.box("statup").put("businesses", data["data"]["businesses"]);
           // Hive.box("statup").put("savings", data["data"]);
