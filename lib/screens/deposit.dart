@@ -1,18 +1,22 @@
-import 'dart:math';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:monnify_payment_sdk/application_mode.dart';
+import 'package:monnify_payment_sdk/payment_method.dart';
+import 'package:monnify_payment_sdk/transaction.dart';
+import 'package:monnify_payment_sdk/transaction_response.dart';
+import 'package:monnify_payment_sdk/monnify_payment_sdk.dart';
 import '/screens/payment.dart';
 import '/screens/withdraw.dart';
 import '/services/savings.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
 import 'landing.dart';
+import 'dart:math';
 
 class Deposit extends StatefulWidget {
   final savingsID, totalSaved, target, savingsName;
@@ -46,6 +50,16 @@ class _DepositState extends State<Deposit> {
   var responseCode;
   int trans_code = 0;
   bool paystack_option_tapped = false;
+  String? email = Hive.box("statup").get("email");
+  String? userID = Hive.box("statup").get("id");
+  String? statup_corp_bank = Hive.box("statup").get("statup_corp_bank");
+  String? statup_corp_name = Hive.box("statup").get("statup_corp_name");
+  String? statup_corp_num = Hive.box("statup").get("statup_corp_num");
+
+  String firstName = Hive.box("statup").get("first_name");
+  String last = Hive.box("statup").get("last_name");
+  String user_id = Hive.box("statup").get("id");
+  final _monnifyPaymentSdkPlugin = MonnifyPaymentSdk();
 
   List<String> preselectedSavings = [
     "1,000",
@@ -78,6 +92,7 @@ class _DepositState extends State<Deposit> {
 
     //Set paystack
     super.initState();
+    initializeSdk();
   }
 
   @override
@@ -296,9 +311,11 @@ class _DepositState extends State<Deposit> {
                                                 int.parse(widget.target)) &&
                                             int.parse(targetAmt.text) >= 100)
                                           {
-                                            loading("Loading", context),
+                                            processing(
+                                                "Processing... please DO NOT close this window",
+                                                context),
 
-                                            Get.to(Payment(
+                                            /*  Get.to(Payment(
                                                 amount: targetAmt.text,
                                                 savings_id: widget.savingsID,
                                                 freq: freqAmt.text,
@@ -306,7 +323,78 @@ class _DepositState extends State<Deposit> {
                                                     widget.savingsName)),
                                             Navigator.of(context,
                                                     rootNavigator: true)
-                                                .pop(),
+                                                .pop(),*/
+
+                                            initPayment()
+                                          }
+                                        else
+                                          {
+                                            if (targetAmt.text.isNotEmpty)
+                                              {
+                                                if (int.parse(targetAmt.text) <
+                                                        100 ||
+                                                    targetAmt.text.isEmpty)
+                                                  {
+                                                    showErrorToast(
+                                                        "The Amount Must Not Be Less Than N1000 !"),
+                                                  }
+                                                else if ((int.parse(
+                                                            widget.totalSaved) +
+                                                        (int.parse(
+                                                            targetAmt.text)) >
+                                                    int.parse(widget.target)))
+                                                  {
+                                                    showErrorToast(
+                                                        "Total Amount Will Be More Than Target!"),
+                                                  }
+                                              }
+                                            else
+                                              {
+                                                showErrorToast(
+                                                    "Please fill out all fields!"),
+                                              }
+                                          }
+                                      },
+                                  child: Material(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      elevation: 10,
+                                      shadowColor:
+                                          Color.fromARGB(255, 209, 209, 209),
+                                      child: Container(
+                                          height: 40,
+                                          width: double.maxFinite,
+                                          decoration: BoxDecoration(
+                                            color: color.green(),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(25.0),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: const Text("Pay With Card",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          )
+                                          //rest of the existing code
+                                          )))),
+                          SizedBox(width: 3),
+                          SizedBox(
+                              width: (Get.width / 2) - 17,
+                              child: GestureDetector(
+                                  onTap: () => {
+                                        if (targetAmt.text.isNotEmpty &&
+                                            freqAmt.text.isNotEmpty &&
+                                            (int.parse(widget.totalSaved) +
+                                                    (int.parse(
+                                                        targetAmt.text)) <=
+                                                int.parse(widget.target)) &&
+                                            int.parse(targetAmt.text) >= 100)
+                                          {
+                                            confirmBankTransferPayment(context),
+
                                             //   Get.to(MobPayTest())
                                             // callQuickTeller()
 
@@ -366,39 +454,6 @@ class _DepositState extends State<Deposit> {
                                           height: 40,
                                           width: double.maxFinite,
                                           decoration: BoxDecoration(
-                                            color: color.green(),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(25.0),
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: const Text(
-                                                "Pay With Paystack",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          )
-                                          //rest of the existing code
-                                          )))),
-                          SizedBox(width: 3),
-                          SizedBox(
-                              width: (Get.width / 2) - 17,
-                              child: GestureDetector(
-                                  onTap: () => {
-                                        confirmBankTransferPayment(context),
-                                      },
-                                  child: Material(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      elevation: 10,
-                                      shadowColor:
-                                          Color.fromARGB(255, 209, 209, 209),
-                                      child: Container(
-                                          height: 40,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
                                             color: color.grey(),
                                             borderRadius:
                                                 const BorderRadius.all(
@@ -407,7 +462,7 @@ class _DepositState extends State<Deposit> {
                                           ),
                                           child: Center(
                                             child: const Text(
-                                                "Pay With Bank Transfer",
+                                                " Direct Bank Transfer",
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.white,
@@ -503,6 +558,47 @@ class _DepositState extends State<Deposit> {
     );
   }
 
+  void requestSuccess(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => Center(
+              child: Material(
+                color: Colors.black.withOpacity(.2),
+                child: Center(
+                  child: Container(
+                    width: 250,
+                    height: 200,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                        child: Column(children: [
+                      const Text(
+                          "Your request has been successfully submitted! Once we receive your transfer, your savings wallet will be funded",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(height: 20),
+                      GestureDetector(
+                          onTap: (() => {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(),
+                                Get.to(Landing())
+                              }),
+                          child: const Text("Go back to home",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 20)))
+                    ])),
+                  ),
+                ),
+              ),
+            ));
+  }
+
   void confirmBankTransferPayment(BuildContext context) {
     showDialog(
       context: context,
@@ -550,8 +646,8 @@ class _DepositState extends State<Deposit> {
                                   ),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       "Bank Transfer",
@@ -560,7 +656,8 @@ class _DepositState extends State<Deposit> {
                                     ),
                                     SizedBox(height: 6),
                                     Text(
-                                      "Go ahead and make a transfer of ${amt.text} to the following account:",
+                                      "Click on the button to notify us of your payment and go ahead and make a transfer of ₦${targetAmt.text} to the following account:",
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 13,
                                           color:
@@ -569,7 +666,7 @@ class _DepositState extends State<Deposit> {
                                     SizedBox(height: 10),
                                     Center(
                                         child: Text(
-                                      "Zenith Bank",
+                                      statup_corp_bank.toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 20,
@@ -577,19 +674,43 @@ class _DepositState extends State<Deposit> {
                                               Color.fromARGB(255, 95, 95, 95)),
                                     )),
                                     SizedBox(height: 10),
-                                    Center(
-                                        child: Text(
-                                      "220077664433",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: color.green(),
-                                          fontWeight: FontWeight.bold),
-                                    )),
+                                    GestureDetector(
+                                        onTap: (() => {
+                                              Clipboard.setData(ClipboardData(
+                                                  text: statup_corp_num
+                                                      .toString())),
+                                              showToast(
+                                                  "Account number copied to clipboard")
+                                            }),
+                                        child: Center(
+                                            child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              statup_corp_num.toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: color.green(),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Icon(
+                                              Icons.copy,
+                                              color: color.grey(),
+                                              size: 15,
+                                            )
+                                          ],
+                                        ))),
                                     SizedBox(height: 10),
                                     Center(
                                         child: Text(
-                                      "StatUp ",
+                                      statup_corp_name.toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 20,
@@ -602,7 +723,97 @@ class _DepositState extends State<Deposit> {
                                             width: (Get.width / 2) - 17,
                                             child: GestureDetector(
                                                 onTap: () => {
-                                                      // confirmBankTransferPayment(context),
+                                                      if (targetAmt.text
+                                                              .isNotEmpty &&
+                                                          freqAmt.text
+                                                              .isNotEmpty &&
+                                                          (int.parse(widget
+                                                                      .totalSaved) +
+                                                                  (int.parse(
+                                                                      targetAmt
+                                                                          .text)) <=
+                                                              int.parse(widget
+                                                                  .target)) &&
+                                                          int.parse(targetAmt
+                                                                  .text) >=
+                                                              100)
+                                                        {
+                                                          // loading("Loading",
+                                                          // context),
+
+                                                          //   Get.to(MobPayTest())
+                                                          // callQuickTeller()
+
+                                                          Savings()
+                                                              .pending_tx(
+                                                                  savingsID: widget
+                                                                      .savingsID,
+                                                                  amount:
+                                                                      targetAmt
+                                                                          .text,
+                                                                  // startAmount: starterAmt.text,
+                                                                  userID:
+                                                                      userID,
+                                                                  email: email)
+                                                              .then((value) => {
+                                                                    if (value ==
+                                                                        1)
+                                                                      {
+                                                                        Navigator.of(context,
+                                                                                rootNavigator: true)
+                                                                            .pop(),
+                                                                        Navigator.of(context,
+                                                                                rootNavigator: true)
+                                                                            .pop(),
+                                                                        requestSuccess(
+                                                                            context),
+                                                                      }
+                                                                    else
+                                                                      {
+                                                                        Navigator.of(context,
+                                                                                rootNavigator: true)
+                                                                            .pop(),
+                                                                        Navigator.of(context,
+                                                                                rootNavigator: true)
+                                                                            .pop(),
+                                                                        showErrorToast(
+                                                                            "Could not process request. Please try again"),
+                                                                      }
+                                                                  })
+                                                        }
+                                                      else
+                                                        {
+                                                          if (targetAmt
+                                                              .text.isNotEmpty)
+                                                            {
+                                                              if (int.parse(targetAmt
+                                                                          .text) <
+                                                                      100 ||
+                                                                  targetAmt.text
+                                                                      .isEmpty)
+                                                                {
+                                                                  showErrorToast(
+                                                                      "The Amount Must Not Be Less Than N1000 !"),
+                                                                }
+                                                              else if ((int.parse(
+                                                                          widget
+                                                                              .totalSaved) +
+                                                                      (int.parse(
+                                                                          targetAmt
+                                                                              .text)) >
+                                                                  int.parse(widget
+                                                                      .target)))
+                                                                {
+                                                                  showErrorToast(
+                                                                      "Total Amount Will Be More Than Target!"),
+                                                                }
+                                                            }
+                                                          else
+                                                            {
+                                                              showErrorToast(
+                                                                  "Please fill out all fields!"),
+                                                            }
+                                                        }
                                                     },
                                                 child: Material(
                                                     borderRadius:
@@ -615,11 +826,10 @@ class _DepositState extends State<Deposit> {
                                                         height: 40,
                                                         width: double.maxFinite,
                                                         decoration:
-                                                            BoxDecoration(
+                                                            const BoxDecoration(
                                                           color: Colors.white,
                                                           borderRadius:
-                                                              const BorderRadius
-                                                                  .all(
+                                                              BorderRadius.all(
                                                             Radius.circular(
                                                                 25.0),
                                                           ),
@@ -645,6 +855,154 @@ class _DepositState extends State<Deposit> {
                                 )))
                       ],
                     )))),
+      ),
+    );
+  }
+
+  Future<void> initPayment() async {
+    try {
+      TransactionResponse transactionResponse =
+          await MonnifyPaymentSdk().initializePayment(
+              transaction: Transaction(
+        double.parse(targetAmt.text),
+        "NGN",
+        firstName + " " + last,
+        email.toString(),
+        getRandomString(16),
+        "Statup deposit from ${email.toString()}",
+        metaData: const {
+          // any other info
+        },
+        paymentMethods: const [PaymentMethod.CARD],
+      ));
+
+      print("tx_reference  ${transactionResponse.transactionReference}");
+
+      print("tx_status ${transactionResponse.transactionStatus}");
+      if (transactionResponse.transactionStatus == "PAID") {
+        Savings()
+            .deposit(
+                amount: targetAmt.text,
+                savingsID: widget.savingsID,
+                freq: freqAmt.text,
+                tx_ref: transactionResponse.transactionReference)
+            .then((value) => {
+                  if (value == 1)
+                    {
+                      Navigator.of(context, rootNavigator: true).pop(),
+                      Get.to(Landing()),
+                      showToast(
+                          "Successfully deposited into ${widget.savingsName}")
+                    }
+                  else if (value == 0)
+                    {
+                      Navigator.of(context, rootNavigator: true).pop(),
+                      tx_incomplete(context)
+                    }
+                });
+      } else {
+        Navigator.of(context, rootNavigator: true).pop();
+        tx_incomplete(context);
+      }
+
+      //
+    } on PlatformException catch (e, s) {
+      print("Error initializing payment");
+      print(e);
+      print(s);
+
+      showToast("Failed to initialize payment!");
+    }
+  }
+
+  String getRandomString(int length) {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+
+    return String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  }
+
+  dynamic tx_incomplete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+        child: Material(
+          color: Colors.black.withOpacity(.2),
+          child: Center(
+            child: Container(
+              width: 250,
+              height: 160,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  Icon(Icons.close, color: color.orange()),
+                  const SizedBox(height: 20),
+                  Text(
+                      "sorry! But we couldn't complete that transaction successfully! Please contact customer support for more details.",
+                      textAlign: TextAlign.center)
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> initializeSdk() async {
+    try {
+      if (await _monnifyPaymentSdkPlugin.initialize(
+          apiKey: 'MK_PROD_UW7RCZ4MKL',
+          contractCode: '800351495208',
+          applicationMode: ApplicationMode.LIVE)) {
+        //showToast("SDK initialized!");
+      }
+    } on PlatformException catch (e, s) {
+      print("Error initializing sdk");
+      print(e);
+      print(s);
+
+      //showToast("Failed to init sdk!");
+    }
+  }
+
+  dynamic processing(String label, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+        child: Material(
+          color: Colors.black.withOpacity(.2),
+          child: Center(
+            child: Container(
+              width: 210,
+              height: 150,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(color.green()),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(label, textAlign: TextAlign.center)
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

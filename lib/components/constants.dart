@@ -27,11 +27,11 @@ void showErrorToast(String label) {
     "Error",
     label,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: color.green(),
+    backgroundColor: Colors.grey.withOpacity(0.1),
     borderRadius: 10,
     isDismissible: true,
     margin: const EdgeInsets.all(20),
-    colorText: const Color.fromARGB(255, 255, 255, 255),
+    colorText: Color.fromARGB(255, 230, 77, 17),
     snackStyle: SnackStyle.FLOATING,
     duration: const Duration(seconds: 2),
   );

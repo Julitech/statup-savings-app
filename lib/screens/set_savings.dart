@@ -7,7 +7,6 @@ import '../components/colors.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'dart:math';
-import 'package:flutterwave_standard/flutterwave.dart';
 import '../services/savings.dart';
 
 class SetSavings extends StatefulWidget {
@@ -438,35 +437,4 @@ class _SetSavingsState extends State<SetSavings> {
 
   //Flutterwave method
 
-  _handlePaymentInitialization() async {
-    final style = FlutterwaveStyle(
-        appBarText: "My Standard Blue",
-        buttonColor: const Color(0xffd0ebff),
-        appBarIcon: const Icon(Icons.message, color: Color(0xffd0ebff)),
-        buttonTextStyle: const TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-        appBarColor: const Color(0xffd0ebff),
-        dialogCancelTextStyle:
-            const TextStyle(color: Colors.redAccent, fontSize: 18),
-        dialogContinueTextStyle:
-            const TextStyle(color: Colors.blue, fontSize: 18));
-
-    final Customer customer = Customer(
-        name: "FLW Developer",
-        phoneNumber: "1234566677777",
-        email: "customer@customer.com");
-
-    final Flutterwave flutterwave = Flutterwave(
-        context: context,
-        style: style,
-        publicKey: "Public Key",
-        currency: "RWF",
-        redirectUrl: "my_redirect_url",
-        txRef: "unique_transaction_reference",
-        amount: "3000",
-        customer: customer,
-        paymentOptions: "ussd, card, barter, payattitude",
-        customization: Customization(title: "Test Payment"),
-        isTestMode: true);
-  }
 }
