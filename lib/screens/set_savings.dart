@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'dart:io';
 import 'dart:math';
 import '../services/savings.dart';
+import 'deposit.dart';
 
 class SetSavings extends StatefulWidget {
   const SetSavings({Key? key, this.defaultSavingsName}) : super(key: key);
@@ -21,6 +22,7 @@ class _SetSavingsState extends State<SetSavings> {
   TextEditingController targetAmt = TextEditingController();
   TextEditingController starterAmt = TextEditingController();
   TextEditingController freqAmt = TextEditingController();
+  TextEditingController duration = TextEditingController();
 
   FocusNode? amtNode;
 
@@ -58,6 +60,13 @@ class _SetSavingsState extends State<SetSavings> {
     "Weekly",
     "Monthly",
     "Once",
+  ];
+
+  List<String> preselectedDuration = [
+    "3 months",
+    "6 months",
+    "9 months",
+    "One year",
   ];
 
   String _ref = "";
@@ -129,8 +138,9 @@ class _SetSavingsState extends State<SetSavings> {
                             fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(height: 40, width: double.maxFinite),
+
                       const Text(
-                        "Enter or select a preferred savings target",
+                        "For How Long Will You Save?",
                         style: TextStyle(
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontSize: 17,
@@ -139,13 +149,13 @@ class _SetSavingsState extends State<SetSavings> {
                       const SizedBox(height: 10, width: double.maxFinite),
                       SizedBox(
                         child: TextField(
-                          keyboardType: TextInputType.number,
-                          controller: targetAmt,
+                          controller: duration,
                           cursorColor: color.green(),
                           obscureText: false,
-                          focusNode: targetNode,
+                          enabled: false,
+                          focusNode: freqNode,
                           onTap: () {
-                            targetNode?.requestFocus();
+                            freqNode?.requestFocus();
                           },
                           style: const TextStyle(
                             fontSize: 16,
@@ -153,9 +163,9 @@ class _SetSavingsState extends State<SetSavings> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N100,000',
+                            hintText: '',
                             hintStyle: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               height: 1.5,
                               color: const Color.fromARGB(255, 161, 161, 161)
                                   .withOpacity(.8),
@@ -173,15 +183,14 @@ class _SetSavingsState extends State<SetSavings> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30, width: double.maxFinite),
+                      const SizedBox(height: 20, width: double.maxFinite),
                       Wrap(
                           spacing: 10,
                           runSpacing: 10,
                           children: _generateChildren(
-                              preselectedSavings, "preselectedTarget")),
-                      const SizedBox(height: 20, width: double.maxFinite),
-
+                              preselectedDuration, "preselectedDuration")),
                       const SizedBox(height: 27, width: double.maxFinite),
+
                       const Text(
                         "How much do you want to start with?",
                         style: TextStyle(
@@ -285,7 +294,7 @@ class _SetSavingsState extends State<SetSavings> {
                           children: _generateChildren(
                               preselectedFreq, "preselectedFreq")),
 
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 30),
 
                       const Text(
                         "This is where you select the target you want to meet for your goal",
@@ -313,10 +322,9 @@ class _SetSavingsState extends State<SetSavings> {
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold)),
                               onPressed: () => {
-                                    if (targetAmt.text.isNotEmpty &&
+                                    if (duration.text.isNotEmpty &&
                                         starterAmt.text.isNotEmpty &&
                                         freqAmt.text.isNotEmpty &&
-                                        int.parse(targetAmt.text) >= 100000 &&
                                         int.parse(starterAmt.text) >= 1000)
                                       {
                                         loading("Loading", context),
@@ -324,7 +332,8 @@ class _SetSavingsState extends State<SetSavings> {
                                             .setDefaultSavings(
                                                 defaltSavingsName:
                                                     widget.defaultSavingsName,
-                                                targetAmount: targetAmt.text,
+                                                duration: getSavingsDuration(
+                                                    duration.text),
                                                 startAmount: starterAmt.text,
                                                 frequency: freqAmt.text)
                                             .then((value) => {
@@ -339,9 +348,17 @@ class _SetSavingsState extends State<SetSavings> {
                                                               rootNavigator:
                                                                   true)
                                                           .pop(),
-                                                      //Get.to(const Landing())
+                                                      Get.to(Deposit(
+                                                          savingsID:
+                                                              savings_plans[0]
+                                                                  ["id"],
+                                                          savingsName: widget
+                                                              .defaultSavingsName,
+                                                          target: "0",
+                                                          totalSaved: "0")),
+                                                      //  Get.to(const Landing())
 
-                                                      Get.to(Payment(
+                                                      /* Get.to(Payment(
                                                           amount:
                                                               starterAmt.text,
                                                           savings_id:
@@ -349,28 +366,17 @@ class _SetSavingsState extends State<SetSavings> {
                                                                   ["id"],
                                                           freq: freqAmt.text,
                                                           savingsName: widget
-                                                              .defaultSavingsName)),
+                                                              .defaultSavingsName)),*/
                                                       // _handlePaymentInitialization
                                                     }
                                                 })
                                       }
                                     else
                                       {
-                                        if (targetAmt.text.isNotEmpty)
+                                        if (duration.text.isEmpty)
                                           {
-                                            if (int.parse(targetAmt.text) <
-                                                100000)
-                                              {
-                                                showErrorToast(
-                                                    "The Target Must Not Be Less Than N100,000 !"),
-                                              }
-                                            else if (int.parse(
-                                                    starterAmt.text) <
-                                                1000)
-                                              {
-                                                showErrorToast(
-                                                    "The Starting Amount Must Not Be Less Than N3,000 !"),
-                                              }
+                                            showErrorToast(
+                                                "Please select a valid duration"),
                                           }
                                         else
                                           {
@@ -420,6 +426,10 @@ class _SetSavingsState extends State<SetSavings> {
             setState(() {
               freqAmt.text = val;
             });
+          } else if (listName == "preselectedDuration") {
+            setState(() {
+              duration.text = val;
+            });
           }
         },
         child: Chip(
@@ -435,6 +445,17 @@ class _SetSavingsState extends State<SetSavings> {
         ));
   }
 
-  //Flutterwave method
-
+  String getSavingsDuration(String duration) {
+    if (duration == "3 months") {
+      return "3";
+    } else if (duration == "6 months") {
+      return "6";
+    } else if (duration == "9 months") {
+      return "9";
+    } else if (duration == "12 months") {
+      return "12";
+    } else {
+      return "0";
+    }
+  }
 }

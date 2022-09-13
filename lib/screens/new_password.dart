@@ -136,7 +136,7 @@ class _NewPasswordState extends State<NewPassword> {
                                                       print(value.toString()),
                                                       print(email),
                                                       showErrorToast(
-                                                          "Sorry!An error occured Could not verify. Please try again!"),
+                                                          "Sorry!Wrong code! Please try again."),
                                                     }
                                                 })
                                       }

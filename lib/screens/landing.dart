@@ -40,6 +40,8 @@ import 'package:monnify_payment_sdk/payment_method.dart';
 import 'package:monnify_payment_sdk/transaction.dart';
 import 'package:monnify_payment_sdk/transaction_response.dart';
 import 'package:monnify_payment_sdk/monnify_payment_sdk.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:jiffy/jiffy.dart';
 
 class Landing extends StatefulWidget {
   final notif_count;
@@ -445,7 +447,7 @@ class _LandingState extends State<Landing> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 SizedBox(height: 3.h),
-                                Center(
+                                /* Center(
                                     child: Column(
                                   children: [
                                     Text("Overall Target",
@@ -481,7 +483,7 @@ class _LandingState extends State<Landing> {
                                       ],
                                     ),
                                   ],
-                                )),
+                                ))*/
 
                                 SizedBox(height: 5.h),
                                 //
@@ -559,7 +561,7 @@ class _LandingState extends State<Landing> {
                                                                     .visibility_off
                                                                 : Icons
                                                                     .visibility,
-                                                            size: 11.sp,
+                                                            size: 12.sp,
                                                             color:
                                                                 Color.fromARGB(
                                                                     255,
@@ -713,7 +715,7 @@ class _LandingState extends State<Landing> {
                                                                   allSavingsPlans![
                                                                               index]
                                                                           [
-                                                                          "target"]
+                                                                          "total_saved"]
                                                                       .toString(),
                                                               style: TextStyle(
                                                                   fontSize:
@@ -734,9 +736,24 @@ class _LandingState extends State<Landing> {
                                                       ),
                                                       SizedBox(height: 5.h),
                                                       Text(
-                                                          percentageCrushed
-                                                                  .toString() +
-                                                              "% Achieved",
+                                                          allSavingsPlans![
+                                                                          index]
+                                                                      [
+                                                                      "type"] ==
+                                                                  "DURATION"
+                                                              ? "Ending: " +
+                                                                  calculateTimeLeft(
+                                                                      allSavingsPlans![
+                                                                              index]
+                                                                          [
+                                                                          "created_at"],
+                                                                      allSavingsPlans![
+                                                                              index]
+                                                                          [
+                                                                          "duration"])
+                                                              : percentageCrushed
+                                                                      .toString() +
+                                                                  "% Achieved",
                                                           style: TextStyle(
                                                               fontSize: 7.sp,
                                                               color:
@@ -760,21 +777,22 @@ class _LandingState extends State<Landing> {
                                                               width: 23.sp),
                                                           GestureDetector(
                                                               onTap: (() => Get.to(Deposit(
-                                                                  savingsID:
-                                                                      allSavingsPlans?[index]
-                                                                          [
-                                                                          "id"],
-                                                                  savingsName:
-                                                                      allSavingsPlans?[index]
-                                                                          [
-                                                                          "name"],
+                                                                  savingsID: allSavingsPlans?[index]
+                                                                      ["id"],
+                                                                  savingsName: allSavingsPlans?[
+                                                                          index]
+                                                                      ["name"],
                                                                   target: allSavingsPlans?[
                                                                           index]
                                                                       [
                                                                       "target"],
-                                                                  totalSaved: allSavingsPlans?[
-                                                                          index]
-                                                                      ["total_saved"]))),
+                                                                  interest:
+                                                                      allSavingsPlans?[index]
+                                                                          [
+                                                                          "interest"],
+                                                                  totalSaved:
+                                                                      allSavingsPlans?[index]
+                                                                          ["total_saved"]))),
                                                               child: Icon(
                                                                 FontAwesomeIcons
                                                                     .circlePlus,
@@ -800,7 +818,17 @@ class _LandingState extends State<Landing> {
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal)),
-                                                              Text("₦0.00",
+                                                              Text(
+                                                                  allSavingsPlans?[index]
+                                                                              [
+                                                                              "interest"] ==
+                                                                          "0"
+                                                                      ? "₦"
+                                                                          "0.00"
+                                                                      : "₦" +
+                                                                          allSavingsPlans?[index]
+                                                                              [
+                                                                              "interest"],
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           9.sp,
@@ -887,7 +915,7 @@ class _LandingState extends State<Landing> {
                                                 ],
                                               ),
                                               const SizedBox(height: 5),
-                                              Text("0% Achieved",
+                                              Text("Not Active",
                                                   style: TextStyle(
                                                       fontSize: 7.sp,
                                                       color: Colors.black,
@@ -1002,7 +1030,7 @@ class _LandingState extends State<Landing> {
                                                 ],
                                               ),
                                               const SizedBox(height: 5),
-                                              Text("0% Achieved",
+                                              Text("Not Active",
                                                   style: TextStyle(
                                                       fontSize: 7.sp,
                                                       color: Colors.black,
@@ -1335,7 +1363,7 @@ class _LandingState extends State<Landing> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               SizedBox(height: 3.h),
-                              Center(
+                              /*Center(
                                   child: Column(
                                 children: [
                                   Text("Overall Target",
@@ -1368,7 +1396,7 @@ class _LandingState extends State<Landing> {
                                     ],
                                   ),
                                 ],
-                              )),
+                              )),*/
 
                               SizedBox(height: 5.h),
                               //
@@ -1425,7 +1453,7 @@ class _LandingState extends State<Landing> {
                                                                   .toString()
                                                           : "--",
                                                       style: TextStyle(
-                                                          fontSize: 9.sp,
+                                                          fontSize: 12.sp,
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.bold)),
@@ -1444,7 +1472,7 @@ class _LandingState extends State<Landing> {
                                                                   .visibility_off
                                                               : Icons
                                                                   .visibility,
-                                                          size: 8.sp,
+                                                          size: 12.sp,
                                                           color: Color.fromARGB(
                                                               255,
                                                               255,
@@ -1591,7 +1619,7 @@ class _LandingState extends State<Landing> {
                                                                 allSavingsPlans![
                                                                             index]
                                                                         [
-                                                                        "target"]
+                                                                        "total_saved"]
                                                                     .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 10.sp,
@@ -1610,9 +1638,22 @@ class _LandingState extends State<Landing> {
                                                     ),
                                                     SizedBox(height: 5.h),
                                                     Text(
-                                                        percentageCrushed
-                                                                .toString() +
-                                                            "% Achieved",
+                                                        allSavingsPlans![index]
+                                                                    ["type"] ==
+                                                                "DURATION"
+                                                            ? "Ending: " +
+                                                                calculateTimeLeft(
+                                                                    allSavingsPlans![
+                                                                            index]
+                                                                        [
+                                                                        "created_at"],
+                                                                    allSavingsPlans![
+                                                                            index]
+                                                                        [
+                                                                        "duration"])
+                                                            : percentageCrushed
+                                                                    .toString() +
+                                                                "% Achieved",
                                                         style: TextStyle(
                                                             fontSize: 7.sp,
                                                             color: Colors.black,
@@ -1637,15 +1678,16 @@ class _LandingState extends State<Landing> {
                                                                     allSavingsPlans?[index]
                                                                         ["id"],
                                                                 savingsName:
-                                                                    allSavingsPlans?[
-                                                                            index][
+                                                                    allSavingsPlans?[index][
                                                                         "name"],
                                                                 target: allSavingsPlans?[
                                                                         index]
                                                                     ["target"],
+                                                                interest: allSavingsPlans?[
+                                                                        index][
+                                                                    "interest"],
                                                                 totalSaved:
-                                                                    allSavingsPlans?[
-                                                                            index]
+                                                                    allSavingsPlans?[index]
                                                                         ["total_saved"]))),
                                                             child: Icon(
                                                               FontAwesomeIcons
@@ -1671,7 +1713,16 @@ class _LandingState extends State<Landing> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .normal)),
-                                                            Text("₦0.00",
+                                                            Text(
+                                                                allSavingsPlans?[index]
+                                                                            [
+                                                                            "interest"] ==
+                                                                        "0"
+                                                                    ? "₦" "0.00"
+                                                                    : "₦" +
+                                                                        allSavingsPlans?[index]
+                                                                            [
+                                                                            "interest"],
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         9.sp,
@@ -1758,7 +1809,7 @@ class _LandingState extends State<Landing> {
                                               ],
                                             ),
                                             const SizedBox(height: 5),
-                                            Text("0% Achieved",
+                                            Text("Not Active",
                                                 style: TextStyle(
                                                     fontSize: 7.sp,
                                                     color: Colors.black,
@@ -1872,7 +1923,7 @@ class _LandingState extends State<Landing> {
                                               ],
                                             ),
                                             const SizedBox(height: 5),
-                                            Text("0% Achieved",
+                                            Text("Not Active",
                                                 style: TextStyle(
                                                     fontSize: 7.sp,
                                                     color: Colors.black,
@@ -2640,6 +2691,8 @@ class _LandingState extends State<Landing> {
       feName = "Rent";
 
       feName = "Rent";
+    } else {
+      return name;
     }
     return feName;
   }
@@ -2720,5 +2773,76 @@ class _LandingState extends State<Landing> {
 
     return String.fromCharCodes(Iterable.generate(
         length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  }
+
+  String calculateTimeLeft(String createdAt, String duration) {
+    String savingsExpiryDate = "";
+    int timeSavingsCreatedAt = int.parse(createdAt);
+    var date = DateTime.fromMillisecondsSinceEpoch(timeSavingsCreatedAt * 1000);
+
+    if (duration == "3") {
+      var t_months_time = Jiffy(date).add(months: 3);
+      var date_created = Jiffy(date);
+      //  var savingsExpiryDate = Jiffy(t_months_time, "yyyy-MM-dd").fromNow();
+
+      int month = int.parse("${t_months_time.diff(date_created, Units.MONTH)}");
+      date_created.add(months: month);
+
+      var days = t_months_time.diff(date_created, Units.DAY);
+
+      // print(month.toString() + " months & " + days.toString() + " days");
+
+      return month.toString() +
+          " months" +
+          (days.toString() == "0" ? "" : (" & " + days.toString()) + " days");
+    } else if (duration == "6") {
+      var tMonthsTime = Jiffy(date).add(months: 6);
+      var date_created = Jiffy(date);
+      //  var savingsExpiryDate = Jiffy(t_months_time, "yyyy-MM-dd").fromNow();
+
+      int month = int.parse("${tMonthsTime.diff(date_created, Units.MONTH)}");
+      date_created.add(months: month);
+
+      var days = tMonthsTime.diff(date_created, Units.DAY);
+
+      // print(month.toString() + " months & " + days.toString() + " days");
+
+      return month.toString() +
+          " months" +
+          (days.toString() == "0" ? "" : (" & " + days.toString()) + " days");
+    } else if (duration == "9") {
+      var tMonthsTime = Jiffy(date).add(months: 9);
+      var date_created = Jiffy(date);
+      //  var savingsExpiryDate = Jiffy(t_months_time, "yyyy-MM-dd").fromNow();
+
+      int month = int.parse("${tMonthsTime.diff(date_created, Units.MONTH)}");
+      date_created.add(months: month);
+
+      var days = tMonthsTime.diff(date_created, Units.DAY);
+
+      // print(month.toString() + " months & " + days.toString() + " days");
+
+      return month.toString() +
+          " months" +
+          (days.toString() == "0" ? "" : (" & " + days.toString()) + " days");
+    }
+    if (duration == "12") {
+      var tMonthsTime = Jiffy(date).add(months: 12);
+      var date_created = Jiffy(date);
+      //  var savingsExpiryDate = Jiffy(t_months_time, "yyyy-MM-dd").fromNow();
+
+      int month = int.parse("${tMonthsTime.diff(date_created, Units.MONTH)}");
+      date_created.add(months: month);
+
+      var days = tMonthsTime.diff(date_created, Units.DAY);
+
+      // print(month.toString() + " months & " + days.toString() + " days");
+
+      return month.toString() +
+          " months" +
+          (days.toString() == "0" ? "" : (" & " + days.toString()) + " days");
+    }
+
+    return "--";
   }
 }

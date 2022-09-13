@@ -19,12 +19,13 @@ import 'landing.dart';
 import 'dart:math';
 
 class Deposit extends StatefulWidget {
-  final savingsID, totalSaved, target, savingsName;
+  final savingsID, totalSaved, target, savingsName, interest;
   const Deposit(
       {Key? key,
       this.savingsID,
       this.totalSaved,
       this.target,
+      this.interest,
       this.savingsName})
       : super(key: key);
 
@@ -100,6 +101,8 @@ class _DepositState extends State<Deposit> {
     var totalSaved = widget.totalSaved;
     var target = widget.target;
 
+    print("interest " + widget.interest);
+
     print(totalSaved + "  " + target);
     return Scaffold(
         appBar: AppBar(
@@ -129,6 +132,7 @@ class _DepositState extends State<Deposit> {
                             total_saved: widget.totalSaved,
                             savingsID: widget.savingsID,
                             savingsName: widget.savingsName,
+                            interest: widget.interest,
                           ))
                         }),
                     child: Column(
@@ -305,10 +309,12 @@ class _DepositState extends State<Deposit> {
                                   onTap: () => {
                                         if (targetAmt.text.isNotEmpty &&
                                             freqAmt.text.isNotEmpty &&
-                                            (int.parse(widget.totalSaved) +
-                                                    (int.parse(
-                                                        targetAmt.text)) <=
-                                                int.parse(widget.target)) &&
+                                            ((int.parse(widget.totalSaved) +
+                                                        (int.parse(
+                                                            targetAmt.text)) <=
+                                                    int.parse(widget.target)) ||
+                                                int.parse(widget.target) ==
+                                                    0) &&
                                             int.parse(targetAmt.text) >= 100)
                                           {
                                             processing(
@@ -338,14 +344,20 @@ class _DepositState extends State<Deposit> {
                                                     showErrorToast(
                                                         "The Amount Must Not Be Less Than N1000 !"),
                                                   }
-                                                else if ((int.parse(
-                                                            widget.totalSaved) +
-                                                        (int.parse(
-                                                            targetAmt.text)) >
-                                                    int.parse(widget.target)))
+                                                else if (int.parse(
+                                                        widget.target) >
+                                                    0)
                                                   {
-                                                    showErrorToast(
-                                                        "Total Amount Will Be More Than Target!"),
+                                                    if ((int.parse(widget
+                                                                .totalSaved) +
+                                                            (int.parse(targetAmt
+                                                                .text)) >
+                                                        int.parse(
+                                                            widget.target)))
+                                                      {
+                                                        showErrorToast(
+                                                            "Total Amount Will Be More Than Target! "),
+                                                      }
                                                   }
                                               }
                                             else
@@ -387,10 +399,12 @@ class _DepositState extends State<Deposit> {
                                   onTap: () => {
                                         if (targetAmt.text.isNotEmpty &&
                                             freqAmt.text.isNotEmpty &&
-                                            (int.parse(widget.totalSaved) +
-                                                    (int.parse(
-                                                        targetAmt.text)) <=
-                                                int.parse(widget.target)) &&
+                                            ((int.parse(widget.totalSaved) +
+                                                        (int.parse(
+                                                            targetAmt.text)) <=
+                                                    int.parse(widget.target)) ||
+                                                int.parse(widget.target) ==
+                                                    0) &&
                                             int.parse(targetAmt.text) >= 100)
                                           {
                                             confirmBankTransferPayment(context),
@@ -428,14 +442,20 @@ class _DepositState extends State<Deposit> {
                                                     showErrorToast(
                                                         "The Amount Must Not Be Less Than N1000 !"),
                                                   }
-                                                else if ((int.parse(
-                                                            widget.totalSaved) +
-                                                        (int.parse(
-                                                            targetAmt.text)) >
-                                                    int.parse(widget.target)))
+                                                else if (int.parse(
+                                                        widget.target) >
+                                                    0)
                                                   {
-                                                    showErrorToast(
-                                                        "Total Amount Will Be More Than Target!"),
+                                                    if ((int.parse(widget
+                                                                .totalSaved) +
+                                                            (int.parse(targetAmt
+                                                                .text)) >
+                                                        int.parse(
+                                                            widget.target)))
+                                                      {
+                                                        showErrorToast(
+                                                            "Total Amount Will Be More Than Target! "),
+                                                      }
                                                   }
                                               }
                                             else
@@ -727,13 +747,16 @@ class _DepositState extends State<Deposit> {
                                                               .isNotEmpty &&
                                                           freqAmt.text
                                                               .isNotEmpty &&
-                                                          (int.parse(widget
-                                                                      .totalSaved) +
-                                                                  (int.parse(
-                                                                      targetAmt
-                                                                          .text)) <=
+                                                          ((int.parse(widget
+                                                                          .totalSaved) +
+                                                                      (int.parse(
+                                                                          targetAmt
+                                                                              .text)) <=
+                                                                  int.parse(widget
+                                                                      .target)) ||
                                                               int.parse(widget
-                                                                  .target)) &&
+                                                                      .target) ==
+                                                                  0) &&
                                                           int.parse(targetAmt
                                                                   .text) >=
                                                               100)
@@ -795,17 +818,22 @@ class _DepositState extends State<Deposit> {
                                                                   showErrorToast(
                                                                       "The Amount Must Not Be Less Than N1000 !"),
                                                                 }
-                                                              else if ((int.parse(
-                                                                          widget
-                                                                              .totalSaved) +
-                                                                      (int.parse(
-                                                                          targetAmt
-                                                                              .text)) >
-                                                                  int.parse(widget
-                                                                      .target)))
+                                                              else if (int.parse(
+                                                                      widget
+                                                                          .target) >
+                                                                  0)
                                                                 {
-                                                                  showErrorToast(
-                                                                      "Total Amount Will Be More Than Target!"),
+                                                                  if ((int.parse(widget
+                                                                              .totalSaved) +
+                                                                          (int.parse(targetAmt
+                                                                              .text)) >
+                                                                      int.parse(
+                                                                          widget
+                                                                              .target)))
+                                                                    {
+                                                                      showErrorToast(
+                                                                          "Total Amount Will Be More Than Target! "),
+                                                                    }
                                                                 }
                                                             }
                                                           else

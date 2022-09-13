@@ -9,7 +9,7 @@ class Savings {
 
   Future<dynamic> setDefaultSavings({
     @required String? defaltSavingsName,
-    @required String? targetAmount,
+    @required String? duration,
     @required String? startAmount,
     @required String? frequency,
   }) async {
@@ -22,7 +22,7 @@ class Savings {
 
       var formData = eos.FormData.fromMap({
         'defaltSavingsName': defaltSavingsName,
-        'targetAmount': targetAmount,
+        'duration': duration,
         'startAmount': startAmount,
         'frequency': frequency,
       });
@@ -252,7 +252,7 @@ class Savings {
           //network or server error
 
           print("An error occured!");
-          return [];
+          return 0;
         } else if (data["code"] == 1) {
           Hive.box("statup").put("savings", data["data"]);
           //  Hive.box("statup").put("userID", data['id']);
