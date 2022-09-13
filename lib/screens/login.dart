@@ -165,6 +165,16 @@ class _LoginState extends State<Login> {
                                                                   "Your account registration isn't complete. Please follow the steps below to finish...",
                                                             ))
                                                           }
+                                                        else if (value == 0)
+                                                          {
+                                                            setState(() {
+                                                              enabled = false;
+                                                              isLoaderVisible =
+                                                                  !isLoaderVisible;
+                                                            }),
+                                                            showErrorToast(
+                                                                "Sorry! Wrong password"),
+                                                          }
                                                       })
                                             }
                                           else
