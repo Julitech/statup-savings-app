@@ -9,12 +9,13 @@ import 'landing.dart';
 import 'profile.dart';
 
 class Withdraw extends StatefulWidget {
-  final savingsID, savingsName, total_saved;
+  final savingsID, savingsName, total_saved, interest;
   const Withdraw({
     Key? key,
     this.savingsID,
     this.savingsName,
     this.total_saved,
+    this.interest,
   }) : super(
           key: key,
         );
@@ -248,11 +249,12 @@ class _WithdrawState extends State<Withdraw> {
                         cachedBank == null ||
                         cachedBank == "") {
                       setAccount(context);
-                    } else if (amt.text.isNotEmpty &&
+                    } /*else if (amt.text.isNotEmpty &&
                         (int.parse(amt.text) < int.parse(widget.total_saved))) {
                       extendGoal(context);
-                    } else if (amt.text.isNotEmpty &&
-                        (int.parse(amt.text) ==
+                    }*/
+                    else if (amt.text.isNotEmpty &&
+                        (int.parse(amt.text) <=
                             int.parse(widget.total_saved))) {
                       loading("Loading", context);
                       //   Get.to(MobPayTest())
@@ -270,11 +272,17 @@ class _WithdrawState extends State<Withdraw> {
                                   {
                                     Navigator.of(context, rootNavigator: true)
                                         .pop(),
-                                    showErrorToast(
+                                    showToast(
                                         "Successfully submitted withdrawal request"),
                                     Get.to(const Landing()),
                                     Navigator.of(context, rootNavigator: true)
                                         .pop(),
+                                  }
+                                else
+                                  {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop(),
+                                    showErrorToast("Request failed!"),
                                   }
                               });
                     } else {
@@ -411,7 +419,8 @@ class _WithdrawState extends State<Withdraw> {
                   GestureDetector(
                       onTap: (() {
                         if (int.parse(amt.text) <=
-                                int.parse(widget.total_saved) &&
+                                int.parse(
+                                    widget.total_saved + widget.interest) &&
                             amt.text.isNotEmpty &&
                             (int.parse(targetNew.text) >= 100000) &&
                             int.parse(targetNew.text) >

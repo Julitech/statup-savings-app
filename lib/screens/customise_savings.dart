@@ -5,7 +5,7 @@ import '/services/savings.dart';
 import '../components/constants.dart';
 import '../components/colors.dart';
 import 'package:get/get.dart';
-
+import 'deposit.dart';
 import 'landing.dart';
 
 class CustomiseGoals extends StatefulWidget {
@@ -22,11 +22,14 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
   TextEditingController targetAmt = TextEditingController();
   TextEditingController starterAmt = TextEditingController();
   TextEditingController freqAmt = TextEditingController();
+
+  TextEditingController duration = TextEditingController();
   var savings_plans = [];
 
   FocusNode? amtNode;
   FocusNode? goal_nameNode;
   FocusNode? freqNode;
+  FocusNode? durationNode;
   FocusNode? startAmtNode;
   FocusNode? targetNode;
   bool visibility = false;
@@ -58,11 +61,19 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
     "Once",
   ];
 
+  List<String> preselectedDuration = [
+    "3 months",
+    "6 months",
+    "9 months",
+    "12 months",
+  ];
+
   bool obs = true;
   @override
   void initState() {
     // _node = FocusNode();
     freqNode = FocusNode();
+    durationNode = FocusNode();
     startAmtNode = FocusNode();
     targetNode = FocusNode();
     goal_nameNode = FocusNode();
@@ -159,8 +170,9 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                       ),
 
                       const SizedBox(height: 27, width: double.maxFinite),
+
                       const Text(
-                        "Enter or select a preferred savings target",
+                        "For How Long Will You Save?",
                         style: TextStyle(
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontSize: 17,
@@ -169,13 +181,13 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                       const SizedBox(height: 10, width: double.maxFinite),
                       SizedBox(
                         child: TextField(
-                          keyboardType: TextInputType.number,
-                          controller: targetAmt,
+                          controller: duration,
                           cursorColor: color.green(),
                           obscureText: false,
-                          focusNode: amtNode,
+                          enabled: false,
+                          focusNode: durationNode,
                           onTap: () {
-                            targetNode?.requestFocus();
+                            durationNode?.requestFocus();
                           },
                           style: const TextStyle(
                             fontSize: 16,
@@ -183,9 +195,9 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Minimum is N100,000',
+                            hintText: '',
                             hintStyle: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               height: 1.5,
                               color: const Color.fromARGB(255, 161, 161, 161)
                                   .withOpacity(.8),
@@ -208,9 +220,9 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                           spacing: 10,
                           runSpacing: 10,
                           children: _generateChildren(
-                              preselectedSavings, "preselectedTarget")),
-
+                              preselectedDuration, "preselectedDuration")),
                       const SizedBox(height: 27, width: double.maxFinite),
+
                       const Text(
                         "How much do you want to start with?",
                         style: TextStyle(
@@ -314,17 +326,16 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                           children: _generateChildren(
                               preselectedFreq, "preselectedFreq")),
 
-                      const SizedBox(height: 60),
+                      const SizedBox(height: 30),
                       // Spacer(),
                       SizedBox(
                           width: double.maxFinite,
                           child: GestureDetector(
                               onTap: () => {
-                                    if (targetAmt.text.isNotEmpty &&
+                                    if (duration.text.isNotEmpty &&
                                         starterAmt.text.isNotEmpty &&
                                         freqAmt.text.isNotEmpty &&
                                         goal_name.text.isNotEmpty &&
-                                        int.parse(targetAmt.text) >= 100000 &&
                                         int.parse(starterAmt.text) >= 1000)
                                       {
                                         loading("Loading", context),
@@ -332,7 +343,8 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                             .setDefaultSavings(
                                                 defaltSavingsName:
                                                     goal_name.text,
-                                                targetAmount: targetAmt.text,
+                                                duration: getSavingsDuration(
+                                                    duration.text),
                                                 startAmount: starterAmt.text,
                                                 frequency: freqAmt.text)
                                             .then((value) => {
@@ -348,7 +360,16 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                                                   true)
                                                           .pop(),
 
-                                                      Get.to(Payment(
+                                                      Get.to(Deposit(
+                                                          savingsID:
+                                                              savings_plans[0]
+                                                                  ["id"],
+                                                          savingsName:
+                                                              goal_name.text,
+                                                          target: "0",
+                                                          totalSaved: "0")),
+
+                                                      /*  Get.to(Payment(
                                                           amount:
                                                               starterAmt.text,
                                                           savings_id:
@@ -356,7 +377,7 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                                                   ["id"],
                                                           freq: freqAmt.text,
                                                           savingsName:
-                                                              goal_name.text)),
+                                                              goal_name.text)),*/
 
                                                       // Get.to(const Landing())
                                                     }
@@ -364,22 +385,10 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
                                       }
                                     else
                                       {
-                                        if (targetAmt.text.isNotEmpty)
+                                        if (duration.text.isEmpty)
                                           {
-                                            if (int.parse(targetAmt.text) <
-                                                    100000 ||
-                                                targetAmt.text.isEmpty)
-                                              {
-                                                showErrorToast(
-                                                    "The Target Must Not Be Less Than N100,000 !"),
-                                              }
-                                            else if (int.parse(
-                                                    starterAmt.text) <
-                                                1000)
-                                              {
-                                                showErrorToast(
-                                                    "The Starting Amount Must Not Be Less Than N3,000 !"),
-                                              }
+                                            showErrorToast(
+                                                "Please select a valid duration"),
                                           }
                                         else
                                           {
@@ -443,6 +452,10 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
             setState(() {
               freqAmt.text = val;
             });
+          } else if (listName == "preselectedDuration") {
+            setState(() {
+              duration.text = val;
+            });
           }
         },
         child: Chip(
@@ -456,5 +469,19 @@ class _CustomiseGoalsState extends State<CustomiseGoals> {
           backgroundColor: const Color.fromARGB(255, 255, 255, 255),
           shape: const StadiumBorder(side: BorderSide(color: Colors.grey)),
         ));
+  }
+
+  String getSavingsDuration(String duration) {
+    if (duration == "3 months") {
+      return "3";
+    } else if (duration == "6 months") {
+      return "6";
+    } else if (duration == "9 months") {
+      return "9";
+    } else if (duration == "12 months") {
+      return "12";
+    } else {
+      return "0";
+    }
   }
 }

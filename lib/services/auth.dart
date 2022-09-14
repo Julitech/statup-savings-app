@@ -345,7 +345,7 @@ class AuthService {
         if (data["code"] == 0) {
           //network or server error
           print("An error occured!");
-          return "An error occured!";
+          return 0;
         } else if (data["code"] == 1) {
           Hive.box("statup").put("access_token", data["data"]["access_token"]);
           Hive.box("statup").put("first_name", data["data"]["first_name"]);
@@ -373,6 +373,9 @@ class AuthService {
           return 2;
         } else if (data["data"]["email_verification_status"] == "0") {
           return 3;
+        } else if (data["code"] == 0) {
+          print("Sorry! Wrong password!");
+          return 0;
         } else {
           print("An error occured!");
           return "An error occured!";
