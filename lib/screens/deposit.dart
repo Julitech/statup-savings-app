@@ -566,7 +566,7 @@ class _DepositState extends State<Deposit> {
                 ),
                 child: const Center(
                     child: Text(
-                        "Withdrawal disabled! You have not met your savings target yet.",
+                        "Withdrawal disabled! Please complete your savings duration to withdraw",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 17,
