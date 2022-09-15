@@ -14,6 +14,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
   print('Notif received ${message.messageId}');
+
+  handleMessage(message);
 }
 
 void main() async {
@@ -28,6 +30,46 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
+}
+
+void handleMessage(RemoteMessage message) {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  AndroidNotificationChannel channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'Orders Notifications', // title
+
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.high,
+      showBadge: true);
+
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        iOS: const IOSNotificationDetails(
+          sound: 'default',
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          enableVibration: true,
+          playSound: true,
+          icon: 'launcher_icon',
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

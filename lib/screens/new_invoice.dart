@@ -694,15 +694,24 @@ class _NewInvoiceState extends State<NewInvoice> {
                                                     {
                                                       showToast(
                                                           "Invoice created successfully!"),
-                                                      Get.to(GetInvoice(
-                                                        pdfImage:
-                                                            value["pdf_image"],
-                                                        pdfFile: value["pdf"],
-                                                      )),
                                                       Navigator.of(context,
                                                               rootNavigator:
                                                                   true)
                                                           .pop(),
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    GetInvoice(
+                                                                      pdfImage:
+                                                                          value[
+                                                                              "pdf_image"],
+                                                                      pdfFile:
+                                                                          value[
+                                                                              "pdf"],
+                                                                    )),
+                                                      )
                                                     }
                                                   else
                                                     {
