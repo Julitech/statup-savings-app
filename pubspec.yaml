@@ -66,14 +66,6 @@ dependencies:
   monnify_flutter: ^0.0.2
   monnify_payment_sdk: ^1.0.0
   jiffy: ^5.0.0
-<<<<<<< HEAD
-=======
-  jiffy: ^5.0.0
-  
-  
-  
-  
->>>>>>> 970e26e6451251bff05f6ab4b2988b219bac069b
 
 dev_dependencies:
   flutter_test:
