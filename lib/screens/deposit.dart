@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:monnify_payment_sdk/application_mode.dart';
-import 'package:monnify_payment_sdk/payment_method.dart';
-import 'package:monnify_payment_sdk/transaction.dart';
-import 'package:monnify_payment_sdk/transaction_response.dart';
+// import 'package:monnify_payment_sdk/application_mode.dart';
+// import 'package:monnify_payment_sdk/payment_method.dart';
+// import 'package:monnify_payment_sdk/transaction.dart';
+// import 'package:monnify_payment_sdk/transaction_response.dart';
 import 'package:monnify_payment_sdk/monnify_payment_sdk.dart';
 import '/screens/withdraw.dart';
 import '/services/savings.dart';
@@ -16,7 +16,7 @@ import '../components/colors.dart';
 import 'package:get/get.dart';
 import 'landing.dart';
 import 'dart:math';
-import 'package:monnify_payment_sdk/monnify_payment_sdk.dart'
+// import 'package:monnify_payment_sdk/monnify_payment_sdk.dart';
 
 class Deposit extends StatefulWidget {
   final savingsID, totalSaved, target, savingsName, interest;
@@ -60,7 +60,8 @@ class _DepositState extends State<Deposit> {
   String firstName = Hive.box("statup").get("first_name");
   String last = Hive.box("statup").get("last_name");
   String user_id = Hive.box("statup").get("id");
-  final _monnifyPaymentSdkPlugin = MonnifyPaymentSdk();
+  // final _monnifyPaymentSdkPlugin = MonnifyPaymentSdk.initialize();
+  late Monnify? _monnifyPaymentSdkPlugin;
 
   List<String> preselectedSavings = [
     "1,000",
@@ -107,8 +108,7 @@ class _DepositState extends State<Deposit> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: const Icon(Icons.arrow_back,
-                  color: Color.fromARGB(255, 0, 0, 0)),
+              icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 0, 0, 0)),
               onPressed: () => Get.back()
               // open side menu},
               ),
@@ -158,8 +158,7 @@ class _DepositState extends State<Deposit> {
                         SvgPicture.asset(
                           "assets/images/svg/withdraw.svg",
                           height: 23,
-                          color:
-                              Color.fromARGB(255, 26, 151, 30).withOpacity(0.5),
+                          color: Color.fromARGB(255, 26, 151, 30).withOpacity(0.5),
                           width: 23,
                           fit: BoxFit.scaleDown,
                         ),
@@ -167,8 +166,7 @@ class _DepositState extends State<Deposit> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 9,
-                                color: Color.fromARGB(255, 26, 151, 30)
-                                    .withOpacity(0.5)))
+                                color: Color.fromARGB(255, 26, 151, 30).withOpacity(0.5)))
                       ],
                     ))
           ],
@@ -229,8 +227,7 @@ class _DepositState extends State<Deposit> {
                               borderSide: BorderSide(color: color.green()),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: color.green(), width: 2),
+                              borderSide: BorderSide(color: color.green(), width: 2),
                             ),
                             // filled: true,
                             // fillColor: Colors.white,
@@ -242,8 +239,8 @@ class _DepositState extends State<Deposit> {
                       Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children: _generateChildren(
-                              preselectedSavings, "preselectedTarget")),
+                          children:
+                              _generateChildren(preselectedSavings, "preselectedTarget")),
 
                       const SizedBox(height: 30, width: double.maxFinite),
                       const Text(
@@ -283,8 +280,7 @@ class _DepositState extends State<Deposit> {
                               borderSide: BorderSide(color: color.green()),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: color.green(), width: 2),
+                              borderSide: BorderSide(color: color.green(), width: 2),
                             ),
                             // filled: true,
                             // fillColor: Colors.white,
@@ -296,8 +292,8 @@ class _DepositState extends State<Deposit> {
                       Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children: _generateChildren(
-                              preselectedFreq, "preselectedFreq")),
+                          children:
+                              _generateChildren(preselectedFreq, "preselectedFreq")),
 
                       const SizedBox(height: 60),
                       // Spacer(),
@@ -310,11 +306,9 @@ class _DepositState extends State<Deposit> {
                                         if (targetAmt.text.isNotEmpty &&
                                             freqAmt.text.isNotEmpty &&
                                             ((int.parse(widget.totalSaved) +
-                                                        (int.parse(
-                                                            targetAmt.text)) <=
+                                                        (int.parse(targetAmt.text)) <=
                                                     int.parse(widget.target)) ||
-                                                int.parse(widget.target) ==
-                                                    0) &&
+                                                int.parse(widget.target) == 0) &&
                                             int.parse(targetAmt.text) >= 100)
                                           {
                                             processing(
@@ -337,23 +331,17 @@ class _DepositState extends State<Deposit> {
                                           {
                                             if (targetAmt.text.isNotEmpty)
                                               {
-                                                if (int.parse(targetAmt.text) <
-                                                        100 ||
+                                                if (int.parse(targetAmt.text) < 100 ||
                                                     targetAmt.text.isEmpty)
                                                   {
                                                     showErrorToast(
                                                         "The Amount Must Not Be Less Than N1000 !"),
                                                   }
-                                                else if (int.parse(
-                                                        widget.target) >
-                                                    0)
+                                                else if (int.parse(widget.target) > 0)
                                                   {
-                                                    if ((int.parse(widget
-                                                                .totalSaved) +
-                                                            (int.parse(targetAmt
-                                                                .text)) >
-                                                        int.parse(
-                                                            widget.target)))
+                                                    if ((int.parse(widget.totalSaved) +
+                                                            (int.parse(targetAmt.text)) >
+                                                        int.parse(widget.target)))
                                                       {
                                                         showErrorToast(
                                                             "Total Amount Will Be More Than Target! "),
@@ -370,15 +358,13 @@ class _DepositState extends State<Deposit> {
                                   child: Material(
                                       borderRadius: BorderRadius.circular(25.0),
                                       elevation: 10,
-                                      shadowColor:
-                                          Color.fromARGB(255, 209, 209, 209),
+                                      shadowColor: Color.fromARGB(255, 209, 209, 209),
                                       child: Container(
                                           height: 40,
                                           width: double.maxFinite,
                                           decoration: BoxDecoration(
                                             color: color.green(),
-                                            borderRadius:
-                                                const BorderRadius.all(
+                                            borderRadius: const BorderRadius.all(
                                               Radius.circular(25.0),
                                             ),
                                           ),
@@ -387,8 +373,7 @@ class _DepositState extends State<Deposit> {
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                                    fontWeight: FontWeight.bold)),
                                           )
                                           //rest of the existing code
                                           )))),
@@ -400,11 +385,9 @@ class _DepositState extends State<Deposit> {
                                         if (targetAmt.text.isNotEmpty &&
                                             freqAmt.text.isNotEmpty &&
                                             ((int.parse(widget.totalSaved) +
-                                                        (int.parse(
-                                                            targetAmt.text)) <=
+                                                        (int.parse(targetAmt.text)) <=
                                                     int.parse(widget.target)) ||
-                                                int.parse(widget.target) ==
-                                                    0) &&
+                                                int.parse(widget.target) == 0) &&
                                             int.parse(targetAmt.text) >= 100)
                                           {
                                             confirmBankTransferPayment(context),
@@ -435,23 +418,17 @@ class _DepositState extends State<Deposit> {
                                           {
                                             if (targetAmt.text.isNotEmpty)
                                               {
-                                                if (int.parse(targetAmt.text) <
-                                                        100 ||
+                                                if (int.parse(targetAmt.text) < 100 ||
                                                     targetAmt.text.isEmpty)
                                                   {
                                                     showErrorToast(
                                                         "The Amount Must Not Be Less Than N1000 !"),
                                                   }
-                                                else if (int.parse(
-                                                        widget.target) >
-                                                    0)
+                                                else if (int.parse(widget.target) > 0)
                                                   {
-                                                    if ((int.parse(widget
-                                                                .totalSaved) +
-                                                            (int.parse(targetAmt
-                                                                .text)) >
-                                                        int.parse(
-                                                            widget.target)))
+                                                    if ((int.parse(widget.totalSaved) +
+                                                            (int.parse(targetAmt.text)) >
+                                                        int.parse(widget.target)))
                                                       {
                                                         showErrorToast(
                                                             "Total Amount Will Be More Than Target! "),
@@ -468,26 +445,22 @@ class _DepositState extends State<Deposit> {
                                   child: Material(
                                       borderRadius: BorderRadius.circular(25.0),
                                       elevation: 10,
-                                      shadowColor:
-                                          Color.fromARGB(255, 209, 209, 209),
+                                      shadowColor: Color.fromARGB(255, 209, 209, 209),
                                       child: Container(
                                           height: 40,
                                           width: double.maxFinite,
                                           decoration: BoxDecoration(
                                             color: color.grey(),
-                                            borderRadius:
-                                                const BorderRadius.all(
+                                            borderRadius: const BorderRadius.all(
                                               Radius.circular(25.0),
                                             ),
                                           ),
                                           child: Center(
-                                            child: const Text(
-                                                " Direct Bank Transfer",
+                                            child: const Text(" Direct Bank Transfer",
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                                    fontWeight: FontWeight.bold)),
                                           )
                                           //rest of the existing code
                                           )))),
@@ -605,13 +578,11 @@ class _DepositState extends State<Deposit> {
                       SizedBox(height: 20),
                       GestureDetector(
                           onTap: (() => {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop(),
+                                Navigator.of(context, rootNavigator: true).pop(),
                                 Get.to(Landing())
                               }),
                           child: const Text("Go back to home",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 20)))
+                              style: TextStyle(color: Colors.grey, fontSize: 20)))
                     ])),
                   ),
                 ),
@@ -641,8 +612,7 @@ class _DepositState extends State<Deposit> {
                             Spacer(),
                             GestureDetector(
                                 onTap: (() {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop();
+                                  Navigator.of(context, rootNavigator: true).pop();
                                 }),
                                 child: Icon(Icons.close))
                           ],
@@ -671,8 +641,8 @@ class _DepositState extends State<Deposit> {
                                   children: [
                                     Text(
                                       "Bank Transfer",
-                                      style: TextStyle(
-                                          fontSize: 20, color: color.green()),
+                                      style:
+                                          TextStyle(fontSize: 20, color: color.green()),
                                     ),
                                     SizedBox(height: 6),
                                     Text(
@@ -680,8 +650,7 @@ class _DepositState extends State<Deposit> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 13,
-                                          color:
-                                              Color.fromARGB(255, 95, 95, 95)),
+                                          color: Color.fromARGB(255, 95, 95, 95)),
                                     ),
                                     SizedBox(height: 10),
                                     Center(
@@ -690,24 +659,20 @@ class _DepositState extends State<Deposit> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 20,
-                                          color:
-                                              Color.fromARGB(255, 95, 95, 95)),
+                                          color: Color.fromARGB(255, 95, 95, 95)),
                                     )),
                                     SizedBox(height: 10),
                                     GestureDetector(
                                         onTap: (() => {
                                               Clipboard.setData(ClipboardData(
-                                                  text: statup_corp_num
-                                                      .toString())),
+                                                  text: statup_corp_num.toString())),
                                               showToast(
                                                   "Account number copied to clipboard")
                                             }),
                                         child: Center(
                                             child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               statup_corp_num.toString(),
@@ -734,8 +699,7 @@ class _DepositState extends State<Deposit> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 20,
-                                          color:
-                                              Color.fromARGB(255, 95, 95, 95)),
+                                          color: Color.fromARGB(255, 95, 95, 95)),
                                     )),
                                     SizedBox(height: 20),
                                     Center(
@@ -743,22 +707,16 @@ class _DepositState extends State<Deposit> {
                                             width: (Get.width / 2) - 17,
                                             child: GestureDetector(
                                                 onTap: () => {
-                                                      if (targetAmt.text
-                                                              .isNotEmpty &&
-                                                          freqAmt.text
-                                                              .isNotEmpty &&
-                                                          ((int.parse(widget
-                                                                          .totalSaved) +
-                                                                      (int.parse(
-                                                                          targetAmt
-                                                                              .text)) <=
-                                                                  int.parse(widget
-                                                                      .target)) ||
-                                                              int.parse(widget
-                                                                      .target) ==
+                                                      if (targetAmt.text.isNotEmpty &&
+                                                          freqAmt.text.isNotEmpty &&
+                                                          ((int.parse(widget.totalSaved) +
+                                                                      (int.parse(targetAmt
+                                                                          .text)) <=
+                                                                  int.parse(
+                                                                      widget.target)) ||
+                                                              int.parse(widget.target) ==
                                                                   0) &&
-                                                          int.parse(targetAmt
-                                                                  .text) >=
+                                                          int.parse(targetAmt.text) >=
                                                               100)
                                                         {
                                                           // loading("Loading",
@@ -769,35 +727,39 @@ class _DepositState extends State<Deposit> {
 
                                                           Savings()
                                                               .pending_tx(
-                                                                  savingsID: widget
-                                                                      .savingsID,
-                                                                  amount:
-                                                                      targetAmt
-                                                                          .text,
+                                                                  savingsID:
+                                                                      widget.savingsID,
+                                                                  amount: targetAmt.text,
                                                                   // startAmount: starterAmt.text,
-                                                                  userID:
-                                                                      userID,
+                                                                  userID: userID,
                                                                   email: email)
                                                               .then((value) => {
-                                                                    if (value ==
-                                                                        1)
+                                                                    if (value == 1)
                                                                       {
-                                                                        Navigator.of(context,
-                                                                                rootNavigator: true)
+                                                                        Navigator.of(
+                                                                                context,
+                                                                                rootNavigator:
+                                                                                    true)
                                                                             .pop(),
-                                                                        Navigator.of(context,
-                                                                                rootNavigator: true)
+                                                                        Navigator.of(
+                                                                                context,
+                                                                                rootNavigator:
+                                                                                    true)
                                                                             .pop(),
                                                                         requestSuccess(
                                                                             context),
                                                                       }
                                                                     else
                                                                       {
-                                                                        Navigator.of(context,
-                                                                                rootNavigator: true)
+                                                                        Navigator.of(
+                                                                                context,
+                                                                                rootNavigator:
+                                                                                    true)
                                                                             .pop(),
-                                                                        Navigator.of(context,
-                                                                                rootNavigator: true)
+                                                                        Navigator.of(
+                                                                                context,
+                                                                                rootNavigator:
+                                                                                    true)
                                                                             .pop(),
                                                                         showErrorToast(
                                                                             "Could not process request. Please try again"),
@@ -806,30 +768,27 @@ class _DepositState extends State<Deposit> {
                                                         }
                                                       else
                                                         {
-                                                          if (targetAmt
-                                                              .text.isNotEmpty)
+                                                          if (targetAmt.text.isNotEmpty)
                                                             {
                                                               if (int.parse(targetAmt
                                                                           .text) <
                                                                       100 ||
-                                                                  targetAmt.text
-                                                                      .isEmpty)
+                                                                  targetAmt.text.isEmpty)
                                                                 {
                                                                   showErrorToast(
                                                                       "The Amount Must Not Be Less Than N1000 !"),
                                                                 }
                                                               else if (int.parse(
-                                                                      widget
-                                                                          .target) >
+                                                                      widget.target) >
                                                                   0)
                                                                 {
                                                                   if ((int.parse(widget
                                                                               .totalSaved) +
-                                                                          (int.parse(targetAmt
-                                                                              .text)) >
+                                                                          (int.parse(
+                                                                              targetAmt
+                                                                                  .text)) >
                                                                       int.parse(
-                                                                          widget
-                                                                              .target)))
+                                                                          widget.target)))
                                                                     {
                                                                       showErrorToast(
                                                                           "Total Amount Will Be More Than Target! "),
@@ -845,21 +804,17 @@ class _DepositState extends State<Deposit> {
                                                     },
                                                 child: Material(
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
+                                                        BorderRadius.circular(25.0),
                                                     elevation: 10,
                                                     shadowColor: Color.fromARGB(
                                                         255, 209, 209, 209),
                                                     child: Container(
                                                         height: 40,
                                                         width: double.maxFinite,
-                                                        decoration:
-                                                            const BoxDecoration(
+                                                        decoration: const BoxDecoration(
                                                           color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(
-                                                                25.0),
+                                                          borderRadius: BorderRadius.all(
+                                                            Radius.circular(25.0),
                                                           ),
                                                         ),
                                                         child: Center(
@@ -867,15 +822,10 @@ class _DepositState extends State<Deposit> {
                                                               "Yes I Have Paid!",
                                                               style: TextStyle(
                                                                   fontSize: 12,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          46,
-                                                                          46,
-                                                                          46),
+                                                                  color: Color.fromARGB(
+                                                                      255, 46, 46, 46),
                                                                   fontWeight:
-                                                                      FontWeight
-                                                                          .bold)),
+                                                                      FontWeight.bold)),
                                                         )
                                                         //rest of the existing code
                                                         ))))),
@@ -889,38 +839,36 @@ class _DepositState extends State<Deposit> {
 
   Future<void> initPayment() async {
     try {
-      TransactionResponse transactionResponse =
-          await MonnifyPaymentSdk().initializePayment(
-              transaction: Transaction(
-        double.parse(targetAmt.text),
-        "NGN",
-        firstName + " " + last,
-        email.toString(),
-        getRandomString(16),
-        "Statup deposit from ${email.toString()}",
+      final transactionResponse = await _monnifyPaymentSdkPlugin?.initializePayment(
+          transaction: TransactionDetails().copyWith(
+        amount: double.parse(targetAmt.text),
+        currencyCode: "NGN",
+        customerName: firstName + " " + last,
+        customerEmail: email.toString(),
+        paymentReference: getRandomString(16),
+        paymentDescription: "Statup deposit from ${email.toString()}",
         metaData: const {
           // any other info
         },
         paymentMethods: const [PaymentMethod.CARD],
       ));
 
-      print("tx_reference  ${transactionResponse.transactionReference}");
+      print("tx_reference  ${transactionResponse?.transactionReference}");
 
-      print("tx_status ${transactionResponse.transactionStatus}");
-      if (transactionResponse.transactionStatus == "PAID") {
+      print("tx_status ${transactionResponse?.transactionStatus}");
+      if (transactionResponse?.transactionStatus == "PAID") {
         Savings()
             .deposit(
                 amount: targetAmt.text,
                 savingsID: widget.savingsID,
                 freq: freqAmt.text,
-                tx_ref: transactionResponse.transactionReference)
+                tx_ref: transactionResponse?.transactionReference)
             .then((value) => {
                   if (value == 1)
                     {
                       Navigator.of(context, rootNavigator: true).pop(),
                       Get.to(Landing()),
-                      showToast(
-                          "Successfully deposited into ${widget.savingsName}")
+                      showToast("Successfully deposited into ${widget.savingsName}")
                     }
                   else if (value == 0)
                     {
@@ -944,12 +892,11 @@ class _DepositState extends State<Deposit> {
   }
 
   String getRandomString(int length) {
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     Random _rnd = Random();
 
-    return String.fromCharCodes(Iterable.generate(
-        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    return String.fromCharCodes(
+        Iterable.generate(length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
   }
 
   dynamic tx_incomplete(BuildContext context) {
@@ -987,12 +934,16 @@ class _DepositState extends State<Deposit> {
 
   Future<void> initializeSdk() async {
     try {
-      if (await _monnifyPaymentSdkPlugin.initialize(
+      // if (await _monnifyPaymentSdkPlugin.initialize(
+      //     apiKey: 'MK_PROD_UW7RCZ4MKL',
+      //     contractCode: '800351495208',
+      //     applicationMode: ApplicationMode.LIVE)) {
+      //   //showToast("SDK initialized!");
+      // }
+      _monnifyPaymentSdkPlugin = await Monnify.initialize(
           apiKey: 'MK_PROD_UW7RCZ4MKL',
           contractCode: '800351495208',
-          applicationMode: ApplicationMode.LIVE)) {
-        //showToast("SDK initialized!");
-      }
+          applicationMode: ApplicationMode.LIVE);
     } on PlatformException catch (e, s) {
       print("Error initializing sdk");
       print(e);

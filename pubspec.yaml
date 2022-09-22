@@ -63,8 +63,8 @@ dependencies:
   flutter_html: ^3.0.0-alpha.5
   firebase_messaging: ^13.0.0
   flutter_local_notifications: ^9.0.0
-  monnify_flutter: ^0.0.2
-  monnify_payment_sdk: ^1.0.0
+  # monnify_flutter: ^0.0.2
+  monnify_payment_sdk: 1.0.1
   jiffy: ^5.0.0
 
 dev_dependencies:
