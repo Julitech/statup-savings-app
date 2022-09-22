@@ -9,7 +9,6 @@ import 'package:monnify_payment_sdk/payment_method.dart';
 import 'package:monnify_payment_sdk/transaction.dart';
 import 'package:monnify_payment_sdk/transaction_response.dart';
 import 'package:monnify_payment_sdk/monnify_payment_sdk.dart';
-import '/screens/payment.dart';
 import '/screens/withdraw.dart';
 import '/services/savings.dart';
 import '../components/constants.dart';
@@ -17,6 +16,7 @@ import '../components/colors.dart';
 import 'package:get/get.dart';
 import 'landing.dart';
 import 'dart:math';
+import 'package:monnify_payment_sdk/monnify_payment_sdk.dart'
 
 class Deposit extends StatefulWidget {
   final savingsID, totalSaved, target, savingsName, interest;
